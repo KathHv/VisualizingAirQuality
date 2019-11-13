@@ -1,3 +1,6 @@
+const stationGeist = [51.936482, 7.611609];
+const stationWeseler = [51.953275, 7.619379];
+
 // using d3 for convenience
 var main = d3.select("main");
 var scrolly = main.select("#scrolly");
@@ -7,6 +10,18 @@ var step = article.selectAll(".step");
 
 // initialize the scrollama
 var scroller = scrollama();
+
+// initialize the Leaflet map
+var map = L.map("map").setView([51.97, 7.63], 13);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+	attribution:
+		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+// start scrolly
+initScrolly();
+
+// SCROLLAMA FUNCTIONS
 
 // generic window resize listener event
 function handleResize() {
@@ -35,8 +50,9 @@ function handleStepEnter(response) {
 		return i === response.index;
 	});
 
-	// update graphic based on step
-	figure.select("p").text(response.index + 1);
+	// update map based on step
+	updateMap(response.index);
+	figure.select("p").text(response.index);
 }
 
 function setupStickyfill() {
@@ -45,7 +61,7 @@ function setupStickyfill() {
 	});
 }
 
-function init() {
+function initScrolly() {
 	setupStickyfill();
 
 	// 1. force a resize on load to ensure proper dimensions are sent to scrollama
@@ -57,8 +73,8 @@ function init() {
 	scroller
 		.setup({
 			step: "#scrolly article .step",
-			offset: 0.33,
-			debug: true
+			offset: 0.33
+			// debug: true
 		})
 		.onStepEnter(handleStepEnter);
 
@@ -66,5 +82,29 @@ function init() {
 	window.addEventListener("resize", handleResize);
 }
 
-// kick things off
-init();
+// MAP FUNCTIONS
+
+function initMap() {
+	var map = L.map("map").setView([51.97, 7.63], 12);
+	L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+		attribution:
+			'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+	}).addTo(map);
+}
+
+function updateMap(index) {
+	switch (index) {
+		case 0:
+			break;
+		case 1:
+			window.markerG = L.marker(stationGeist).addTo(map);
+			markerG.bindPopup("Air Quality Station <br> <b>Geist</b>").openPopup();
+			break;
+		case 2:
+			window.markerW = L.marker(stationWeseler).addTo(map);
+			markerW
+				.bindPopup("Air Quality Station <br> <b>Weseler Straße</b>")
+				.openPopup();
+			break;
+	}
+}

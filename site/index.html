@@ -8,10 +8,25 @@
 
 		<link rel="stylesheet" type="text/css" href="styles.css" />
 
+		<!-- scrollama.js -->
 		<script src="https://unpkg.com/intersection-observer@0.5.1/intersection-observer.js"></script>
 		<script src="https://unpkg.com/scrollama"></script>
 
+		<!-- D3 -->
 		<script src="https://d3js.org/d3.v5.min.js"></script>
+
+		<!-- Leaflet (CSS "*must* be loaded before JS)-->
+		<link
+			rel="stylesheet"
+			href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+			integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+			crossorigin=""
+		/>
+		<script
+			src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+			integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+			crossorigin=""
+		></script>
 	</head>
 
 	<body>
@@ -24,22 +39,28 @@
 			</section>
 
 			<section id="scrolly">
+				<!-- individual text boxes on the left -->
 				<article>
 					<div class="step" data-step="1">
-						<p>STEP 1</p>
+						<p>This is Münster.</p>
 					</div>
 					<div class="step" data-step="2">
-						<p>STEP 2</p>
+						<p>
+							There are two stationary air quality measurement stations. One is
+							located in Geist.
+						</p>
 					</div>
 					<div class="step" data-step="3">
-						<p>STEP 3</p>
+						<p>The second one is located at Weseler Straße.</p>
 					</div>
 					<div class="step" data-step="4">
 						<p>STEP 4</p>
 					</div>
 				</article>
 
+				<!-- this is the block on the right -->
 				<figure>
+					<div id="map"></div>
 					<p>0</p>
 				</figure>
 			</section>
