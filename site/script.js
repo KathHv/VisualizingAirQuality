@@ -1,3 +1,6 @@
+const initCoord = [51.96, 7.63];
+const initZoom = 12;
+
 const stationGeist = [51.936482, 7.611609];
 const stationWeseler = [51.953275, 7.619379];
 
@@ -85,7 +88,7 @@ function initScrolly() {
 // MAP FUNCTIONS
 
 function initMap() {
-	var map = L.map("map").setView([51.97, 7.63], 12);
+	var map = L.map("map").setView(initCoord, initZoom);
 	L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 		attribution:
 			'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

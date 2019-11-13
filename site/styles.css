@@ -1,9 +1,14 @@
+body,
+html {
+	font-family: sans-serif;
+	background-color: #f3f3f3;
+}
+
 #scrolly {
 	position: relative;
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
-	background-color: #f3f3f3;
 	padding: 1rem;
 }
 
@@ -27,10 +32,10 @@ figure {
 	-webkit-transform: translate3d(0, 0, 0);
 	-moz-transform: translate3d(0, 0, 0);
 	transform: translate3d(0, 0, 0);
-	background-color: #8a8a8a;
+	/*background-color: #8a8a8a;*/
 }
 
-figure p {
+/*figure p {
 	text-align: center;
 	padding: 1rem;
 	position: absolute;
@@ -42,7 +47,7 @@ figure p {
 	font-size: 8rem;
 	font-weight: 900;
 	color: #fff;
-}
+}*/
 
 .step {
 	margin: 0 auto 2rem auto;
@@ -62,7 +67,6 @@ figure p {
 .step p {
 	text-align: center;
 	padding: 1rem;
-	font-size: 1.5rem;
 }
 
 #map {
