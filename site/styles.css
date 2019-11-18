@@ -2,6 +2,7 @@ body,
 html {
 	font-family: sans-serif;
 	background-color: #f3f3f3;
+	margin: 0;
 }
 
 #scrolly {
@@ -20,7 +21,7 @@ html {
 
 article {
 	position: relative;
-	padding: 0 1rem;
+	padding: 0 10px;
 	max-width: 20rem;
 }
 
@@ -35,6 +36,12 @@ figure {
 	/*background-color: #8a8a8a;*/
 }
 
+/*  display: block;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  margin-left: 40px;
+  margin-right: 40px;
+*/
 /*figure p {
 	text-align: center;
 	padding: 1rem;
@@ -67,8 +74,4 @@ figure {
 .step p {
 	text-align: center;
 	padding: 1rem;
-}
-
-#map {
-	height: 100%;
 }

@@ -8,6 +8,7 @@ const stationWeseler = [51.953275, 7.619379];
 var main = d3.select("main");
 var scrolly = main.select("#scrolly");
 var figure = scrolly.select("figure");
+var map = scrolly.select("#map");
 var article = scrolly.select("article");
 var step = article.selectAll(".step");
 
@@ -15,14 +16,23 @@ var step = article.selectAll(".step");
 var scroller = scrollama();
 
 // initialize the Leaflet map
-var map = L.map("map").setView([51.97, 7.63], 13);
+var mymap = L.map("map", {
+	zoomControl: false,
+	scrollWheelZoom: false,
+	doubleClickZoom: false,
+	touchZoom: false,
+	boxZoom: false,
+	dragging: false
+}).setView([51.97, 7.63], 13);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 	attribution:
 		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
+}).addTo(mymap);
 
 // start scrolly
 initScrolly();
+
+mymap.invalidateSize();
 
 // SCROLLAMA FUNCTIONS
 
@@ -32,12 +42,11 @@ function handleResize() {
 	var stepH = Math.floor(window.innerHeight * 0.75);
 	step.style("height", stepH + "px");
 
-	var figureHeight = window.innerHeight / 2;
-	var figureMarginTop = (window.innerHeight - figureHeight) / 2;
+	var mapMarginTB = 10;
+	var mapHeight = window.innerHeight - mapMarginTB * 2;
 
-	figure
-		.style("height", figureHeight + "px")
-		.style("top", figureMarginTop + "px");
+	figure.style("height", mapHeight + "px").style("top", mapMarginTB + "px");
+	map.style("height", mapHeight + "px");
 
 	// 3. tell scrollama to update new element dimensions
 	scroller.resize();
@@ -76,8 +85,8 @@ function initScrolly() {
 	scroller
 		.setup({
 			step: "#scrolly article .step",
-			offset: 0.33
-			// debug: true
+			offset: 0.33,
+			debug: true
 		})
 		.onStepEnter(handleStepEnter);
 
@@ -87,24 +96,16 @@ function initScrolly() {
 
 // MAP FUNCTIONS
 
-function initMap() {
-	var map = L.map("map").setView(initCoord, initZoom);
-	L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-		attribution:
-			'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-	}).addTo(map);
-}
-
 function updateMap(index) {
 	switch (index) {
 		case 0:
 			break;
 		case 1:
-			window.markerG = L.marker(stationGeist).addTo(map);
+			window.markerG = L.marker(stationGeist).addTo(mymap);
 			markerG.bindPopup("Air Quality Station <br> <b>Geist</b>").openPopup();
 			break;
 		case 2:
-			window.markerW = L.marker(stationWeseler).addTo(map);
+			window.markerW = L.marker(stationWeseler).addTo(mymap);
 			markerW
 				.bindPopup("Air Quality Station <br> <b>Weseler Straße</b>")
 				.openPopup();
