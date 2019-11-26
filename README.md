@@ -8,3 +8,7 @@
   * Technology: Website made with HTML, CSS, JavaScript, D3, Leaflet
 * Part II: Create an AR application with which people can walk around the station and see the air quality visualized as a "mist" to provide a more playful way of interacting with the data
   * Unity, City Engine, maybe SketchUp
+
+## Links to Sites
+* AR: https://kathhv.github.io/VisualizingAirQuality/AR
+* Webpage: https://kathhv.github.io/VisualizingAirQuality/site
