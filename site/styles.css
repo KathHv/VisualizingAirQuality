@@ -76,7 +76,7 @@ figure {
 	padding: 1rem;
 }
 
-.button {
+button {
   background-color: #4CAF50;
   border: none;
   color: white;
@@ -86,6 +86,6 @@ figure {
   cursor: pointer;
 }
 
-.button:hover {
+button:hover {
   background-color: green;
 }
