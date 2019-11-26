@@ -89,3 +89,6 @@ figure {
 .button:hover {
   background-color: green;
 }
+.wrapper {
+	text-align: right;
+}
