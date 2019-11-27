@@ -22,6 +22,7 @@ JL("mylogger").setOptions({"appenders": [consoleAppender]});
 window.onload = () => {
     const button = document.querySelector('button[data-action="change"]');
     button.innerText = '﹖';
+    loadAndRenderMarkerLocations();
 }
 
 function getLocation() {
