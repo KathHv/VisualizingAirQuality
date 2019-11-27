@@ -29,27 +29,32 @@
 <!-- creating the consoleAppender to write logs into the console
      also see http://js.jsnlog.com/ -->
 </jsnlog>
-  <consoleAppender name="consoleAppender" />
-  <logger name ="mylogger" appenders="consoleAppender"/>
+<consoleAppender name="consoleAppender" />
+<logger name ="mylogger" appenders="consoleAppender"/>
 </jsnlog>
 
 <body style='margin: 0; overflow: hidden;' id="visArea">
 
 <div>
-  <button type="button" class="btn" id='button' onclick=loadData()>Get Data</button>
+    <button type="button" class="btn" id='button' onclick=loadData()>Get Data</button>
 
-  <button type="button" class="btn" id='button' onclick=selectData(loadedData)>Select Data</button></div>
+    <button type="button" class="btn" id='button' onclick=selectData(loadedData)>Select Data</button>
+
+    <button type="button" class="btn" id='markerButton' onclick=loadAndRenderMarkerLocations()>marker example</button>
+</div>
 <div>
     <a-scene
-        vr-mode-ui="enabled: false"
-		embedded
-        arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;'>
+            cursor='rayOrigin: mouse; fuse: true; fuseTimeout: 0;'
+            raycaster="objects: [gps-entity-place];"
+            vr-mode-ui="enabled: false"
+            embedded
+            arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;'>
 
-        <a-camera gps-camera rotation-reader></a-camera>
+        <a-camera gps-camera="minDistance: 20;" rotation-reader></a-camera>
 
-	 <a-entity gltf-model="./magnemite/scene.gltf" rotation="0 180 0" scale="0.30 0.30 0.30" gps-entity-place="longitude: 7.595787; latitude: 51.969574;" animation-mixer/>
+        <a-entity gltf-model="./magnemite/scene.gltf" rotation="0 180 0" scale="0.30 0.30 0.30" gps-entity-place="longitude: 7.595787; latitude: 51.969574;" animation-mixer/>
 
-	</a-scene>
+    </a-scene>
 </div>
 <script src="visualizeData.js"></script>
 </body>
