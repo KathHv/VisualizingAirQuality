@@ -241,15 +241,15 @@ function renderPlaces(places) {
         switch(true) {
             case (expression < 5):
                 console.log("green");
-                imageSrc = './assets/map-marker_green.png';
+                imageSrc = './markers/map-marker_green.png';
                 break;
             case (expression > 5 && expression < 6):
                 console.log("orange");
-                imageSrc = './assets/map-marker.png';
+                imageSrc = './markers/map-marker.png';
                 break;
             case (expression > 6):
                 console.log("red");
-                imageSrc = './assets/map-marker_red.png';
+                imageSrc = './markers/map-marker_red.png';
                 break;
         }
         icon.setAttribute('src', imageSrc);
