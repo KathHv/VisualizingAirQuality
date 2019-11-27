@@ -19,7 +19,7 @@
     <script src="jsnlog.min.js"> </script>
     <link rel="icon" type="image/png" href="favicon.png"
 
-    <script src="visualizeData.js"></script>
+
 
 
 
@@ -34,7 +34,12 @@
 </jsnlog>
 
 <body style='margin: 0; overflow: hidden;' id="visArea">
-<button type="button" class="btn" id='button' onclick=processData()>Get Data</button>
+
+<div>
+  <button type="button" class="btn" id='button' onclick=loadData()>Get Data</button>
+
+  <button type="button" class="btn" id='button' onclick=selectData(loadedData)>Select Data</button></div>
+<div>
     <a-scene
         vr-mode-ui="enabled: false"
 		embedded
@@ -45,5 +50,6 @@
 	 <a-entity gltf-model="./magnemite/scene.gltf" rotation="0 180 0" scale="0.30 0.30 0.30" gps-entity-place="longitude: 7.595787; latitude: 51.969574;" animation-mixer/>
 
 	</a-scene>
-
+</div>
+<script src="visualizeData.js"></script>
 </body>
