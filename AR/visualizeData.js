@@ -245,7 +245,7 @@ function renderPlaces(places) {
                 break;
             case (expression > 5 && expression < 6):
                 console.log("orange");
-                imageSrc = './markers/map-marker.png';
+                imageSrc = './markers/map-marker-orange.png';
                 break;
             case (expression > 6):
                 console.log("red");
