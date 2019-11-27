@@ -9,49 +9,17 @@
 *@param visArea: area in document where something can be visualized
 */
 var url = "/data/bike_14-11.csv";
-var currentPosition;
+var currentPosition = getLocation();
 var visArea = document.getElementById("visArea");
 var loadedData=null;
 var selectedData=null;
+
 
 // "mylogger" logs to just the console
 //@see http://js.jsnlog.com/
 var consoleAppender = JL.createConsoleAppender('consoleAppender');
 JL("mylogger").setOptions({"appenders": [consoleAppender]});
 
-
-
-function getLocation() {
- if (navigator.geolocation) {
-   navigator.geolocation.getCurrentPosition(showPosition);
- } else {
-   x.innerHTML = "Geolocation is not supported by this browser.";
- }
-}
-
-function showPosition(position) {
- x.innerHTML = "Latitude: " + position.coords.latitude +
- "<br>Longitude: " + position.coords.longitude;
-}
-
-
-
-
-/*
-function processData(){
-  var loadedData=null;
-  var selectedData=null;
-
-  loadedData = loadData();
-  JL("mylogger").info("loadedData: " + loadedData);
-
-  selectedData = selectData(loadedData);
-  JL("mylogger").info("selectedData: " + selectedData);
-
-  //var visualizedData = visualizeData(readData);
-  //JL("mylogger").info("visualizedData: " + visualizedData);
-
-}*/
 
 /*
 * load Data from csv file
@@ -70,6 +38,8 @@ function loadData(){
         JL("mylogger").info("response Text: " + this.responseText);
         var dataArray = readData(this.responseText);
         loadedData = dataArray;
+        selectData(loadedData);
+        //getLocation(loadedData);
       }
     };
     xhttp.open("GET", url, true);
@@ -101,14 +71,35 @@ function readData(dataCSV){
 
 
 /*
+* get location of the device and write it into the global variabel currentPosition[lat, lng]
+*/
+function getLocation() {
+  JL("mylogger").info("--------getLocation()--------");
+ if (navigator.geolocation) {
+   JL("mylogger").info(navigator.geolocation);
+   navigator.geolocation.getCurrentPosition(getCoordinates);
+ } else {
+   JL("mylogger").warn("Current position is not available.");
+ }
+
+}
+
+function getCoordinates(position){
+  JL("mylogger").info("--------getCoordinates()--------");
+  JL("mylogger").info("current position: " + position.coords.latitude +", "+position.coords.longitude);
+  currentPosition = [position.coords.latitude, position.coords.longitude];
+}
+
+/*
 * select data that is around the current position of the device from the array
 *@param dataArray: array which contains data of the air quality
 *@return: array with relevant air quality data in format: [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
 */
 function selectData(dataArray){
-    JL("mylogger").info("--------selectData()--------");
+JL("mylogger").info("--------selectData()--------");
 var relevantDataArray = null;
 var radius = 0.00001;
+JL("mylogger").info(currentPosition);
 
 var x;
 for (x in dataArray){
