@@ -19,7 +19,10 @@ var selectedData=null;
 var consoleAppender = JL.createConsoleAppender('consoleAppender');
 JL("mylogger").setOptions({"appenders": [consoleAppender]});
 
-
+window.onload = () => {
+    const button = document.querySelector('button[data-action="change"]');
+    button.innerText = '﹖';
+}
 
 function getLocation() {
     if (navigator.geolocation) {
