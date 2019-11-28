@@ -20,7 +20,7 @@ var consoleAppender = JL.createConsoleAppender('consoleAppender');
 JL("mylogger").setOptions({"appenders": [consoleAppender]});
 
 window.onload = () => {
-    const button = document.querySelector('#markerButtonCentered');
+    const button = document.getElementById('markerButtonCentered');
     console.dir(button);
     button.innerText = '﹖';
     loadAndRenderMarkerLocations();
