@@ -16,12 +16,11 @@ var selectedData=null;
 
 // "mylogger" logs to just the console
 //@see http://js.jsnlog.com/
-var consoleAppender = JL.createConsoleAppender('consoleAppender');
-JL("mylogger").setOptions({"appenders": [consoleAppender]});
+//var consoleAppender = JL.createConsoleAppender('consoleAppender');
+//JL("mylogger").setOptions({"appenders": [consoleAppender]});
 
 window.onload = () => {
     const button = document.getElementById('markerButtonCentered');
-    console.dir(button);
     button.innerText = '﹖';
     loadAndRenderMarkerLocations();
 };
@@ -64,15 +63,15 @@ function processData(){
 */
 function loadData(){
 
-    JL("mylogger").info("--------loadData()--------");
+    //JL("mylogger").info("--------loadData()--------");
     var xhttp = new XMLHttpRequest();
 
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             if (this.responseText.length == 0){
-                JL("mylogger").error("The URL field or the content of the field is emtpy.1");
+                //JL("mylogger").error("The URL field or the content of the field is emtpy.1");
             }
-            JL("mylogger").info("response Text: " + this.responseText);
+            //JL("mylogger").info("response Text: " + this.responseText);
             var dataArray = readData(this.responseText);
             loadedData = dataArray;
         }
@@ -88,7 +87,7 @@ function loadData(){
 *@return returns array of processed csv-text in form [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
 */
 function readData(dataCSV){
-    JL("mylogger").info("--------readData()--------");
+    //JL("mylogger").info("--------readData()--------");
     var dataArraySplittedByBrake = dataCSV.split("\n");
     dataArraySplittedByBrake.shift();
 //    JL("mylogger").info("dataArraySplittedByBrake[0]: " + dataArraySplittedByBrake[0]);
@@ -100,7 +99,7 @@ function readData(dataCSV){
         dataElementSplittedByBrakeAndComma.shift();
         dataArraySplittedByBrakeAndComma.push(dataElementSplittedByBrakeAndComma);
     }
-    JL("mylogger").info("read data is ready.");
+    //JL("mylogger").info("read data is ready.");
     return dataArraySplittedByBrakeAndComma
 }
 
@@ -111,7 +110,7 @@ function readData(dataCSV){
 *@return: array with relevant air quality data in format: [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
 */
 function selectData(dataArray){
-    JL("mylogger").info("--------selectData()--------");
+    //JL("mylogger").info("--------selectData()--------");
     var relevantDataArray = null;
     var radius = 0.00001;
 
@@ -129,14 +128,14 @@ function selectData(dataArray){
                 || currentPosition[1] > (dataArray[x][3] - radius))
             )
         ){
-            JL("mylogger").info("relevant Position: " +dataArray[x][2]+", "+dataArray[x][3]);
+            //JL("mylogger").info("relevant Position: " +dataArray[x][2]+", "+dataArray[x][3]);
             relevantDataArray.push(dataArray[x]);
         }
         else{
-            JL("mylogger").info("position not relevant.");
+            //JL("mylogger").info("position not relevant.");
         }
     }
-    JL("mylogger").info("relevantDataArray: "+ relevantDataArray);
+    //JL("mylogger").info("relevantDataArray: "+ relevantDataArray);
     selectedData =  relevantDataArray;
 
 }
@@ -147,7 +146,7 @@ function selectData(dataArray){
 *@param dataArray: array which contains the RELEVANT data of the air quality in format [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
 */
 function visualizeData(dataArray){
-    JL("mylogger").info("--------visualizeData()--------");
+    //JL("mylogger").info("--------visualizeData()--------");
     let scene = document.querySelector('a-scene');
 
     dataArray.forEach((place) => {
