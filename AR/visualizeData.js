@@ -21,9 +21,10 @@ JL("mylogger").setOptions({"appenders": [consoleAppender]});
 
 window.onload = () => {
     const button = document.querySelector('#markerButtonCentered');
+    console.dir(button);
     button.innerText = '﹖';
     loadAndRenderMarkerLocations();
-}
+};
 
 function getLocation() {
     if (navigator.geolocation) {
