@@ -149,7 +149,7 @@ function visualizeData(dataArray){
     JL("mylogger").info("--------visualizeData()--------");
     let scene = document.querySelector('a-scene');
 
-    places.forEach((place) => {
+    dataArray.forEach((place) => {
         const latitude = place.location.lat;
     const longitude = place.location.lng;
 
