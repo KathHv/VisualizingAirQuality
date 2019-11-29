@@ -144,7 +144,7 @@ function visualizeData(dataArray){
     //JL("mylogger").info("--------visualizeData()--------");
     let scene = document.querySelector('a-scene');
 
-    dataArray.forEach(setTimeout((place) => {
+    dataArray.forEach((place) => {
         const latitude = place.location.lat;
         const longitude = place.location.lng;
 
@@ -200,7 +200,7 @@ function visualizeData(dataArray){
         icon.addEventListener('click', clickListener);
 
         scene.appendChild(icon);
-    },100));
+    });
 }
 
 
