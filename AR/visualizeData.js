@@ -20,8 +20,6 @@ var selectedData=null;
 //JL("mylogger").setOptions({"appenders": [consoleAppender]});
 
 window.onload = () => {
-    const button = document.getElementById('markerButtonCentered');
-    button.innerText = '﹖';
     loadAndRenderMarkerLocations();
 };
 
