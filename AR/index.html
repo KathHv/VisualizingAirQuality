@@ -41,7 +41,7 @@
 
     <button type="button" class="btn" id='selectButton' onclick=selectData(loadedData)>Select Data</button>
 
-    <button type="button" class="btn" id='markerButton' onclick=loadAndRenderMarkerLocations()>marker example</button>
+    <button type="button" class="btn" id='markerButton' onclick=loadAndRenderMarkerLocationsExample()>marker example</button>
 </div-->
 <a-scene
         vr-mode-ui="enabled: false"
@@ -53,7 +53,8 @@
 
 </a-scene>
 <div class="centered">
-    <button id="markerButtonCentered" onclick=loadAndRenderMarkerLocations()>?</button>
+    <button id="exampleMarkerButtonCentered" onclick=loadAndRenderMarkerLocationsExample()>?</button>
+    <button id="bikeMarkerButtonCentered" onclick=loadAndRenderMarkerLocationsBike()>?</button>
 </div>
 <script src="visualizeData.js"></script>
 </body>

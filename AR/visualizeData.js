@@ -69,6 +69,7 @@ function loadData(){
             //JL("mylogger").info("response Text: " + this.responseText);
             var dataArray = readData(this.responseText);
             loadedData = dataArray;
+            visualizeData(loadedData);
         }
     };
     xhttp.open("GET", url, true);
@@ -206,9 +207,13 @@ function visualizeData(dataArray){
 }
 
 
-function loadAndRenderMarkerLocations() {
+function loadAndRenderMarkerLocationsExample() {
     let places = LoadExamplePlaces();
     visualizeData(places);
+}
+
+function loadAndRenderMarkerLocationsBike() {
+    loadData()
 }
 
 function LoadExamplePlaces() {
