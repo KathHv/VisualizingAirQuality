@@ -205,7 +205,7 @@ function visualizeData(dataArray){
 
 
 function loadAndRenderMarkerLocations() {
-    let places = selectData(LoadExamplePlaces());
+    let places = LoadExamplePlaces();
     visualizeData(places);
 }
 
