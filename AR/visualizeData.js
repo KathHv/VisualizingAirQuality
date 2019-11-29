@@ -100,14 +100,14 @@ function readData(dataCSV){
         let placeObject = {
             name: "location" + item[1],
             location: {
-                lat: JSON.parse(item[2]),
-                lng: JSON.parse(item[3])
+                lat: parseFloat(item[2]),
+                lng: parseFloat(item[3])
             },
             air_quality: {
-                airTC: JSON.parse(item[4]),
-                rH: JSON.parse(item[5]),
-                pm25: JSON.parse(item[6]),
-                pm10: JSON.parse(item[7])
+                airTC: parseFloat(item[4]),
+                rH: parseFloat(item[5]),
+                pm25: parseFloat(item[6]),
+                pm10: parseFloat(item[7])
             }
         };
         dataArrayOfObjects.push(placeObject);
