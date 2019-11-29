@@ -19,9 +19,6 @@ var selectedData=null;
 //var consoleAppender = JL.createConsoleAppender('consoleAppender');
 //JL("mylogger").setOptions({"appenders": [consoleAppender]});
 
-window.onload = () => {
-    loadAndRenderMarkerLocations();
-};
 
 function getLocation() {
     if (navigator.geolocation) {
