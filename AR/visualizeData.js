@@ -95,8 +95,25 @@ function readData(dataCSV){
         dataElementSplittedByBrakeAndComma.shift();
         dataArraySplittedByBrakeAndComma.push(dataElementSplittedByBrakeAndComma);
     }
+    let dataArrayOfObjects = [];
+    dataArraySplittedByBrakeAndComma.forEach((item) => {
+        let placeObject = {
+            name: "location" + item[1],
+            location: {
+                lat: JSON.parse(item[2]),
+                lng: JSON.parse(item[3])
+            },
+            air_quality: {
+                airTC: JSON.parse(item[4]),
+                rH: JSON.parse(item[5]),
+                pm25: JSON.parse(item[6]),
+                pm10: JSON.parse(item[7])
+            }
+        };
+        dataArrayOfObjects.push(placeObject);
+    });
     //JL("mylogger").info("read data is ready.");
-    return dataArraySplittedByBrakeAndComma
+    return dataArrayOfObjects;
 }
 
 
