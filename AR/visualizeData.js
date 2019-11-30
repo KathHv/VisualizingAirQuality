@@ -162,15 +162,13 @@ function visualizeData(dataArray){
     //JL("mylogger").info("--------visualizeData()--------");
     let scene = document.querySelector('a-scene');
 
-    for (let i = 0; i < dataArray.length; i++) {
-        let place = dataArray[i];
-
-        const latitude = place.location.lat;
-        const longitude = place.location.lng;
+    dataArray.forEach((place) => {
+        let latitude = place.location.lat;
+        let longitude = place.location.lng;
 
         // add place icon
-        const icon = document.createElement('a-image');
-        icon.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude}`);
+        let icon = document.createElement('a-image');
+        icon.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
         icon.setAttribute('name', place.name);
         let imageSrc = "";
         let expression = place.air_quality.pm10;
@@ -191,10 +189,10 @@ function visualizeData(dataArray){
         icon.setAttribute('src', imageSrc);
 
         // for debug purposes, just show in a bigger scale, otherwise I have to personally go on places...
-        icon.setAttribute('scale', '20, 20');
+        icon.setAttribute('scale', '15 15 15');
 
         icon.addEventListener('loaded', () => window.dispatchEvent(new CustomEvent('gps-entity-place-loaded')));
-
+/*
         const clickListener = function (ev) {
             ev.stopPropagation();
             ev.preventDefault();
@@ -218,9 +216,9 @@ function visualizeData(dataArray){
         };
 
         icon.addEventListener('click', clickListener);
-
+*/
         scene.appendChild(icon);
-    };
+    });
 }
 
 
@@ -230,7 +228,7 @@ function loadAndRenderMarkerLocationsExample() {
 }
 
 function loadAndRenderMarkerLocationsBike() {
-    loadData()
+    loadData();
 }
 
 function LoadExamplePlaces() {
