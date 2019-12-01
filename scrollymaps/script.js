@@ -34,6 +34,11 @@ initScrolly();
 
 mymap.invalidateSize();
 
+// DATA
+d3.csv("data/LANUV_1oct-20nov.csv").then(function(data) {
+	console.log(data);
+});
+
 // SCROLLAMA FUNCTIONS
 
 // generic window resize listener event
