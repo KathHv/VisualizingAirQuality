@@ -76,19 +76,18 @@ figure {
 	padding: 1rem;
 }
 
-.button {
-  background-color: #3b3b3b;
-  border: none;
-  color: white;
-  padding: 15px 25px;
-  text-align: center;
-  font-size: 16px;
-  cursor: pointer;
+#arbutton {
+	display: table;
+	background-color: #3b3b3b;
+	color: white;
+	padding: 30px 50px;
+	margin: 15px auto;
+	text-decoration: none;
+	text-align: center;
+	font-size: 16px;
+	cursor: pointer;
 }
 
-.button:hover {
-  background-color: green;
-}
-.wrapper {
-	text-align: right;
+#arbutton:hover {
+	background-color: green;
 }
