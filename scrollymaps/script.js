@@ -18,6 +18,12 @@ var parseTimeLANUV = d3.timeParse("%d.%m.%Y-%H:%M"); // 01.12.2019-09:12
 var parseTimeSensebox = d3.timeParse("%Y-%m-%d-%H:%M:%S,%L"); // "2019-11-14-14:26:02,456"
 var parseTimeBike = d3.timeParse("%Y-%m-%d%_H:%M:%S"); // 2019-11-14 14:35:00
 
+// colour scale for pm10
+var colourPM10 = d3
+	.scaleSequential()
+	.domain([65, 0]) // roughly the range of pm10 values
+	.interpolator(d3.interpolateRdBu);
+
 // initialize the scrollama
 var scroller = scrollama();
 
@@ -79,6 +85,16 @@ d3.csv("data/LANUV_1oct-20nov.csv", function(d) {
 			};
 		}).then(function(bikeData) {
 			console.log("Bike: ", bikeData);
+
+			bikeData.forEach(function(d) {
+				L.circleMarker([d.lat, d.lon], {
+					stroke: false,
+					fill: true,
+					fillColor: colourPM10(d.pm10),
+					fillOpacity: 0.7,
+					radius: 8
+				}).addTo(mymap);
+			});
 		});
 	});
 });
