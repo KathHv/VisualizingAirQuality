@@ -1,0 +1,18 @@
+{
+  "name": "VisualizingAirQuality",
+  "version": "1.0.0",
+  "description": "visualizing the air quality in muenster on a normal website and in VR",
+  "scripts": {
+    "postinstall": "npm i -g parcel-bundler",
+    "start": "parcel serve -d .serve index.html",
+    "build": "parcel build -d docs --public-url ./ src/script.js"
+  },
+  "keywords": [
+    "ar"
+  ],
+  "author": "Katharina Hovestadt, Aditya Kudekar, Tanja ?, Sarah Schöttler, Paula Scharf",
+  "dependencies": {
+    "jsnlog": "^2.29.0",
+    "rainbowvis.js": "^1.0.1"
+  }
+}

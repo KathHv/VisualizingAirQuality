@@ -1,12 +1,12 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <!-- making the website conform to any device -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
-    <title>GeoAR.js demo</title>
+    <title>VAQIIS AR demo</title>
 
     <script src='https://aframe.io/releases/0.9.2/aframe.min.js'></script>
     <script src="https://raw.githack.com/jeromeetienne/AR.js/master/aframe/build/aframe-ar.min.js"></script>
@@ -17,37 +17,36 @@
     </script>
     <!-- jsnlog -->
     <script src="jsnlog.min.js"> </script>
-    <link rel="icon" type="image/png" href="favicon.png"
+    <!-- color gradient library -->
+    <script src="rainbowvis.js"></script>
 
-
-
-
-
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" type="text/css" href="./stylesheets/style.css">
 </head>
 
 
 <!-- creating the consoleAppender to write logs into the console
      also see http://js.jsnlog.com/ -->
 </jsnlog>
-  <consoleAppender name="consoleAppender" />
-  <logger name ="mylogger" appenders="consoleAppender"/>
+<consoleAppender name="consoleAppender" />
+<logger name ="mylogger" appenders="consoleAppender"/>
 </jsnlog>
 
 <body style='margin: 0; overflow: hidden;' id="visArea">
 
-<div>
-  <button type="button" class="btn" id='button' onclick=loadData()>Get Data</button>
-<div>
-    <a-scene
+
+<a-scene
         vr-mode-ui="enabled: false"
-		embedded
+        embedded
         arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;'>
 
-        <a-camera gps-camera rotation-reader></a-camera>
+    <a-camera gps-camera="minDistance: 20;" rotation-reader></a-camera>
 
-	 <a-entity gltf-model="./magnemite/scene.gltf" rotation="0 180 0" scale="0.30 0.30 0.30" gps-entity-place="longitude: 7.595787; latitude: 51.969574;" animation-mixer/>
-
-	</a-scene>
+</a-scene>
+<div class="centered">
+    <button id="exampleMarkerButtonCentered" onclick=loadAndRenderMarkerLocationsExample()>example</button>
+    <button id="bikeMarkerButtonCentered" onclick=loadAndRenderMarkerLocationsBike()>bike</button>
 </div>
 <script src="visualizeData.js"></script>
 </body>
+</html>
