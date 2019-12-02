@@ -8,7 +8,7 @@
 *@param currentPosition: current position of the device [lat,lng]
 *@param visArea: area in document where something can be visualized
 */
-var url = "/data/";
+var url = "data/";
 var currentPosition;
 var visArea = document.getElementById("visArea");
 var loadedData=null;
@@ -44,8 +44,8 @@ function loadData(input){
     var xhttp = new XMLHttpRequest();
 
     xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            if (this.responseText.length == 0){
+        if (this.readyState === 4 && this.status === 200) {
+            if (this.responseText.length === 0){
                 //JL("mylogger").error("The URL field or the content of the field is emtpy.1");
             }
             //JL("mylogger").info("response Text: " + this.responseText);
