@@ -9,16 +9,16 @@
 *@param visArea: area in document where something can be visualized
 */
 var url = "data/";
-var currentPosition;
+var currentPosition = getLocation();
 var visArea = document.getElementById("visArea");
 var loadedData=null;
 var selectedData=null;
+
 
 // "mylogger" logs to just the console
 //@see http://js.jsnlog.com/
 //var consoleAppender = JL.createConsoleAppender('consoleAppender');
 //JL("mylogger").setOptions({"appenders": [consoleAppender]});
-
 
 function getLocation() {
     if (navigator.geolocation) {
@@ -53,6 +53,12 @@ function loadData(input){
             loadedData = dataArray;
             visualizeData(loadedData);
         }
+      // JL("mylogger").info("response Text: " + this.responseText);
+        var dataArray = readData(this.responseText);
+        loadedData = dataArray;
+        selectData(loadedData);
+        //getLocation(loadedData);
+      }
     };
     xhttp.open("GET", url + input, true);
     xhttp.send();
@@ -99,36 +105,57 @@ function readData(dataCSV){
 }
 
 
+
+/**
+* get location of the device and write it into the global variabel currentPosition[lat, lng]
+*/
+function getLocation() {
+  JL("mylogger").info("--------getLocation()--------");
+ if (navigator.geolocation) {
+   JL("mylogger").info(navigator.geolocation);
+   navigator.geolocation.getCurrentPosition(getCoordinates);
+ } else {
+   JL("mylogger").warn("Current position is not available.");
+ }
+
+}
+
+function getCoordinates(position){
+  JL("mylogger").info("--------getCoordinates()--------");
+  JL("mylogger").info("current position: " + position.coords.latitude +", "+position.coords.longitude);
+  currentPosition = [position.coords.latitude, position.coords.longitude];
+}
+
 /**
 * select data that is around the current position of the device from the array
 *@param dataArray: array which contains data of the air quality
 *@return: array with relevant air quality data in format: [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
 */
 function selectData(dataArray){
-    //JL("mylogger").info("--------selectData()--------");
-    var relevantDataArray = null;
-    var radius = 0.00001;
+JL("mylogger").info("--------selectData()--------");
+var relevantDataArray = null;
+var radius = 0.00001;
+JL("mylogger").info(currentPosition);
 
-    var x;
-    for (x in dataArray){
-        //push all relevant value sets to the relevantDataArray
+var x;
+for (x in dataArray){
+  //push all relevant value sets to the relevantDataArray
 
-        if(
-          (currentPosition[0] < (dataArray[x][2] + radius)
-            && (currentPosition[1] < (dataArray[x][3] + radius)
-              || currentPosition[1] > (dataArray[x][3] - radius))
-          )
-          || (currentPosition[0] > (dataArray[x][2] - radius)
-            && (currentPosition[1] < (dataArray[x][3] + radius)
-            || currentPosition[1] > (dataArray[x][3] - radius))
-          )
-        ){
-            //JL("mylogger").info("relevant Position: " +dataArray[x][2]+", "+dataArray[x][3]);
-            relevantDataArray.push(dataArray[x]);
-        }
-        else{
-            //JL("mylogger").info("position not relevant.");
-        }
+  if(
+      (currentPosition[0] < (dataArray[x][2] + radius)
+          && (currentPosition[1] < (dataArray[x][3] + radius)
+          || currentPosition[1] > (dataArray[x][3] - radius))
+      )
+      || (currentPosition[0] > (dataArray[x][2] - radius)
+          && (currentPosition[1] < (dataArray[x][3] + radius)
+          || currentPosition[1] > (dataArray[x][3] - radius))
+         )
+    ){
+      JL("mylogger").info("relevant Position: " +dataArray[x][2]+", "+dataArray[x][3]);
+      relevantDataArray.push(dataArray[x]);
+    }
+    else{
+        JL("mylogger").info("position not relevant.");
     }
     //JL("mylogger").info("relevantDataArray: "+ relevantDataArray);
     selectedData =  relevantDataArray;
