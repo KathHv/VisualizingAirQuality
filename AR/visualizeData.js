@@ -212,8 +212,8 @@ function LoadExamplePlaces() {
         {
             name: "location 1",
             location: {
-                lat: 51.969210870645504, // add here latitude if using static data
-                lng: 7.595804035663604 // add here longitude if using static data
+                lat: 51.96982558464251,
+                lng: 7.595897912979127
             },
             air_quality: {
                 airTC: 8.12,
@@ -225,8 +225,8 @@ function LoadExamplePlaces() {
         {
             name: 'location 2',
             location: {
-                lat: 51.969184431144676,
-                lng: 7.595962285995483
+                lat: 51.969820627305275,
+                lng: 7.5959837436676025
             },
             air_quality: {
                 airTC: 9.12,
@@ -238,8 +238,8 @@ function LoadExamplePlaces() {
         {
             name: 'location 3',
             location: {
-                lat: 51.969267054533006,
-                lng: 7.595986425876617
+                lat: 51.96979914550434,
+                lng: 7.5960856676101685
             },
             air_quality: {
                 airTC: 10.12,
@@ -251,8 +251,8 @@ function LoadExamplePlaces() {
         {
             name: 'location 4',
             location: {
-                lat: 51.96937281224775,
-                lng: 7.596029341220856
+                lat: 51.96977435879814,
+                lng: 7.596171498298644
             },
             air_quality: {
                 airTC: 10.12,
@@ -262,10 +262,49 @@ function LoadExamplePlaces() {
             }
         },
         {
-            name: 'location 4',
+            name: 'location 5',
             location: {
-                lat: 51.969521533611875,
-                lng: 7.596091032028197
+                lat: 51.96972974269244,
+                lng: 7.596241235733032
+            },
+            air_quality: {
+                airTC: 10.12,
+                rH: 71.14,
+                pm25: 3.68,
+                pm10: 28.5
+            }
+        },
+        {
+            name: 'location 6',
+            location: {
+                lat: 51.96967686428743,
+                lng: 7.596286833286285
+            },
+            air_quality: {
+                airTC: 10.12,
+                rH: 71.14,
+                pm25: 3.68,
+                pm10: 28.5
+            }
+        },
+        {
+            name: 'location 7',
+            location: {
+                lat: 51.969625638273094,
+                lng: 7.596308290958405
+            },
+            air_quality: {
+                airTC: 10.12,
+                rH: 71.14,
+                pm25: 3.68,
+                pm10: 28.5
+            }
+        },
+        {
+            name: 'location 8',
+            location: {
+                lat: 51.96956614992487,
+                lng: 7.596305608749389
             },
             air_quality: {
                 airTC: 10.12,
