@@ -1,8 +1,8 @@
-/*
-* @author Katharina Hovestadt
+/**
+* @author Katharina Hovestadt, Paula Scharf
 */
 
-/*
+/**
 * initialzing variables
 *@param url: URL to the csv-file which contains the data
 *@param currentPosition: current position of the device [lat,lng]
@@ -34,25 +34,7 @@ function showPosition(position) {
 }
 
 
-
-
-/*
-function processData(){
-  var loadedData=null;
-  var selectedData=null;
-
-  loadedData = loadData();
-  JL("mylogger").info("loadedData: " + loadedData);
-
-  selectedData = selectData(loadedData);
-  JL("mylogger").info("selectedData: " + selectedData);
-
-  //var visualizedData = visualizeData(readData);
-  //JL("mylogger").info("visualizedData: " + visualizedData);
-
-}*/
-
-/*
+/**
 * load Data from csv file
 *@return: array with air quality data in format: [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
 */
@@ -77,7 +59,7 @@ function loadData(){
 }
 
 
-/*
+/**
 * read Data out of the submitted responseText
 *@param dataCSV csv text from air quality data
 *@return returns array of processed csv-text in form [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
@@ -117,7 +99,7 @@ function readData(dataCSV){
 }
 
 
-/*
+/**
 * select data that is around the current position of the device from the array
 *@param dataArray: array which contains data of the air quality
 *@return: array with relevant air quality data in format: [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
@@ -170,22 +152,8 @@ function visualizeData(dataArray){
         let icon = document.createElement('a-sphere');
         icon.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
         icon.setAttribute('name', place.name);
-        let color = "";
-        let expression = place.air_quality.pm10;
-        switch(true) {
-            case (expression < 5):
-                console.log("green");
-                color = "#00e600";
-                break;
-            case (expression > 5 && expression < 6):
-                console.log("orange");
-                color = "#ff9900";
-                break;
-            case (expression > 6):
-                console.log("red");
-                color = "#ff0000";
-                break;
-        }
+        let color = getColor(place.air_quality.pm10);
+        console.dir(color);
         icon.setAttribute('color', color);
 
         // for debug purposes, just show in a bigger scale, otherwise I have to personally go on places...
@@ -219,6 +187,14 @@ function visualizeData(dataArray){
 */
         scene.appendChild(icon);
     });
+}
+
+function getColor(input) {
+    let rainbow = new Rainbow();
+    rainbow.setNumberRange(30);
+    rainbow.setSpectrum('green', 'red');
+    let hexColour = rainbow.colourAt(input);
+    return '#' + hexColour;
 }
 
 
@@ -256,7 +232,7 @@ function LoadExamplePlaces() {
                 airTC: 9.12,
                 rH: 69.14,
                 pm25: 2.68,
-                pm10: 5.04
+                pm10: 8.04
             }
         },
         {
@@ -269,7 +245,7 @@ function LoadExamplePlaces() {
                 airTC: 10.12,
                 rH: 71.14,
                 pm25: 3.68,
-                pm10: 6.04
+                pm10: 14.04
             }
         },
         {
@@ -282,7 +258,7 @@ function LoadExamplePlaces() {
                 airTC: 10.12,
                 rH: 71.14,
                 pm25: 3.68,
-                pm10: 1.0
+                pm10: 20.0
             }
         },
         {
@@ -295,7 +271,7 @@ function LoadExamplePlaces() {
                 airTC: 10.12,
                 rH: 71.14,
                 pm25: 3.68,
-                pm10: 5.5
+                pm10: 28.5
             }
         }
     ];

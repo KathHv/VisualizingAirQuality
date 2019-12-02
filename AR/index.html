@@ -16,14 +16,12 @@
         THREEx.ArToolkitContext.baseURL = 'https://raw.githack.com/jeromeetienne/ar.js/master/three.js/'
     </script>
     <!-- jsnlog -->
-    <script src="jsnlog.min.js"> </script>
+    <script src="../node_modules/jsnlog/jsnlog.min.js"> </script>
+    <!-- color gradient library -->
+    <script src="../node_modules/rainbowvis.js/rainbowvis.js"></script>
+
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" type="text/css" href="./stylesheets/style.css">
-
-
-
-
-
 </head>
 
 
@@ -36,13 +34,6 @@
 
 <body style='margin: 0; overflow: hidden;' id="visArea">
 
-<!--div>
-    <button type="button" class="btn" id='loadButton' onclick=loadData()>Get Data</button>
-
-    <button type="button" class="btn" id='selectButton' onclick=selectData(loadedData)>Select Data</button>
-
-    <button type="button" class="btn" id='markerButton' onclick=loadAndRenderMarkerLocationsExample()>marker example</button>
-</div-->
 <a-scene
         vr-mode-ui="enabled: false"
         embedded

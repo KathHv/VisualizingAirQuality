@@ -12,6 +12,7 @@
   ],
   "author": "Katharina Hovestadt, Aditya Kudekar, Tanja ?, Sarah Schöttler, Paula Scharf",
   "dependencies": {
-    "jsnlog": "^2.29.0"
+    "jsnlog": "^2.29.0",
+    "rainbowvis.js": "^1.0.1"
   }
 }
