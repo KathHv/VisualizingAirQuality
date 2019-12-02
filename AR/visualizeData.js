@@ -212,8 +212,8 @@ function LoadExamplePlaces() {
         {
             name: "location 1",
             location: {
-                lat: 51.972799888098116, // add here latitude if using static data
-                lng: 7.5600528717041025 // add here longitude if using static data
+                lat: 51.969210870645504, // add here latitude if using static data
+                lng: 7.595804035663604 // add here longitude if using static data
             },
             air_quality: {
                 airTC: 8.12,
@@ -225,8 +225,8 @@ function LoadExamplePlaces() {
         {
             name: 'location 2',
             location: {
-                lat: 51.97263465419644,
-                lng: 7.559886574745177
+                lat: 51.969184431144676,
+                lng: 7.595962285995483
             },
             air_quality: {
                 airTC: 9.12,
@@ -238,8 +238,8 @@ function LoadExamplePlaces() {
         {
             name: 'location 3',
             location: {
-                lat: 51.972442982107154,
-                lng: 7.5598543882369995
+                lat: 51.969267054533006,
+                lng: 7.595986425876617
             },
             air_quality: {
                 airTC: 10.12,
@@ -251,8 +251,8 @@ function LoadExamplePlaces() {
         {
             name: 'location 4',
             location: {
-                lat: 51.97227774688935,
-                lng: 7.559940218925476
+                lat: 51.96937281224775,
+                lng: 7.596029341220856
             },
             air_quality: {
                 airTC: 10.12,
@@ -264,8 +264,8 @@ function LoadExamplePlaces() {
         {
             name: 'location 4',
             location: {
-                lat: 51.97212242522909,
-                lng: 7.560095787048341
+                lat: 51.969521533611875,
+                lng: 7.596091032028197
             },
             air_quality: {
                 airTC: 10.12,
