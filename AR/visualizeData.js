@@ -167,9 +167,8 @@ function visualizeData(dataArray){
         let longitude = place.location.lng;
 
         // add place icon
-        let icon = document.createElement('a-plane');
+        let icon = document.createElement('a-sphere');
         icon.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
-        icon.setAttribute('rotation', "-90 0 0");
         icon.setAttribute('name', place.name);
         let color = "";
         let expression = place.air_quality.pm10;
@@ -190,7 +189,7 @@ function visualizeData(dataArray){
         icon.setAttribute('color', color);
 
         // for debug purposes, just show in a bigger scale, otherwise I have to personally go on places...
-        icon.setAttribute('scale', '15 15 15');
+        icon.setAttribute('scale', '10 10 10');
 
         icon.addEventListener('loaded', () => window.dispatchEvent(new CustomEvent('gps-entity-place-loaded')));
 /*
