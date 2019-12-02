@@ -1,24 +1,24 @@
 /**
-* @author Katharina Hovestadt, Paula Scharf
-*/
+ * @author Katharina Hovestadt, Paula Scharf
+ */
 
 /**
-* initialzing variables
-*@param url: URL to the csv-file which contains the data
-*@param currentPosition: current position of the device [lat,lng]
-*@param visArea: area in document where something can be visualized
-*/
+ * initialzing variables
+ *@param url: URL to the csv-file which contains the data
+ *@param currentPosition: current position of the device [lat,lng]
+ *@param visArea: area in document where something can be visualized
+ */
 var url = "data/";
-var currentPosition;
+var currentPosition = getLocation();
 var visArea = document.getElementById("visArea");
 var loadedData=null;
 var selectedData=null;
+
 
 // "mylogger" logs to just the console
 //@see http://js.jsnlog.com/
 //var consoleAppender = JL.createConsoleAppender('consoleAppender');
 //JL("mylogger").setOptions({"appenders": [consoleAppender]});
-
 
 function getLocation() {
     if (navigator.geolocation) {
@@ -30,14 +30,14 @@ function getLocation() {
 
 function showPosition(position) {
     x.innerHTML = "Latitude: " + position.coords.latitude +
-      "<br>Longitude: " + position.coords.longitude;
+        "<br>Longitude: " + position.coords.longitude;
 }
 
 
 /**
-* load Data from csv file
-*@return: array with air quality data in format: [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
-*/
+ * load Data from csv file
+ *@return: array with air quality data in format: [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
+ */
 function loadData(input){
 
     //JL("mylogger").info("--------loadData()--------");
@@ -53,17 +53,23 @@ function loadData(input){
             loadedData = dataArray;
             visualizeData(loadedData);
         }
-    };
-    xhttp.open("GET", url + input, true);
-    xhttp.send();
+        // JL("mylogger").info("response Text: " + this.responseText);
+        var dataArray = readData(this.responseText);
+        loadedData = dataArray;
+        selectData(loadedData);
+        //getLocation(loadedData);
+    }
+};
+xhttp.open("GET", url + input, true);
+xhttp.send();
 }
 
 
 /**
-* read Data out of the submitted responseText
-*@param dataCSV csv text from air quality data
-*@return returns array of processed csv-text in form [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
-*/
+ * read Data out of the submitted responseText
+ *@param dataCSV csv text from air quality data
+ *@return returns array of processed csv-text in form [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
+ */
 function readData(dataCSV){
     //JL("mylogger").info("--------readData()--------");
     var dataArraySplittedByBrake = dataCSV.split("\n");
@@ -99,110 +105,126 @@ function readData(dataCSV){
 }
 
 
+
 /**
-* select data that is around the current position of the device from the array
-*@param dataArray: array which contains data of the air quality
-*@return: array with relevant air quality data in format: [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
-*/
+ * get location of the device and write it into the global variabel currentPosition[lat, lng]
+ */
+function getLocation() {
+    JL("mylogger").info("--------getLocation()--------");
+    if (navigator.geolocation) {
+        JL("mylogger").info(navigator.geolocation);
+        navigator.geolocation.getCurrentPosition(getCoordinates);
+    } else {
+        JL("mylogger").warn("Current position is not available.");
+    }
+
+}
+
+function getCoordinates(position){
+    JL("mylogger").info("--------getCoordinates()--------");
+    JL("mylogger").info("current position: " + position.coords.latitude +", "+position.coords.longitude);
+    currentPosition = [position.coords.latitude, position.coords.longitude];
+}
+
+/**
+ * select data that is around the current position of the device from the array
+ *@param dataArray: array which contains data of the air quality
+ *@return: array with relevant air quality data in format: [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
+ */
 function selectData(dataArray){
-    //JL("mylogger").info("--------selectData()--------");
+    JL("mylogger").info("--------selectData()--------");
     var relevantDataArray = null;
     var radius = 0.00001;
+    JL("mylogger").info(currentPosition);
 
     var x;
     for (x in dataArray){
         //push all relevant value sets to the relevantDataArray
 
         if(
-          (currentPosition[0] < (dataArray[x][2] + radius)
-            && (currentPosition[1] < (dataArray[x][3] + radius)
-              || currentPosition[1] > (dataArray[x][3] - radius))
-          )
-          || (currentPosition[0] > (dataArray[x][2] - radius)
-            && (currentPosition[1] < (dataArray[x][3] + radius)
-            || currentPosition[1] > (dataArray[x][3] - radius))
-          )
+            (currentPosition[0] < (dataArray[x][2] + radius)
+                && (currentPosition[1] < (dataArray[x][3] + radius)
+                    || currentPosition[1] > (dataArray[x][3] - radius))
+            )
+            || (currentPosition[0] > (dataArray[x][2] - radius)
+                && (currentPosition[1] < (dataArray[x][3] + radius)
+                || currentPosition[1] > (dataArray[x][3] - radius))
+            )
         ){
-            //JL("mylogger").info("relevant Position: " +dataArray[x][2]+", "+dataArray[x][3]);
+            JL("mylogger").info("relevant Position: " +dataArray[x][2]+", "+dataArray[x][3]);
             relevantDataArray.push(dataArray[x]);
         }
         else{
-            //JL("mylogger").info("position not relevant.");
+            JL("mylogger").info("position not relevant.");
         }
+        //JL("mylogger").info("relevantDataArray: "+ relevantDataArray);
+        selectedData =  relevantDataArray;
+
     }
-    //JL("mylogger").info("relevantDataArray: "+ relevantDataArray);
-    selectedData =  relevantDataArray;
-
-}
 
 
-/*
-* visualizes data in the AR, writes into html
-*@param dataArray: array which contains the RELEVANT data of the air quality in format [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
-*/
-function visualizeData(dataArray){
-    //JL("mylogger").info("--------visualizeData()--------");
-    let scene = document.querySelector('a-scene');
+    /*
+    * visualizes data in the AR, writes into html
+    *@param dataArray: array which contains the RELEVANT data of the air quality in format [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
+    */
+    function visualizeData(dataArray){
+        //JL("mylogger").info("--------visualizeData()--------");
+        let scene = document.querySelector('a-scene');
 
-    dataArray.forEach((place) => {
-        let latitude = place.location.lat;
-        let longitude = place.location.lng;
+        dataArray.forEach((place) => {
+            let latitude = place.location.lat;
+            let longitude = place.location.lng;
 
-        // add place icon
-        let icon = document.createElement('a-cylinder');
-        icon.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
-        icon.setAttribute('height', '0.1');
-        icon.setAttribute('name', place.name);
-        let color = getColor(place.air_quality.pm10);
-        console.dir(color);
-        icon.setAttribute('color', color);
+            // add place icon
+            let icon = document.createElement('a-cylinder');
+            icon.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
+            icon.setAttribute('height', '0.1');
+            icon.setAttribute('name', place.name);
+            let color = getColor(place.air_quality.pm10);
+            console.dir(color);
+            icon.setAttribute('color', color);
 
-        // for debug purposes, just show in a bigger scale, otherwise I have to personally go on places...
-        icon.setAttribute('scale', '5 5 5');
+            // for debug purposes, just show in a bigger scale, otherwise I have to personally go on places...
+            icon.setAttribute('scale', '5 5 5');
 
-        icon.addEventListener('loaded', () => window.dispatchEvent(new CustomEvent('gps-entity-place-loaded')));
-/*
-        const clickListener = function (ev) {
-            ev.stopPropagation();
-            ev.preventDefault();
+            icon.addEventListener('loaded', () => window.dispatchEvent(new CustomEvent('gps-entity-place-loaded')));
+            /*
+                    const clickListener = function (ev) {
+                        ev.stopPropagation();
+                        ev.preventDefault();
+                        const name = ev.target.getAttribute('name');
+                        const el = ev.detail.intersection && ev.detail.intersection.object.el;
+                        if (el && el === ev.target) {
+                            const label = document.createElement('span');
+                            const container = document.createElement('div');
+                            container.setAttribute('id', 'place-label');
+                            label.innerText = name;
+                            container.appendChild(label);
+                            document.body.appendChild(container);
+                            setTimeout(() => {
+                                container.parentElement.removeChild(container);
+                            }, 1500);
+                        }
+                    };
+                    icon.addEventListener('click', clickListener);
+            */
+            scene.appendChild(icon);
+        });
+    }
 
-            const name = ev.target.getAttribute('name');
-
-            const el = ev.detail.intersection && ev.detail.intersection.object.el;
-
-            if (el && el === ev.target) {
-                const label = document.createElement('span');
-                const container = document.createElement('div');
-                container.setAttribute('id', 'place-label');
-                label.innerText = name;
-                container.appendChild(label);
-                document.body.appendChild(container);
-
-                setTimeout(() => {
-                    container.parentElement.removeChild(container);
-                }, 1500);
-            }
-        };
-
-        icon.addEventListener('click', clickListener);
-*/
-        scene.appendChild(icon);
-    });
-}
-
-function getColor(input) {
-    let rainbow = new Rainbow();
-    rainbow.setNumberRange(1, 30);
-    rainbow.setSpectrum('green', 'red');
-    let hexColour = rainbow.colourAt(input);
-    return '#' + hexColour;
-}
+    function getColor(input) {
+        let rainbow = new Rainbow();
+        rainbow.setNumberRange(1, 30);
+        rainbow.setSpectrum('green', 'red');
+        let hexColour = rainbow.colourAt(input);
+        return '#' + hexColour;
+    }
 
 
-function loadAndRenderMarkerLocationsExample() {
-   loadData("example.csv");
-}
+    function loadAndRenderMarkerLocationsExample() {
+        loadData("example.csv");
+    }
 
-function loadAndRenderMarkerLocationsBike() {
-    loadData("bike_14-11.csv");
-}
+    function loadAndRenderMarkerLocationsBike() {
+        loadData("bike_14-11.csv");
+    }
