@@ -53,13 +53,6 @@ function loadData(input){
             loadedData = dataArray;
             visualizeData(loadedData);
         }
-      // JL("mylogger").info("response Text: " + this.responseText);
-        var dataArray = readData(this.responseText);
-        loadedData = dataArray;
-        selectData(loadedData);
-        //getLocation(loadedData);
-      }
-    };
     xhttp.open("GET", url + input, true);
     xhttp.send();
 }
