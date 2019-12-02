@@ -17,8 +17,6 @@ button {
     display: flex;
     border: 2px solid white;
     background-color: transparent;
-    width: 5em;
-    height: 2em;
     border-radius: 100%;
     font-size: 2em;
     background-color: rgba(0, 0, 0, 0.4);
