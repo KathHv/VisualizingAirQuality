@@ -149,10 +149,9 @@ function visualizeData(dataArray){
         let longitude = place.location.lng;
 
         // add place icon
-        let icon = document.createElement('a-plane');
+        let icon = document.createElement('a-sphere');
         icon.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
-        icon.setAttribute('src', '#ground');
-        icon.setAttribute('rotation', '-90 0 0');
+        icon.setAttribute('height', '128');
         icon.setAttribute('name', place.name);
         let color = getColor(place.air_quality.pm10);
         console.dir(color);
