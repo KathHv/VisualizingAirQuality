@@ -8,7 +8,7 @@
 *@param currentPosition: current position of the device [lat,lng]
 *@param visArea: area in document where something can be visualized
 */
-var url = "/data/bike_14-11.csv";
+var url = "/data/";
 var currentPosition;
 var visArea = document.getElementById("visArea");
 var loadedData=null;
@@ -38,7 +38,7 @@ function showPosition(position) {
 * load Data from csv file
 *@return: array with air quality data in format: [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
 */
-function loadData(){
+function loadData(input){
 
     //JL("mylogger").info("--------loadData()--------");
     var xhttp = new XMLHttpRequest();
@@ -54,7 +54,7 @@ function loadData(){
             visualizeData(loadedData);
         }
     };
-    xhttp.open("GET", url, true);
+    xhttp.open("GET", url + input, true);
     xhttp.send();
 }
 
@@ -200,12 +200,11 @@ function getColor(input) {
 
 
 function loadAndRenderMarkerLocationsExample() {
-    let places = LoadExamplePlaces();
-    visualizeData(places);
+   loadData("example.csv");
 }
 
 function loadAndRenderMarkerLocationsBike() {
-    loadData();
+    loadData("bike_14-11.csv");
 }
 
 function LoadExamplePlaces() {
