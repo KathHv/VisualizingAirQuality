@@ -191,7 +191,7 @@ function visualizeData(dataArray){
 
 function getColor(input) {
     let rainbow = new Rainbow();
-    rainbow.setNumberRange(30);
+    rainbow.setNumberRange(1, 30);
     rainbow.setSpectrum('green', 'red');
     let hexColour = rainbow.colourAt(input);
     return '#' + hexColour;
