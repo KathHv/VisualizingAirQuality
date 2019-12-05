@@ -63,8 +63,8 @@ d3.csv("data/LANUV_1oct-20nov.csv", function(d) {
 			humidity: +d.Humidity,
 			pm10: +d.P10,
 			p2_5: +d["P2.5"],
-			pressure: d.Pressure,
-			temp: d.Temperature,
+			pressure: +d.Pressure,
+			temp: +d.Temperature,
 			time: parseTimeSensebox("2019-11-14-" + d["time of day"])
 			// skip "time since power on"​​​​
 		};
