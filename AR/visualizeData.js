@@ -1,24 +1,24 @@
 /**
-* @author Katharina Hovestadt, Paula Scharf
-*/
+ * @author Katharina Hovestadt, Paula Scharf
+ */
 
 /**
-* initialzing variables
-*@param url: URL to the csv-file which contains the data
-*@param currentPosition: current position of the device [lat,lng]
-*@param visArea: area in document where something can be visualized
-*/
+ * initialzing variables
+ *@param url: URL to the csv-file which contains the data
+ *@param currentPosition: current position of the device [lat,lng]
+ *@param visArea: area in document where something can be visualized
+ */
 var url = "data/";
-var currentPosition = getLocation();
+var currentPosition;
 var visArea = document.getElementById("visArea");
 var loadedData=null;
 var selectedData=null;
 
-
 // "mylogger" logs to just the console
-//@see http://js.jsnlog.com/
-//var consoleAppender = JL.createConsoleAppender('consoleAppender');
-//JL("mylogger").setOptions({"appenders": [consoleAppender]});
+@see http://js.jsnlog.com/
+var consoleAppender = JL.createConsoleAppender('consoleAppender');
+JL("mylogger").setOptions({"appenders": [consoleAppender]});
+
 
 function getLocation() {
     if (navigator.geolocation) {
@@ -30,44 +30,45 @@ function getLocation() {
 
 function showPosition(position) {
     x.innerHTML = "Latitude: " + position.coords.latitude +
-      "<br>Longitude: " + position.coords.longitude;
+        "<br>Longitude: " + position.coords.longitude;
 }
 
 
 /**
-* load Data from csv file
-*@return: array with air quality data in format: [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
-*/
+ * load Data from csv file
+ *@return: array with air quality data in format: [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
+ */
 function loadData(input){
 
-    //JL("mylogger").info("--------loadData()--------");
+    JL("mylogger").info("--------loadData()--------");
     var xhttp = new XMLHttpRequest();
 
     xhttp.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
             if (this.responseText.length === 0){
-                //JL("mylogger").error("The URL field or the content of the field is emtpy.1");
+                JL("mylogger").error("The URL field or the content of the field is emtpy.1");
             }
-            //JL("mylogger").info("response Text: " + this.responseText);
+            JL("mylogger").info("response Text: " + this.responseText);
             var dataArray = readData(this.responseText);
             loadedData = dataArray;
             visualizeData(loadedData);
         }
+    };
     xhttp.open("GET", url + input, true);
     xhttp.send();
 }
 
 
 /**
-* read Data out of the submitted responseText
-*@param dataCSV csv text from air quality data
-*@return returns array of processed csv-text in form [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
-*/
+ * read Data out of the submitted responseText
+ *@param dataCSV csv text from air quality data
+ *@return returns array of processed csv-text in form [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
+ */
 function readData(dataCSV){
-    //JL("mylogger").info("--------readData()--------");
+    JL("mylogger").info("--------readData()--------");
     var dataArraySplittedByBrake = dataCSV.split("\n");
     dataArraySplittedByBrake.shift();
-//    JL("mylogger").info("dataArraySplittedByBrake[0]: " + dataArraySplittedByBrake[0]);
+    JL("mylogger").info("dataArraySplittedByBrake[0]: " + dataArraySplittedByBrake[0]);
     var dataArraySplittedByBrakeAndComma = [];
     var x;
     for (x in dataArraySplittedByBrake){
@@ -93,11 +94,9 @@ function readData(dataCSV){
         };
         dataArrayOfObjects.push(placeObject);
     });
-    //JL("mylogger").info("read data is ready.");
+    JL("mylogger").info("read data is ready.");
     return dataArrayOfObjects;
 }
-
-
 
 /**
 * get location of the device and write it into the global variabel currentPosition[lat, lng]
@@ -150,7 +149,7 @@ for (x in dataArray){
     else{
         JL("mylogger").info("position not relevant.");
     }
-    //JL("mylogger").info("relevantDataArray: "+ relevantDataArray);
+    JL("mylogger").info("relevantDataArray: "+ relevantDataArray);
     selectedData =  relevantDataArray;
 
 }
@@ -161,7 +160,7 @@ for (x in dataArray){
 *@param dataArray: array which contains the RELEVANT data of the air quality in format [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
 */
 function visualizeData(dataArray){
-    //JL("mylogger").info("--------visualizeData()--------");
+    JL("mylogger").info("--------visualizeData()--------");
     let scene = document.querySelector('a-scene');
 
     dataArray.forEach((place) => {
@@ -181,31 +180,26 @@ function visualizeData(dataArray){
         icon.setAttribute('scale', '5 5 5');
 
         icon.addEventListener('loaded', () => window.dispatchEvent(new CustomEvent('gps-entity-place-loaded')));
-/*
-        const clickListener = function (ev) {
-            ev.stopPropagation();
-            ev.preventDefault();
-
-            const name = ev.target.getAttribute('name');
-
-            const el = ev.detail.intersection && ev.detail.intersection.object.el;
-
-            if (el && el === ev.target) {
-                const label = document.createElement('span');
-                const container = document.createElement('div');
-                container.setAttribute('id', 'place-label');
-                label.innerText = name;
-                container.appendChild(label);
-                document.body.appendChild(container);
-
-                setTimeout(() => {
-                    container.parentElement.removeChild(container);
-                }, 1500);
-            }
-        };
-
-        icon.addEventListener('click', clickListener);
-*/
+        /*
+                const clickListener = function (ev) {
+                    ev.stopPropagation();
+                    ev.preventDefault();
+                    const name = ev.target.getAttribute('name');
+                    const el = ev.detail.intersection && ev.detail.intersection.object.el;
+                    if (el && el === ev.target) {
+                        const label = document.createElement('span');
+                        const container = document.createElement('div');
+                        container.setAttribute('id', 'place-label');
+                        label.innerText = name;
+                        container.appendChild(label);
+                        document.body.appendChild(container);
+                        setTimeout(() => {
+                            container.parentElement.removeChild(container);
+                        }, 1500);
+                    }
+                };
+                icon.addEventListener('click', clickListener);
+        */
         scene.appendChild(icon);
     });
 }
@@ -220,7 +214,7 @@ function getColor(input) {
 
 
 function loadAndRenderMarkerLocationsExample() {
-   loadData("example.csv");
+    loadData("example.csv");
 }
 
 function loadAndRenderMarkerLocationsBike() {
