@@ -15,7 +15,7 @@ var loadedData=null;
 var selectedData=null;
 
 // "mylogger" logs to just the console
-@see http://js.jsnlog.com/
+//@see http://js.jsnlog.com/
 var consoleAppender = JL.createConsoleAppender('consoleAppender');
 JL("mylogger").setOptions({"appenders": [consoleAppender]});
 
