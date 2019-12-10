@@ -1,27 +1,25 @@
 body,
 html {
 	font-family: sans-serif;
-	background-color: #f3f3f3;
 	margin: 0;
 }
 
-#scrolly {
+.scrolly {
 	position: relative;
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
+	background-color: #f3f3f3;
 	padding: 1rem;
 }
-
-#scrolly > * {
+.scrolly > * {
 	-webkit-box-flex: 1;
 	-ms-flex: 1;
 	flex: 1;
 }
-
 article {
 	position: relative;
-	padding: 0 10px;
+	padding: 0 1rem;
 	max-width: 20rem;
 }
 
@@ -33,27 +31,27 @@ figure {
 	-webkit-transform: translate3d(0, 0, 0);
 	-moz-transform: translate3d(0, 0, 0);
 	transform: translate3d(0, 0, 0);
-	/*background-color: #8a8a8a;*/
+	background-color: #8a8a8a;
+	z-index: 0;
 }
 
-/*  display: block;
-  margin-top: 1em;
-  margin-bottom: 1em;
-  margin-left: 40px;
-  margin-right: 40px;
-*/
-/*figure p {
-	text-align: center;
-	padding: 1rem;
+figure img {
+	/*text-align: center;*/
+	/*padding: 1rem;*/
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	-moz-transform: translate(-50%, -50%);
 	-webkit-transform: translate(-50%, -50%);
 	transform: translate(-50%, -50%);
-	font-size: 8rem;
-	font-weight: 900;
+	/*font-size: 8rem;*/
+	/*font-weight: 900;*/
 	color: #fff;
+	width: 100%;
+}
+
+/*figure div img {
+	width: 100%;
 }*/
 
 .step {

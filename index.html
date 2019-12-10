@@ -15,6 +15,9 @@
 		<!-- D3 -->
 		<script src="https://d3js.org/d3.v5.min.js"></script>
 
+		<!-- polyfill for position:sticky -->
+		<script src="lib/stickyfill.min.js"></script>
+
 		<!-- Leaflet (CSS "*must* be loaded before JS)-->
 		<link
 			rel="stylesheet"
@@ -32,13 +35,67 @@
 	<body>
 		<main>
 			<section id="intro">
-				<h1 class="intro__hed">Sticky Side Example</h1>
+				<h1 class="intro__hed">How reliable are air quality measurements?</h1>
 				<p class="intro__dek">
-					Start scrolling to see how it works.
+					Intro intro intro
 				</p>
 			</section>
 
-			<section id="scrolly">
+			<h2>Measurement Uncertainty</h2>
+
+			<section id="scrollyA" class="scrolly">
+				<!-- individual text boxes on the left -->
+				<article>
+					<div class="step" data-step="1">
+						<p>LANUV stations</p>
+					</div>
+					<div class="step" data-step="2">
+						<p>senseBox</p>
+					</div>
+					<div class="step" data-step="3">
+						<p>Bike</p>
+					</div>
+				</article>
+
+				<!-- this is the block on the right -->
+				<figure>
+					<!-- <p> -->
+					<img src="img/test1.png" alt="test pic" />
+					<!-- </p> -->
+				</figure>
+			</section>
+
+			<h2>Temporal Uncertainty</h2>
+
+			<section id="scrollyB" class="scrolly">
+				<!-- individual text boxes on the left -->
+				<article>
+					<div class="step" data-step="1">
+						<p>This is Münster.</p>
+					</div>
+					<div class="step" data-step="2">
+						<p>
+							There are two stationary air quality measurement stations. One is
+							located in Geist.
+						</p>
+					</div>
+					<div class="step" data-step="3">
+						<p>The second one is located at Weseler Straße.</p>
+					</div>
+					<div class="step" data-step="4">
+						<p>STEP 4</p>
+					</div>
+				</article>
+
+				<!-- this is the block on the right -->
+				<figure>
+					<div id="map"></div>
+				</figure>
+			</section>
+
+			<h2>Spatial Uncertainty</h2>
+
+			<section id="scrollyC" class="scrolly">
 				<!-- individual text boxes on the left -->
 				<article>
 					<div class="step" data-step="1">
