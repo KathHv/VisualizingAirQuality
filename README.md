@@ -11,4 +11,4 @@
 
 ## Links to Sites
 * AR: https://kathhv.github.io/VisualizingAirQuality/AR
-* Webpage: https://kathhv.github.io/VisualizingAirQuality/site
+* Webpage: https://kathhv.github.io/VisualizingAirQuality
