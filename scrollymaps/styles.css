@@ -47,7 +47,8 @@ figure img {
 	/*font-size: 8rem;*/
 	/*font-weight: 900;*/
 	color: #fff;
-	width: 100%;
+	max-width: 100%;
+	max-height: 100%;
 }
 
 /*figure div img {
@@ -56,6 +57,7 @@ figure img {
 
 .step {
 	margin: 0 auto 2rem auto;
+	padding: 1rem;
 	background-color: #3b3b3b;
 	color: #fff;
 }
@@ -71,7 +73,7 @@ figure img {
 
 .step p {
 	text-align: center;
-	padding: 1rem;
+	/*padding: 1rem;*/
 }
 
 #arbutton {

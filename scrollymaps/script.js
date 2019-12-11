@@ -132,7 +132,7 @@ function handleResize() {
 	// 1. update height of step elements
 	var stepH = Math.floor(window.innerHeight * 0.75);
 	allSteps.style("height", stepH + "px");
-	var figureHeight = window.innerHeight / 2;
+	var figureHeight = window.innerHeight * 0.75;
 	var figureMarginTop = (window.innerHeight - figureHeight) / 2;
 	allFigures
 		.style("height", figureHeight + "px")
