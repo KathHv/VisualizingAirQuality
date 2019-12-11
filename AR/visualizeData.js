@@ -59,7 +59,6 @@ function getAngle(lat1, lng1, lat2, lng2) {
  * @param input - the name of the csv from which the data is loaded
  */
 function promiseToLoadData(input) {
-
     return new Promise(function(resolve, reject) {
         JL("mylogger").info("--------loadData()--------");
         var xhttp = new XMLHttpRequest();
@@ -172,7 +171,6 @@ function selectData(dataArray){
     }
     JL("mylogger").info("relevantDataArray: "+ relevantDataArray);
     return relevantDataArray;
-
 }
 
 
