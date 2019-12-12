@@ -20,6 +20,9 @@
     <!-- color gradient library -->
     <script src="rainbowvis.js"></script>
 
+    <script src="components.js"></script>
+    <script src="visualizeData.js"></script>
+
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" type="text/css" href="./stylesheets/style.css">
 </head>
@@ -27,25 +30,27 @@
 
 <!-- creating the consoleAppender to write logs into the console
      also see http://js.jsnlog.com/ -->
-<!--/jsnlog>
-<consoleAppender name="consoleAppender" />
-<logger name ="mylogger" appenders="consoleAppender"/>
-</jsnlog-->
+<jsnlog>
+    <consoleAppender name="consoleAppender" ></consoleAppender>
+    <logger name ="mylogger" appenders="consoleAppender"></logger>
+</jsnlog>
 
-<body style='margin: 0; overflow: hidden;' id="visArea">
+<body style='margin: 0; overflow: hidden;' id="visArea" onload = "getLocation()">
 
 <a-scene
         vr-mode-ui="enabled: false"
         embedded
         arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;'>
 
-    <a-camera gps-camera="minDistance: 20;" rotation-reader></a-camera>
+    <a-camera gps-camera="minDistance: 20;" rotation-reader id="camera" camera-listener>
+        <a-entity id="arrow" arrow="direction: 0 1 0; length: 0.5; headWidth: 0.1" position="0 -1.5 -3"></a-entity>
+    </a-camera>
+
 
 </a-scene>
 <div class="centered">
-    <button id="exampleMarkerButtonCentered" onclick=loadAndRenderMarkerLocationsExample()>example</button>
-    <button id="bikeMarkerButtonCentered" onclick=loadAndRenderMarkerLocationsBike()>bike</button>
+    <button id="exampleMarkerButtonCentered" onclick=promiseToLoadData("example.csv")>route</button>
+    <button id="bikeMarkerButtonCentered" onclick=startNavigation()>navi</button>
 </div>
-<script src="visualizeData.js"></script>
 </body>
 </html>
