@@ -3,6 +3,10 @@ html {
 	font-family: sans-serif;
 	background-color: #f3f3f3;
 	margin: 10;
+	background-image: url('1.jpg');
+  	background-repeat: no-repeat;
+  	background-attachment: fixed;
+  	background-size: cover;
 }
 
 #scrolly {
