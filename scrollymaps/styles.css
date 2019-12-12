@@ -76,6 +76,23 @@ figure img {
 	/*padding: 1rem;*/
 }
 
+#mapB,
+#mapC {
+	/*setting height explicitly is required for Leaflet*/
+	height: 100%;
+	width: 100%;
+}
+
+#timeB {
+	display: block;
+	position: fixed;
+	top: 0;
+	right: 0;
+	z-index: 1000; /*leaflet: 400*/
+	background-color: white;
+	padding: 10px;
+}
+
 #arbutton {
 	display: table;
 	background-color: #3b3b3b;
