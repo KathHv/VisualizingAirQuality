@@ -92,3 +92,8 @@ figure {
 .wrapper {
 	text-align: right;
 }
+.introp {
+	text-align: center;
+	font-size: 16px;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif
+}
