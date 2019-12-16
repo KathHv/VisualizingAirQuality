@@ -138,13 +138,13 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 }).addTo(mapB);
 
 var mapC = L.map("mapC", {
-	// uncomment to disable all zoom controls
-	// zoomControl: false,
-	// scrollWheelZoom: false,
-	// doubleClickZoom: false,
-	// touchZoom: false,
-	// boxZoom: false,
-	// dragging: false
+	// disable all zoom controls
+	zoomControl: false,
+	scrollWheelZoom: false,
+	doubleClickZoom: false,
+	touchZoom: false,
+	boxZoom: false,
+	dragging: false
 }).setView([51.97, 7.63], 13);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 	attribution:
