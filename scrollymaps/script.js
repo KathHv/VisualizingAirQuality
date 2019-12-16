@@ -4,6 +4,8 @@ const initZoom = 12;
 const stationGeist = [51.936482, 7.611609];
 const stationWeseler = [51.953275, 7.619379];
 
+const scrollyImg = ["lanuv.jpg", "sensebox.jpg", "bike.jpg"];
+
 // parsing functions
 // var parseDateLANUV = d3.timeParse("%d.%m.%Y"); // 01.12.2019
 var parseTimeLANUV = d3.timeParse("%d.%m.%Y-%H:%M"); // 01.12.2019-09:12
@@ -136,13 +138,13 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 }).addTo(mapB);
 
 var mapC = L.map("mapC", {
-	// uncomment to disable all zoom controls
-	// zoomControl: false,
-	// scrollWheelZoom: false,
-	// doubleClickZoom: false,
-	// touchZoom: false,
-	// boxZoom: false,
-	// dragging: false
+	// disable all zoom controls
+	zoomControl: false,
+	scrollWheelZoom: false,
+	doubleClickZoom: false,
+	touchZoom: false,
+	boxZoom: false,
+	dragging: false
 }).setView([51.97, 7.63], 13);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 	attribution:
@@ -249,7 +251,7 @@ function handleStepEnterA(response) {
 	});
 
 	// update image based on step
-	scrollyA.img.attr("src", "img/test" + (response.index + 1) + ".png");
+	scrollyA.img.attr("src", "img/" + scrollyImg[response.index]);
 	// update map based on step
 	// updateMap(response.index);
 	// figure.select("p").text(response.index);
