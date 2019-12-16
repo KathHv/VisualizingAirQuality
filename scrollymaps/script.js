@@ -4,6 +4,14 @@ const initZoom = 12;
 const stationGeist = [51.936482, 7.611609];
 const stationWeseler = [51.953275, 7.619379];
 
+const scrollyImg = ["lanuv.jpg", "sensebox.jpg", "bike.jpg"];
+
+// parsing functions
+// var parseDateLANUV = d3.timeParse("%d.%m.%Y"); // 01.12.2019
+var parseTimeLANUV = d3.timeParse("%d.%m.%Y-%H:%M"); // 01.12.2019-09:12
+var parseTimeSensebox = d3.timeParse("%Y-%m-%d-%H:%M:%S,%L"); // "2019-11-14-14:26:02,456"
+var parseTimeBike = d3.timeParse("%Y-%m-%d%_H:%M:%S"); // 2019-11-14 14:35:00
+
 var main = d3.select("main");
 var allSteps = d3.selectAll(".step");
 var allFigures = d3.selectAll("figure");
@@ -17,6 +25,18 @@ var scrollyB = {
 	scrolly: d3.select("#scrollyB"),
 	step: d3.select("#scrollyB").selectAll(".step")
 };
+var timerB = {
+	div: d3.select("#timeB"),
+	start: new Date(2019, 10, 14),
+	end: new Date(2019, 10, 14, 23, 59, 59),
+	speedFactor: 24 * 60
+};
+
+timerB.scale = d3
+	.scaleTime()
+	.range([timerB.start, timerB.end])
+	.domain([0, (timerB.end - timerB.start) / timerB.speedFactor]);
+
 var scrollyC = {
 	scrolly: d3.select("#scrollyC"),
 	step: d3.select("#scrollyC").selectAll(".step")
@@ -26,12 +46,6 @@ var scrollyC = {
 // var map = scrolly.select("#map");
 // var article = scrolly.select("article");
 // var step = article.selectAll(".step");
-
-// parsing functions
-// var parseDateLANUV = d3.timeParse("%d.%m.%Y"); // 01.12.2019
-var parseTimeLANUV = d3.timeParse("%d.%m.%Y-%H:%M"); // 01.12.2019-09:12
-var parseTimeSensebox = d3.timeParse("%Y-%m-%d-%H:%M:%S,%L"); // "2019-11-14-14:26:02,456"
-var parseTimeBike = d3.timeParse("%Y-%m-%d%_H:%M:%S"); // 2019-11-14 14:35:00
 
 // colour scale for pm10
 var colourPM10 = d3
@@ -108,22 +122,37 @@ Promise.all([
 		if (err) throw err;
 	});
 
-// initialize the Leaflet map
-var mymap = L.map("map", {
-	// uncomment to disable all zoom controls
-	// zoomControl: false,
-	// scrollWheelZoom: false,
-	// doubleClickZoom: false,
-	// touchZoom: false,
-	// boxZoom: false,
-	// dragging: false
+// initialize two Leaflet maps B and C
+var mapB = L.map("mapB", {
+	// disable all zoom controls
+	zoomControl: false,
+	scrollWheelZoom: false,
+	doubleClickZoom: false,
+	touchZoom: false,
+	boxZoom: false,
+	dragging: false
 }).setView([51.97, 7.63], 13);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 	attribution:
 		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(mymap);
+}).addTo(mapB);
 
-mymap.invalidateSize();
+var mapC = L.map("mapC", {
+	// disable all zoom controls
+	zoomControl: false,
+	scrollWheelZoom: false,
+	doubleClickZoom: false,
+	touchZoom: false,
+	boxZoom: false,
+	dragging: false
+}).setView([51.97, 7.63], 13);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+	attribution:
+		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(mapC);
+
+mapB.invalidateSize();
+mapC.invalidateSize();
 
 // DATA
 d3.csv("data/LANUV_1oct-20nov.csv", function(d) {
@@ -222,7 +251,7 @@ function handleStepEnterA(response) {
 	});
 
 	// update image based on step
-	scrollyA.img.attr("src", "img/test" + (response.index + 1) + ".png");
+	scrollyA.img.attr("src", "img/" + scrollyImg[response.index]);
 	// update map based on step
 	// updateMap(response.index);
 	// figure.select("p").text(response.index);
@@ -253,6 +282,14 @@ function handleStepEnterB(response) {
 	scrollyB.step.classed("is-active", function(d, i) {
 		return i === response.index;
 	});
+
+	if (response.index == 0) {
+		var t = d3.timer(function(elapsed) {
+			console.log(elapsed);
+			timerB.div.html(timerB.scale(elapsed));
+			if (timerB.scale(elapsed) > timerB.end) t.stop(); // restart here
+		}, 150);
+	}
 
 	// update map based on step
 	// updateMap(response.index);
