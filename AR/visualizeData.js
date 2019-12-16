@@ -141,9 +141,10 @@ function visualizeParticles(pm10Value){
 
     function getPM10(dataArray){
 
-      getLocation();
-      closest = getDataOfClosestRoutePoint();
-      var pm10 = closest.air_quality.pm10;
+      //getLocation();
+      //closest = getDirection();
+      //var pm10 = closest.air_quality.pm10;
+      pm10 = 10;
       return pm10;
     }
 
