@@ -129,7 +129,7 @@ function readData(dataCSV){
 */
 function visualizeParticles(pm10Value){
     JL("mylogger").info("--------visualizeParticles()--------");
-    let scene = document.querySelector('#dust');
+    let scene = document.querySelector('a-scene');
 
         // add particle icon
         let dust = document.createElement('a-entity');
