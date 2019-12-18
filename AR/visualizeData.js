@@ -6,10 +6,12 @@
  * initialzing variables
  *@param url: URL to the csv-file which contains the data
  *@param currentPosition: current position of the device [lat,lng]
+ *@param closestPointToCurrentPosition: point with clostest point on route according to the current position
  *@param visArea: area in document where something can be visualized
  */
 var url = "data/";
 var currentPosition;
+var closestPointToCurrentPosition
 var visArea = document.getElementById("visArea");
 var cameraOrientation=0;
 var direction;
@@ -18,22 +20,6 @@ var direction;
 //@see http://js.jsnlog.com/
 var consoleAppender = JL.createConsoleAppender('consoleAppender');
 JL("mylogger").setOptions({"appenders": [consoleAppender]});
-
-
-function getLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-            JL("mylogger").info("Latitude: " + position.coords.latitude +
-              ", Longitude: " + position.coords.longitude);
-        });
-    } else {
-        JL("mylogger").info("Geolocation is not supported by this browser.");
-    }
-}
-
-function showPosition(position) {
-
-}
 
 
 /**
@@ -71,7 +57,6 @@ function promiseToLoadData(input) {
                     }
                     JL("mylogger").info("response Text: " + this.responseText);
                     var dataArray = readData(this.responseText);
-                    visualizeParticles(getPM10(dataArray));
                     resolve(dataArray);
                 } else {
                     reject("couldnt load");
@@ -123,85 +108,9 @@ function readData(dataCSV){
     return dataArrayOfObjects;
 }
 
-/*
-* visualizes data in the AR, writes into html
-*@param dataArray: array which contains the RELEVANT data of the air quality in format [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
-*/
-function visualizeParticles(pm10Value){
-    JL("mylogger").info("--------visualizeParticles()--------");
-    let scene = document.querySelector('a-scene');
-
-        // add particle icon
-        let dust = document.createElement('a-entity');
-        dust.setAttribute('position', '0 2.25 -15')
-        pm10ValueVisualized = pm10Value * 10000;
-        dust.setAttribute('particle-system', 'preset: dust; particleCount: ' + pm10ValueVisualized+';  color: #61210B, #61380B, #3B170B');
-        scene.appendChild(dust);
-}
-
-    function getPM10(dataArray){
-
-      //getLocation();
-      //closest = getDirection();
-      //var pm10 = closest.air_quality.pm10;
-      pm10 = 10;
-      return pm10;
-    }
 
 
 /**
-* get location of the device and write it into the global variabel currentPosition[lat, lng]
-*/
-function getLocation() {
-  JL("mylogger").info("--------getLocation()--------");
- if (navigator.geolocation) {
-   JL("mylogger").info(navigator.geolocation);
-   navigator.geolocation.getCurrentPosition(function (position) {
-       JL("mylogger").info("current position: " + position.coords.latitude +", "+position.coords.longitude);
-       currentPosition = [position.coords.latitude, position.coords.longitude];
-   });
- } else {
-   JL("mylogger").warn("Current position is not available.");
- }
-}
-
-/**
- * select data that is around the current position of the device from the array
- *@param dataArray: array which contains data of the air quality
- *@return: array with relevant air quality data in format: [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
- */
-function selectData(dataArray){
-    JL("mylogger").info("--------selectData()--------");
-    var relevantDataArray = null;
-    var radius = 0.00001;
-
-    var x;
-    for (x in dataArray){
-        //push all relevant value sets to the relevantDataArray
-
-        if(
-            (currentPosition[0] < (dataArray[x][2] + radius)
-                && (currentPosition[1] < (dataArray[x][3] + radius)
-                    || currentPosition[1] > (dataArray[x][3] - radius))
-            )
-            || (currentPosition[0] > (dataArray[x][2] - radius)
-                && (currentPosition[1] < (dataArray[x][3] + radius)
-                || currentPosition[1] > (dataArray[x][3] - radius))
-            )
-        ){
-            JL("mylogger").info("relevant Position: " +dataArray[x][2]+", "+dataArray[x][3]);
-            relevantDataArray.push(dataArray[x]);
-        }
-        else{
-            JL("mylogger").info("position not relevant.");
-        }
-    }
-    JL("mylogger").info("relevantDataArray: "+ relevantDataArray);
-    return relevantDataArray;
-}
-
-
-/*
 * visualizes data in the AR, writes into html
 *@param dataArray: array which contains the RELEVANT data of the air quality in format [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
 */
@@ -229,18 +138,6 @@ function visualizeData(dataArray){
     });
 }
 
-/**
- * convert the input number into a color
- * @param input -  a number between 1 and 30
- * @returns {string} color - the color in hex format
- */
-function getColor(input) {
-    let rainbow = new Rainbow();
-    rainbow.setNumberRange(1, 30);
-    rainbow.setSpectrum('green', 'red');
-    let hexColour = rainbow.colourAt(input);
-    return '#' + hexColour;
-}
 
 /**
  * Load the data and then use it for the navigation
@@ -251,6 +148,7 @@ function startNavigation() {
         .then(function (dataArray) {
             getDirection(dataArray)
                 .catch(console.error);
+
             window.setInterval(getDirection, 5000, dataArray)
         });
 }
@@ -278,6 +176,10 @@ function getDirection(dataArray) {
                 let directionCoordinate = dataArray.find(coordinate => coordinate.name === closest.name + 2);
                 direction = getAngle(position.coords.latitude, position.coords.longitude,
                     directionCoordinate.location.lat, directionCoordinate.location.lng);
+
+                closestPointToCurrentPosition = dataArray.find(coordinate => coordinate.name === closest.name);
+                visualizeParticles(getPM10(dataArray));
+
                 resolve();
             } catch (e) {
                 reject(e);
@@ -317,3 +219,27 @@ function distance(lat1, lon1, lat2, lon2, unit) {
         return dist;
     }
 }
+
+
+
+// visualize visualizeParticles
+/*
+* visualizes data in the AR, writes into html
+*@param dataArray: array which contains the RELEVANT data of the air quality in format [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
+*/
+function visualizeParticles(pm10Value){
+    JL("mylogger").info("--------visualizeParticles()--------");
+    let scene = document.querySelector('a-scene');
+
+        // add particle icon
+        let dust = document.createElement('a-entity');
+        dust.setAttribute('position', '0 2.25 -15')
+        pm10ValueVisualized = pm10Value * 1000;
+        dust.setAttribute('particle-system', 'preset: dust; particleCount: ' + pm10ValueVisualized+';  color: #61210B, #61380B, #3B170B');
+        scene.appendChild(dust);
+}
+
+    function getPM10(){
+      pm10 = closestPointToCurrentPosition.air_quality.pm10;
+      return pm10;
+    }

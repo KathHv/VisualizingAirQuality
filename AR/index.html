@@ -37,14 +37,14 @@
     <logger name ="mylogger" appenders="consoleAppender"></logger>
 </jsnlog>
 
-<body style='margin: 0; overflow: hidden;' id="visArea" onload = "getLocation()">
+<body style='margin: 0; overflow: hidden;' id="visArea">
 
 <a-scene
         vr-mode-ui="enabled: false"
         embedded
         arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;'>
-    <!--  <a-entity position="0 2.25 -15" particle-system  = "preset: dust; particleCount: 100000;  color: #61210B, #61380B, #3B170B"></a-entity>
-    -->
+     <!--<a-entity position="0 2.25 -15" particle-system  = "preset: dust; particleCount: 100000;  color: #61210B, #61380B, #3B170B"></a-entity>
+-->
     <a-camera gps-camera="minDistance: 20;" rotation-reader id="camera" camera-listener>
         <a-entity id="arrow" arrow="direction: 0 1 0; length: 0.5; headWidth: 0.1" position="0 -1.5 -3"></a-entity>
     </a-camera>
