@@ -115,7 +115,7 @@ Promise.all([
 				fillColor: colourPM10(d.pm10),
 				fillOpacity: 0.7,
 				radius: 8
-			}).addTo(mymap);
+			}).addTo(mapC);
 		});
 	})
 	.catch(function(err) {
@@ -124,13 +124,13 @@ Promise.all([
 
 // initialize two Leaflet maps B and C
 var mapB = L.map("mapB", {
-	// disable all zoom controls
-	zoomControl: false,
+	// disable all zoom controls that interfere with scrolling
+	// zoomControl: false,
 	scrollWheelZoom: false,
 	doubleClickZoom: false,
-	touchZoom: false,
-	boxZoom: false,
-	dragging: false
+	touchZoom: false
+	// boxZoom: false
+	// dragging: false
 }).setView([51.97, 7.63], 13);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 	attribution:
@@ -138,13 +138,13 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 }).addTo(mapB);
 
 var mapC = L.map("mapC", {
-	// disable all zoom controls
-	zoomControl: false,
+	// disable all zoom controls that interfere with scrolling
+	// zoomControl: false,
 	scrollWheelZoom: false,
 	doubleClickZoom: false,
-	touchZoom: false,
-	boxZoom: false,
-	dragging: false
+	touchZoom: false
+	// boxZoom: false
+	// dragging: false
 }).setView([51.97, 7.63], 13);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 	attribution:
@@ -153,58 +153,6 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 
 mapB.invalidateSize();
 mapC.invalidateSize();
-
-// DATA
-d3.csv("data/LANUV_1oct-20nov.csv", function(d) {
-	return {
-		// date: (d.Datum),
-		time: parseTimeLANUV(d.Datum + "-" + d.Zeit),
-		pm10_Weseler: +d.Weseler,
-		pm10_Geist: +d.Geist
-	};
-}).then(function(data) {
-	console.log("LANUV data: ", data);
-
-	d3.csv("data/Sensebox_Geist_14-11-19.csv", function(d) {
-		return {
-			humidity: +d.Humidity,
-			pm10: +d.P10,
-			p2_5: +d["P2.5"],
-			pressure: +d.Pressure,
-			temp: +d.Temperature,
-			time: parseTimeSensebox("2019-11-14-" + d["time of day"])
-			// skip "time since power on"​​​​
-		};
-	}).then(function(data) {
-		console.log("Sensebox: ", data);
-
-		d3.csv("data/bike_14-11.csv", function(d) {
-			return {
-				time: parseTimeBike(d.TIMESTAMP),
-				lat: +d.lat,
-				lon: +d.lon,
-				pm10: +d.pm10,
-				pm2_5: +d.pm25
-				// skip:
-				// AirTC_Avg: "8.12"
-				// RECORD: "36625"
-				// RH_Avg: "67.14"
-			};
-		}).then(function(bikeData) {
-			console.log("Bike: ", bikeData);
-
-			bikeData.forEach(function(d) {
-				L.circleMarker([d.lat, d.lon], {
-					stroke: false,
-					fill: true,
-					fillColor: colourPM10(d.pm10),
-					fillOpacity: 0.7,
-					radius: 8
-				}).addTo(mymap);
-			});
-		});
-	});
-});
 
 // SCROLLAMA FUNCTIONS
 
