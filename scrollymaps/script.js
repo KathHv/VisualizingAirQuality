@@ -267,9 +267,7 @@ function handleStepEnterB(response, data) {
 				if (timerB.scale(elapsed) > timerB.end) t.restart(timer);
 			}
 
-			// bike route
-
-			//  test dot
+			//  dots for stations
 			svgB
 				.selectAll("circle")
 				.data([stationGeist, stationWeseler])
@@ -283,8 +281,18 @@ function handleStepEnterB(response, data) {
 
 			break;
 		case 1:
-			// window.markerG = L.marker(stationGeist).addTo(mymap);
-			// markerG.bindPopup("Air Quality Station <br> <b>Geist</b>").openPopup();
+			// bike route
+			var lineGenerator = d3
+				.line()
+				.x(d => mapB.latLngToLayerPoint([d.lat, d.lon]).x)
+				.y(d => mapB.latLngToLayerPoint([d.lat, d.lon]).y);
+			var bikeRoute = lineGenerator(data.bike);
+			console.log(bikeRoute);
+			svgB
+				.append("path")
+				.attr("d", bikeRoute)
+				.attr("id", "bikeRoute");
+
 			break;
 	}
 

@@ -93,6 +93,12 @@ figure img {
 	opacity: 0.8;
 }
 
+#bikeRoute {
+	fill: transparent;
+	stroke-width: 2px;
+	stroke: #333;
+}
+
 #arbutton {
 	display: table;
 	background-color: #3b3b3b;
