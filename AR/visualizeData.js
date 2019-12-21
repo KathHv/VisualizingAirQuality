@@ -10,8 +10,9 @@
  *@param visArea: area in document where something can be visualized
  */
 var url = "../../data/";
+var url2 = "../data/";
 var currentPosition;
-var closestPointToCurrentPosition
+var closestPointToCurrentPosition;
 var visArea = document.getElementById("visArea");
 var cameraOrientation=0;
 var direction;
@@ -68,6 +69,33 @@ function promiseToLoadData(input) {
     });
 }
 
+/**
+ * load and then read Data from csv file
+ * @param input - the name of the csv from which the data is loaded
+ */
+function promiseToLoadData2(input) {
+    return new Promise(function(resolve, reject) {
+        JL("mylogger").info("--------loadData()--------");
+        var xhttp = new XMLHttpRequest();
+
+        xhttp.onreadystatechange = function () {
+            if (this.readyState === 4) {
+                if (this.status === 200) {
+                    if (this.responseText.length === 0) {
+                        JL("mylogger").error("The URL field or the content of the field is emtpy.1");
+                    }
+                    JL("mylogger").info("response Text: " + this.responseText);
+                    var dataArray = readData(this.responseText);
+                    resolve(dataArray);
+                } else {
+                    reject("couldnt load");
+                }
+            }
+        };
+        xhttp.open("GET", url2 + input, true);
+        xhttp.send();
+    });
+}
 
 /**
  * read Data out of the submitted responseText
@@ -157,6 +185,14 @@ function startNavigation() {
 
             window.setInterval(getDirection, 5000, dataArray)
         });
+    promiseToLoadData2("example.csv")
+      .catch(console.error)
+      .then(function (dataArray) {
+          getDirection(dataArray)
+            .catch(console.error);
+
+          window.setInterval(getDirection, 5000, dataArray)
+      });
 }
 
 /**
