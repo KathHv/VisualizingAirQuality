@@ -9,7 +9,7 @@
  *@param closestPointToCurrentPosition: point with clostest point on route according to the current position
  *@param visArea: area in document where something can be visualized
  */
-var url = "../data/";
+var url = "../../data/";
 var currentPosition;
 var closestPointToCurrentPosition
 var visArea = document.getElementById("visArea");
