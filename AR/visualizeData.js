@@ -56,8 +56,7 @@ function promiseToLoadData(input) {
                         JL("mylogger").error("The URL field or the content of the field is emtpy.1");
                     }
                     JL("mylogger").info("response Text: " + this.responseText);
-                    var dataArray = readData(this.responseText);
-                    resolve(dataArray);
+                    resolve(this.responseText);
                 } else {
                     reject("couldnt load");
                 }
@@ -108,10 +107,11 @@ function readData(dataCSV){
 }
 
 function loadGuideAreas(filename) {
-    console.log("body has loaded");
     promiseToLoadData(filename)
       .catch(console.error)
-      .then(function (dataArray) {
+      .then(function (response) {
+          console.dir(response);
+          let dataArray = JSON.parse(response);
           addGuideAreas(dataArray);
       });
 }
@@ -151,7 +151,8 @@ function addGuideAreas(dataArray){
 function startNavigation() {
     promiseToLoadData("example.csv")
         .catch(console.error)
-        .then(function (dataArray) {
+        .then(function (response) {
+            let dataArray = readData(response);
             getDirection(dataArray)
                 .catch(console.error);
 
