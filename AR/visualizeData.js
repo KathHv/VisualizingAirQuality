@@ -9,7 +9,7 @@
  *@param closestPointToCurrentPosition: point with clostest point on route according to the current position
  *@param visArea: area in document where something can be visualized
  */
-var url = "data/";
+var url = "../data/";
 var currentPosition;
 var closestPointToCurrentPosition
 var visArea = document.getElementById("visArea");
@@ -108,13 +108,19 @@ function readData(dataCSV){
     return dataArrayOfObjects;
 }
 
-
+function loadGuideAreas(filename) {
+    promiseToLoadData(filename)
+      .catch(console.error)
+      .then(function (dataArray) {
+          addGuideAreas(dataArray);
+      });
+}
 
 /**
 * visualizes data in the AR, writes into html
 *@param dataArray: array which contains the RELEVANT data of the air quality in format [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
 */
-function visualizeData(dataArray){
+function addGuideAreas(dataArray){
     JL("mylogger").info("--------visualizeData()--------");
     let scene = document.querySelector('a-scene');
 
@@ -123,12 +129,12 @@ function visualizeData(dataArray){
         let longitude = place.location.lng;
 
         // add place icon
-        let icon = document.createElement('a-cylinder');
+        let icon = document.createElement('a-circle');
         icon.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
         icon.setAttribute('height', '0.1');
         icon.setAttribute('name', place.name);
-        let color = getColor(place.air_quality.pm10);
-        icon.setAttribute('color', color);
+        icon.setAttribute('color', '#f55a42');
+        icon.setAttribute('rotation', '0 0 90');
 
         // for debug purposes, just show in a bigger scale, otherwise I have to personally go on places...
         icon.setAttribute('scale', '5 5 5');
@@ -239,7 +245,39 @@ function visualizeParticles(pm10Value){
         scene.appendChild(dust);
 }
 
-    function getPM10(){
-      pm10 = closestPointToCurrentPosition.air_quality.pm10;
-      return pm10;
-    }
+function getPM10(){
+  pm10 = closestPointToCurrentPosition.air_quality.pm10;
+  return pm10;
+}
+
+/**
+ * select data that is around the current position of the device from the array
+ * @param currentPosition - array containing the lat and long info of the current position
+ * @param dataArray - array which contains objects with coordinates
+ * @param radius - radius around current position (in degree)
+ * @return array with relevant objects
+ * @example selectData([51.2,7.3], [...], 0.00001)
+ */
+function selectData(currentPosition, dataArray, radius){
+    //JL("mylogger").info("--------selectData()--------");
+    var relevantDataArray = [];
+
+    dataArray.forEach(function (current) {
+        //push all relevant value sets to the relevantDataArray
+        if(
+          (currentPosition[0] < (current.coordinates.lat + radius)
+            && (currentPosition[1] < (current.coordinates.lng + radius)
+              || currentPosition[1] > (current.coordinates.lng - radius))
+          )
+          || (currentPosition[0] > (current.coordinates.lat - radius)
+            && (currentPosition[1] < (current.coordinates.lng + radius)
+            || currentPosition[1] > (current.coordinates.lng - radius))
+          )
+        ){
+            relevantDataArray.push(current);
+        }
+    });
+    JL("mylogger").info("relevantDataArray: "+ relevantDataArray);
+    return relevantDataArray;
+
+}

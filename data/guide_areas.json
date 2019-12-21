@@ -1,0 +1,21 @@
+{
+  "reference": "bike_14-11",
+  "areas": [
+    {
+      "name": "Gievenbeck",
+      "coordinates": {
+        "lat": 51.972522294795255,
+        "lng": 7.559827566146851
+      },
+      "text": "Lots of air here"
+    },
+    {
+      "name": "Gievenbeck2",
+      "coordinates": {
+        "lat": 51.97147390284584,
+        "lng": 7.5614047050476065
+      },
+      "text": "Lots of air over here as well"
+    }
+  ]
+}
