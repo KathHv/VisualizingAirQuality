@@ -179,7 +179,7 @@ function getDirection(dataArray) {
                         closest = current;
                     }
                 });
-                let directionCoordinate = dataArray.find(coordinate => coordinate.name === closest.name + 2);
+                let directionCoordinate = closest;//dataArray.find(coordinate => coordinate.name === closest.name + 2);
                 direction = getAngle(position.coords.latitude, position.coords.longitude,
                     directionCoordinate.location.lat, directionCoordinate.location.lng);
 
