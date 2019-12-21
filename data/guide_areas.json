@@ -3,7 +3,7 @@
   "areas": [
     {
       "name": "Gievenbeck",
-      "coordinates": {
+      "location": {
         "lat": 51.972522294795255,
         "lng": 7.559827566146851
       },
@@ -11,7 +11,7 @@
     },
     {
       "name": "Gievenbeck2",
-      "coordinates": {
+      "location": {
         "lat": 51.97147390284584,
         "lng": 7.5614047050476065
       },

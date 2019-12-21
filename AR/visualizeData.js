@@ -15,6 +15,7 @@ var closestPointToCurrentPosition;
 var visArea = document.getElementById("visArea");
 var cameraOrientation=0;
 var direction;
+var guideAreas;
 
 // "mylogger" logs to just the console
 //@see http://js.jsnlog.com/
@@ -110,9 +111,10 @@ function loadGuideAreas(filename) {
     promiseToLoadData(filename)
       .catch(console.error)
       .then(function (response) {
-          console.dir(response);
-          let dataArray = JSON.parse(response);
+          let dataArray = JSON.parse(response).areas;
           addGuideAreas(dataArray);
+          checkForGuideArea(dataArray);
+          window.setInterval(checkForGuideArea, 5000, dataArray)
       });
 }
 
@@ -134,7 +136,8 @@ function addGuideAreas(dataArray){
         icon.setAttribute('height', '0.1');
         icon.setAttribute('name', place.name);
         icon.setAttribute('color', '#f55a42');
-        icon.setAttribute('rotation', '0 0 90');
+        icon.setAttribute('rotation', '-90 0 0');
+        icon.setAttribute('radius', '30');
 
         // for debug purposes, just show in a bigger scale, otherwise I have to personally go on places...
         icon.setAttribute('scale', '5 5 5');
