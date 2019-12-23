@@ -10,17 +10,57 @@
  *@param visArea: area in document where something can be visualized
  */
 var url = "../data/";
-var currentPosition;
 var closestPointToCurrentPosition;
 var visArea = document.getElementById("visArea");
 var cameraOrientation=0;
 var direction;
 var guideAreas;
+x = {
+    currentPositionInternal: null,
+    currentPositionListener: [function(val) {}],
+    set currentPosition(val) {
+        if (this.currentPositionInternal !== val) {
+            this.currentPositionInternal = val;
+            this.currentPositionListener.forEach(function (listener) {
+                listener(val);
+            });
+        }
+    },
+    get currentPosition() {
+        return this.currentPositionInternal;
+    },
+    registerListener: function(listener) {
+        this.currentPositionListener.push(listener);
+    }
+};
+
 
 // "mylogger" logs to just the console
 //@see http://js.jsnlog.com/
-var consoleAppender = JL.createConsoleAppender('consoleAppender');
-JL("mylogger").setOptions({"appenders": [consoleAppender]});
+//var consoleAppender = JL.createConsoleAppender('consoleAppender');
+JL("mylogger").setOptions({"appenders": []});
+
+// this is similar to an endless loop which keeps on calling the function "getDirection"
+Promise.resolve().then(function resolver() {
+    return getPosition()
+        .then(function (position) {
+            x.currentPosition = position;
+        })
+        .then(resolver)
+        .catch(console.error);
+}).catch(console.error);
+
+function getPosition() {
+    return new Promise(function(resolve, reject) {
+        try {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                resolve(position);
+            });
+        } catch (e) {
+            reject(e);
+        }
+    });
+}
 
 
 /**
@@ -113,9 +153,14 @@ function loadGuideAreas(filename) {
       .then(function (response) {
           let dataArray = JSON.parse(response).areas;
           addGuideAreas(dataArray);
-          checkForGuideArea(dataArray);
-          window.setInterval(checkForGuideArea, 5000, dataArray)
+          x.registerListener(function(val) {
+              checkForGuideArea(dataArray,val);
+          });
       });
+}
+
+function checkForGuideArea(dataArray, position) {
+    let possibleGuideAreas = selectData([position.coords.latitude, position.coords.longitude], dataArray, 0.00001);
 }
 
 /**
@@ -131,13 +176,14 @@ function addGuideAreas(dataArray){
         let longitude = place.location.lng;
 
         // add place icon
-        let icon = document.createElement('a-circle');
-        icon.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
+        let icon = document.createElement('a-ring');
+        icon.setAttribute('gps-entity-place', `latitude: ` + latitude + `}; longitude: `+ longitude + `;`);
         icon.setAttribute('height', '0.1');
         icon.setAttribute('name', place.name);
         icon.setAttribute('color', '#f55a42');
         icon.setAttribute('rotation', '-90 0 0');
-        icon.setAttribute('radius', '30');
+        icon.setAttribute('radius-inner', '8');
+        icon.setAttribute('radius-outer', '10');
 
         // for debug purposes, just show in a bigger scale, otherwise I have to personally go on places...
         icon.setAttribute('scale', '5 5 5');
@@ -156,46 +202,44 @@ function startNavigation() {
         .catch(console.error)
         .then(function (response) {
             let dataArray = readData(response);
-            getDirection(dataArray)
-                .catch(console.error);
-
-            window.setInterval(getDirection, 5000, dataArray)
+            x.registerListener(function(val) {
+                getDirection(dataArray,val);
+            });
+            x.registerListener(function(val) {
+                let closest = getClosest(dataArray,val);
+                if (closestPointToCurrentPosition !== closest) {
+                    closestPointToCurrentPosition = closest;
+                    visualizeParticles(closest.air_quality.pm10);
+                }
+            });
         });
+}
+
+function getClosest(dataArray,position) {
+    let closest = dataArray[0];
+    let minDistance = Infinity;
+    dataArray.forEach(function (current) {
+        let currentDistance = distance(current.location.lat, current.location.lng,
+            position.coords.latitude, position.coords.longitude, "K");
+        if (currentDistance < minDistance) {
+            minDistance = currentDistance;
+            closest = current;
+        }
+    });
+    return closest;
 }
 
 /**
  * this retrieves the current position and calculates the direction from it. The direction is then saved in the global
  * variable called direction.
  * @param dataArray - the route points
- * @returns {Promise}
+ * @param position
  */
-function getDirection(dataArray) {
-    return new Promise(function(resolve, reject) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-            try {
-                let closest = dataArray[0];
-                let minDistance = Infinity;
-                dataArray.forEach(function (current) {
-                    let currentDistance = distance(current.location.lat, current.location.lng,
-                        position.coords.latitude, position.coords.longitude, "K");
-                    if (currentDistance < minDistance) {
-                        minDistance = currentDistance;
-                        closest = current;
-                    }
-                });
-                let directionCoordinate = closest;//dataArray.find(coordinate => coordinate.name === closest.name + 2);
-                direction = getAngle(position.coords.latitude, position.coords.longitude,
-                    directionCoordinate.location.lat, directionCoordinate.location.lng);
-
-                closestPointToCurrentPosition = dataArray.find(coordinate => coordinate.name === closest.name);
-                visualizeParticles(getPM10(dataArray));
-
-                resolve();
-            } catch (e) {
-                reject(e);
-            }
-        });
-    });
+function getDirection(dataArray,position) {
+    let closest = getClosest(dataArray,position);
+    let directionCoordinate = dataArray.find(coordinate => coordinate.name === closest.name + 2);
+    direction = getAngle(position.coords.latitude, position.coords.longitude,
+        directionCoordinate.location.lat, directionCoordinate.location.lng);
 }
 
 /**
@@ -249,11 +293,6 @@ function visualizeParticles(pm10Value){
         scene.appendChild(dust);
 }
 
-function getPM10(){
-  pm10 = closestPointToCurrentPosition.air_quality.pm10;
-  return pm10;
-}
-
 /**
  * select data that is around the current position of the device from the array
  * @param currentPosition - array containing the lat and long info of the current position
@@ -269,13 +308,13 @@ function selectData(currentPosition, dataArray, radius){
     dataArray.forEach(function (current) {
         //push all relevant value sets to the relevantDataArray
         if(
-          (currentPosition[0] < (current.coordinates.lat + radius)
-            && (currentPosition[1] < (current.coordinates.lng + radius)
-              || currentPosition[1] > (current.coordinates.lng - radius))
+          (currentPosition[0] < (current.location.lat + radius)
+            && (currentPosition[1] < (current.location.lng + radius)
+              || currentPosition[1] > (current.location.lng - radius))
           )
-          || (currentPosition[0] > (current.coordinates.lat - radius)
-            && (currentPosition[1] < (current.coordinates.lng + radius)
-            || currentPosition[1] > (current.coordinates.lng - radius))
+          || (currentPosition[0] > (current.location.lat - radius)
+            && (currentPosition[1] < (current.location.lng + radius)
+            || currentPosition[1] > (current.location.lng - radius))
           )
         ){
             relevantDataArray.push(current);

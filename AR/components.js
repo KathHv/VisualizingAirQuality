@@ -11,7 +11,6 @@ AFRAME.registerComponent('camera-listener', {
             let rotation = cameraEl.getAttribute('rotation');
             cameraOrientation = rotation.y;
             let directionRad = (direction - rotation.y) * (Math.PI/180);
-            console.dir(Math.cos(directionRad) + " " + Math.sin(directionRad));
             let tiltRad = (rotation.x) * (Math.PI/180);
             document.getElementById("arrow").setAttribute("arrow", "direction: "
                 + Math.cos(directionRad) + " " + Math.sin(directionRad) + " 0; length: 1; headWidth: 0.2");
