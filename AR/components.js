@@ -6,7 +6,7 @@ if (typeof AFRAME === "undefined") {
 
 AFRAME.registerComponent('camera-listener', {
     tick: function () {
-        if (direction) {
+        if (typeof direction !== "undefined") {
             var cameraEl = this.el.sceneEl.camera.el;
             let rotation = cameraEl.getAttribute('rotation');
             cameraOrientation = rotation.y;

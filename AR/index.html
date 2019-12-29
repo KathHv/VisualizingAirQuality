@@ -43,8 +43,14 @@
 <a-scene
         vr-mode-ui="enabled: false"
         embedded
-        arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;'>
-    <a-camera gps-camera="minDistance: 20;" rotation-reader id="camera" camera-listener>
+        arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;'
+        cursor="rayOrigin: mouse; fuse: true; fuseTimeout: 0;"
+        raycaster="objects: [gps-entity-place];"
+        inspector 
+        keyboard-shortcuts
+        screenshot
+        device-orientation-permission-ui>
+    <a-camera gps-camera="minDistance: 20;" rotation-reader id="camera" camera-listener id="camera">
         <a-entity id="arrow" arrow="direction: 0 1 0; length: 0.5; headWidth: 0.1" position="0 -1.5 -3"></a-entity>
     </a-camera>
 
@@ -53,6 +59,8 @@
 <div class="centered">
     <button id="exampleMarkerButtonCentered" onclick=promiseToLoadData("example.csv")>route</button>
     <button id="bikeMarkerButtonCentered" onclick=startNavigation()>navi</button>
+</div>
+<div class="top-right" id="guide-buttons">
 </div>
 </body>
 </html>

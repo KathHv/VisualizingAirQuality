@@ -2,18 +2,18 @@
   "reference": "bike_14-11",
   "areas": [
     {
-      "name": "Gievenbeck",
+      "name": "GEO1-1",
       "location": {
-        "lat": 51.66224431490093,
-        "lng": 8.337727189064026
+        "lat": 51.96920921817717,
+        "lng": 7.5958120822906485
       },
       "text": "Lots of air here"
     },
     {
-      "name": "Gievenbeck2",
+      "name": "GEO1-2",
       "location": {
-        "lat": 51.66206629184441,
-        "lng": 8.337737917900085
+        "lat": 51.969690083894555,
+        "lng": 7.595495581626892
       },
       "text": "Lots of air over here as well"
     }
