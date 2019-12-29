@@ -6,12 +6,11 @@ if (typeof AFRAME === "undefined") {
 
 AFRAME.registerComponent('camera-listener', {
     tick: function () {
-        if (direction) {
+        if (typeof direction !== "undefined") {
             var cameraEl = this.el.sceneEl.camera.el;
             let rotation = cameraEl.getAttribute('rotation');
             cameraOrientation = rotation.y;
             let directionRad = (direction - rotation.y) * (Math.PI/180);
-            console.dir(Math.cos(directionRad) + " " + Math.sin(directionRad));
             let tiltRad = (rotation.x) * (Math.PI/180);
             document.getElementById("arrow").setAttribute("arrow", "direction: "
                 + Math.cos(directionRad) + " " + Math.sin(directionRad) + " 0; length: 1; headWidth: 0.2");

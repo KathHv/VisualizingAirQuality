@@ -9,17 +9,71 @@
  *@param closestPointToCurrentPosition: point with clostest point on route according to the current position
  *@param visArea: area in document where something can be visualized
  */
-var url = "data/";
-var currentPosition;
-var closestPointToCurrentPosition
+var url = "../data/";
+var closestPointToCurrentPosition;
 var visArea = document.getElementById("visArea");
 var cameraOrientation=0;
 var direction;
+var guideAreas;
+x = {
+    currentPositionInternal: undefined,
+    currentPositionListener: [],
+    set currentPosition(val) {
+        if (!this.currentPositionInternal || this.currentPositionInternal.coords !== val.coords) {
+            this.currentPositionInternal = val;
+            this.currentPositionListener.forEach(function (listener) {
+                listener.function(val);
+            });
+        }
+    },
+    get currentPosition() {
+        return this.currentPositionInternal;
+    },
+    registerListener: function(listener,name) {
+        let alreadyExisting = false;
+
+        this.currentPositionListener.forEach(function (current) {
+            if (current.name === name) {
+                alreadyExisting = true;
+            }
+        });
+
+        if (!alreadyExisting) {
+            this.currentPositionListener.push({
+                name: name,
+                function: listener
+            });
+        }
+    }
+};
+
 
 // "mylogger" logs to just the console
 //@see http://js.jsnlog.com/
-var consoleAppender = JL.createConsoleAppender('consoleAppender');
-JL("mylogger").setOptions({"appenders": [consoleAppender]});
+//var consoleAppender = JL.createConsoleAppender('consoleAppender');
+JL("mylogger").setOptions({"appenders": []});
+
+// this is similar to an endless loop which keeps on calling the function "getDirection"
+Promise.resolve().then(function resolver() {
+    return getPosition()
+        .then(function (position) {
+            x.currentPosition = position;
+        })
+        .then(resolver)
+        .catch(console.error);
+}).catch(console.error);
+
+function getPosition() {
+    return new Promise(function(resolve, reject) {
+        try {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                resolve(position);
+            });
+        } catch (e) {
+            reject(e);
+        }
+    });
+}
 
 
 /**
@@ -56,8 +110,7 @@ function promiseToLoadData(input) {
                         JL("mylogger").error("The URL field or the content of the field is emtpy.1");
                     }
                     JL("mylogger").info("response Text: " + this.responseText);
-                    var dataArray = readData(this.responseText);
-                    resolve(dataArray);
+                    resolve(this.responseText);
                 } else {
                     reject("couldnt load");
                 }
@@ -67,7 +120,6 @@ function promiseToLoadData(input) {
         xhttp.send();
     });
 }
-
 
 /**
  * read Data out of the submitted responseText
@@ -108,13 +160,39 @@ function readData(dataCSV){
     return dataArrayOfObjects;
 }
 
+function loadGuideAreas(filename) {
+    promiseToLoadData(filename)
+      .catch(console.error)
+      .then(function (response) {
+          let dataArray = JSON.parse(response).areas;
+          addGuideAreas(dataArray);
+          x.registerListener(function(val) {
+                  checkForGuideArea(dataArray,val);
+          }, "guide-areas");
+      });
+}
 
+/**
+ * This function checks if there are guide areas nearby.
+ * If a guide area is within a set radius (0.000001 degree) then the corresponding popup will be enabled.
+ * CURRENTLY THIS METHOD SEEMS TO BE SELECTING ALL GUIDE AREAS. MAYBE THERE'S A PROBLEM WITH "selectData".
+ * @param dataArray - contains the guide areas
+ * @param position - the current position
+ */
+function checkForGuideArea(dataArray, position) {
+    let possibleGuideAreas = selectData([position.coords.latitude, position.coords.longitude], dataArray, 0.000001);
+    if (possibleGuideAreas.length > 0) {
+        addGuide(possibleGuideAreas[0].text);
+    } else {
+        removeGuide();
+    }
+}
 
 /**
 * visualizes data in the AR, writes into html
 *@param dataArray: array which contains the RELEVANT data of the air quality in format [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
 */
-function visualizeData(dataArray){
+function addGuideAreas(dataArray){
     JL("mylogger").info("--------visualizeData()--------");
     let scene = document.querySelector('a-scene');
 
@@ -123,12 +201,14 @@ function visualizeData(dataArray){
         let longitude = place.location.lng;
 
         // add place icon
-        let icon = document.createElement('a-cylinder');
-        icon.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
-        icon.setAttribute('height', '0.1');
+        let icon = document.createElement('a-ring');
+        icon.setAttribute('gps-entity-place', `latitude: ` + latitude + `; longitude: `+ longitude + `;`);
         icon.setAttribute('name', place.name);
-        let color = getColor(place.air_quality.pm10);
-        icon.setAttribute('color', color);
+        icon.setAttribute('color', '#f55a42');
+        icon.setAttribute('rotation', '-90 0 0');
+        icon.setAttribute('radius-inner', '1');
+        icon.setAttribute('radius-outer', '1.2');
+        icon.setAttribute('height', '-1');
 
         // for debug purposes, just show in a bigger scale, otherwise I have to personally go on places...
         icon.setAttribute('scale', '5 5 5');
@@ -145,47 +225,52 @@ function visualizeData(dataArray){
 function startNavigation() {
     promiseToLoadData("example.csv")
         .catch(console.error)
-        .then(function (dataArray) {
-            getDirection(dataArray)
-                .catch(console.error);
-
-            window.setInterval(getDirection, 5000, dataArray)
+        .then(function (response) {
+            let dataArray = readData(response);
+            x.registerListener(function(val) {
+                getDirection(dataArray,val);
+            }, "direction");
+            x.registerListener(function(val) {
+                let closest = getClosest(dataArray,val);
+                if (closestPointToCurrentPosition !== closest) {
+                    closestPointToCurrentPosition = closest;
+                    visualizeParticles(closest.air_quality.pm10);
+                }
+            }, "particles");
         });
+}
+
+function getClosest(dataArray,position) {
+    let closest = dataArray[0];
+    let minDistance = Infinity;
+    dataArray.forEach(function (current) {
+        let currentDistance = distance(current.location.lat, current.location.lng,
+            position.coords.latitude, position.coords.longitude, "K");
+        if (currentDistance < minDistance) {
+            minDistance = currentDistance;
+            closest = current;
+        }
+    });
+    return closest;
 }
 
 /**
  * this retrieves the current position and calculates the direction from it. The direction is then saved in the global
  * variable called direction.
  * @param dataArray - the route points
- * @returns {Promise}
+ * @param position
  */
-function getDirection(dataArray) {
-    return new Promise(function(resolve, reject) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-            try {
-                let closest = dataArray[0];
-                let minDistance = Infinity;
-                dataArray.forEach(function (current) {
-                    let currentDistance = distance(current.location.lat, current.location.lng,
-                        position.coords.latitude, position.coords.longitude, "K");
-                    if (currentDistance < minDistance) {
-                        minDistance = currentDistance;
-                        closest = current;
-                    }
-                });
-                let directionCoordinate = dataArray.find(coordinate => coordinate.name === closest.name + 2);
-                direction = getAngle(position.coords.latitude, position.coords.longitude,
-                    directionCoordinate.location.lat, directionCoordinate.location.lng);
-
-                closestPointToCurrentPosition = dataArray.find(coordinate => coordinate.name === closest.name);
-                visualizeParticles(getPM10(dataArray));
-
-                resolve();
-            } catch (e) {
-                reject(e);
-            }
-        });
-    });
+function getDirection(dataArray,position) {
+    let closest = getClosest(dataArray,position);
+    let directionCoordinate = dataArray.find(coordinate => coordinate.name === closest.name + 2);
+    if (!directionCoordinate) {
+        directionCoordinate = dataArray.find(coordinate => coordinate.name === closest.name + 1);
+        if (!directionCoordinate) {
+            directionCoordinate = closest;
+        }
+    }
+    direction = getAngle(position.coords.latitude, position.coords.longitude,
+        directionCoordinate.location.lat, directionCoordinate.location.lng);
 }
 
 /**
@@ -222,8 +307,7 @@ function distance(lat1, lon1, lat2, lon2, unit) {
 
 
 
-// visualize visualizeParticles
-/*
+/**
 * visualizes data in the AR, writes into html
 *@param dataArray: array which contains the RELEVANT data of the air quality in format [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
 */
@@ -239,7 +323,93 @@ function visualizeParticles(pm10Value){
         scene.appendChild(dust);
 }
 
-    function getPM10(){
-      pm10 = closestPointToCurrentPosition.air_quality.pm10;
-      return pm10;
+/**
+ * select data that is around the current position of the device from the array
+ * @param currentPosition - array containing the lat and long info of the current position
+ * @param dataArray - array which contains objects with coordinates
+ * @param radius - radius around current position (in degree)
+ * @return array with relevant objects
+ * @example selectData([51.2,7.3], [...], 0.00001)
+ */
+function selectData(currentPosition, dataArray, radius){
+    //JL("mylogger").info("--------selectData()--------");
+    var relevantDataArray = [];
+
+    dataArray.forEach(function (current) {
+        //push all relevant value sets to the relevantDataArray
+        if(
+          (currentPosition[0] < (current.location.lat + radius)
+            && (currentPosition[1] < (current.location.lng + radius)
+              || currentPosition[1] > (current.location.lng - radius))
+          )
+          || (currentPosition[0] > (current.location.lat - radius)
+            && (currentPosition[1] < (current.location.lng + radius)
+            || currentPosition[1] > (current.location.lng - radius))
+          )
+        ){
+            relevantDataArray.push(current);
+        }
+    });
+    JL("mylogger").info("relevantDataArray: "+ relevantDataArray);
+    return relevantDataArray;
+
+}
+
+/**
+ * This function adds the guide to the scene. If theres already an active guide its content will be replaced.
+ * A guide consists of a button and a popup (a-entity with a plane and text) for the content.
+ * The button is for opening and closing the popup.
+ * @param content - content for the guide
+ */
+function addGuide(content) {
+    let existingPopup = document.getElementById( 'popup' );
+    if (existingPopup === null) {
+        // button
+        let btnContainer = document.getElementById("guide-buttons");
+        let popupBtn = document.createElement("button");
+        popupBtn.setAttribute("id", "popupBtn");
+        popupBtn.onclick = openClosePopup();
+        popupBtn.innerText = "info";
+        btnContainer.appendChild(popupBtn);
+        // the popup
+        let popup = document.createElement("a-entity");
+        popup.setAttribute("id", "popup");
+        popup.setAttribute("geometry", "primitive: plane; height: auto; width: 1");
+        popup.setAttribute("material", "color: blue");
+        popup.setAttribute("text", "wrapCount:10; value: " + content);
+        popup.setAttribute("position", "0 3 -5");
+        popup.setAttribute("visible", false);
+        let ppContainer = document.getElementById("camera");
+        ppContainer.appendChild(popup)
+    } else {
+        existingPopup.setAttribute("text", "wrapCount:10; value: " + content);
     }
+
+}
+
+/**
+ * This function removes active guides.
+ */
+function removeGuide() {
+    let popupBtn = document.getElementById("popupBtn");
+    let popup = document.getElementById("popup");
+    if (popupBtn !== null) {
+        popupBtn.parentNode.removeChild(popupBtn);
+    }
+    if (popup !== null) {
+        popup.parentNode.removeChild(popup);
+    }
+}
+
+/**
+ * This function returns a function for opening and closing popups.
+ * @returns {Function}
+ */
+function openClosePopup() {
+    return function() {
+        let popup = document.getElementById("popup");
+        if (popup !== null) {
+            popup.setAttribute("visible", !(popup.getAttribute("visible") === true));
+        }
+    };
+}

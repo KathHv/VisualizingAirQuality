@@ -8,6 +8,9 @@
 
     <title>VAQIIS AR demo</title>
 
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" type="text/css" href="./stylesheets/style.css">
+
     <script src='https://aframe.io/releases/0.9.2/aframe.min.js'></script>
     <script src="https://raw.githack.com/jeromeetienne/AR.js/master/aframe/build/aframe-ar.min.js"></script>
     <script src="https://raw.githack.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
@@ -15,18 +18,16 @@
 
 
     <script>
-        THREEx.ArToolkitContext.baseURL = 'https://raw.githack.com/jeromeetienne/ar.js/master/three.js/'
+			THREEx.ArToolkitContext.baseURL = 'https://raw.githack.com/jeromeetienne/ar.js/master/three.js/'
     </script>
     <!-- jsnlog -->
     <script src="jsnlog.min.js"> </script>
+    
     <!-- color gradient library -->
     <script src="rainbowvis.js"></script>
 
     <script src="components.js"></script>
     <script src="visualizeData.js"></script>
-
-    <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="stylesheet" type="text/css" href="./stylesheets/style.css">
 </head>
 
 
@@ -37,15 +38,19 @@
     <logger name ="mylogger" appenders="consoleAppender"></logger>
 </jsnlog>
 
-<body style='margin: 0; overflow: hidden;' id="visArea">
+<body style='margin: 0; overflow: hidden;' id="visArea" onload="loadGuideAreas('guide_areas.json')">
 
 <a-scene
         vr-mode-ui="enabled: false"
         embedded
-        arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;'>
-     <!--<a-entity position="0 2.25 -15" particle-system  = "preset: dust; particleCount: 100000;  color: #61210B, #61380B, #3B170B"></a-entity>
--->
-    <a-camera gps-camera="minDistance: 20;" rotation-reader id="camera" camera-listener>
+        arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;'
+        cursor="rayOrigin: mouse; fuse: true; fuseTimeout: 0;"
+        raycaster="objects: [gps-entity-place];"
+        inspector 
+        keyboard-shortcuts
+        screenshot
+        device-orientation-permission-ui>
+    <a-camera gps-camera="minDistance: 20;" rotation-reader id="camera" camera-listener id="camera">
         <a-entity id="arrow" arrow="direction: 0 1 0; length: 0.5; headWidth: 0.1" position="0 -1.5 -3"></a-entity>
     </a-camera>
 
@@ -54,6 +59,8 @@
 <div class="centered">
     <button id="exampleMarkerButtonCentered" onclick=promiseToLoadData("example.csv")>route</button>
     <button id="bikeMarkerButtonCentered" onclick=startNavigation()>navi</button>
+</div>
+<div class="top-right" id="guide-buttons">
 </div>
 </body>
 </html>
