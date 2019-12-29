@@ -1,7 +1,7 @@
 const initCoord = [51.96, 7.63];
 const initZoom = 12;
 
-const stationGeist = [51.936482, 7.611609];
+const stationGeist = [51.936482, 7.611609]; // lat lon
 const stationWeseler = [51.953275, 7.619379];
 
 const scrollyImg = ["lanuv.jpg", "sensebox.jpg", "bike.jpg"];
@@ -11,6 +11,8 @@ const scrollyImg = ["lanuv.jpg", "sensebox.jpg", "bike.jpg"];
 var parseTimeLANUV = d3.timeParse("%d.%m.%Y-%H:%M"); // 01.12.2019-09:12
 var parseTimeSensebox = d3.timeParse("%Y-%m-%d-%H:%M:%S,%L"); // "2019-11-14-14:26:02,456"
 var parseTimeBike = d3.timeParse("%Y-%m-%d%_H:%M:%S"); // 2019-11-14 14:35:00
+var formatTime = d3.timeFormat("%d/%m/%Y, %H:%M");
+var formatTimeHour = d3.timeFormat("%d%m%Y%H");
 
 var main = d3.select("main");
 var allSteps = d3.selectAll(".step");
@@ -63,14 +65,46 @@ handleResize();
 // setup resize event
 window.addEventListener("resize", handleResize);
 
-// start scrolly
-initScrollyA();
-initScrollyB();
-initScrollyC();
+// initialize two Leaflet maps B and C
+var mapB = L.map("mapB", {
+	// disable all zoom controls that interfere with scrolling
+	// zoomControl: false,
+	scrollWheelZoom: false,
+	doubleClickZoom: false,
+	touchZoom: false
+	// boxZoom: false
+	// dragging: false
+}).setView([51.97, 7.63], 13);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+	attribution:
+		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(mapB);
+
+// SVG overlay for mapB
+L.svg().addTo(mapB);
+const overlayB = d3.select(mapB.getPanes().overlayPane);
+const svgB = overlayB.select("svg");
+
+var mapC = L.map("mapC", {
+	// disable all zoom controls that interfere with scrolling
+	// zoomControl: false,
+	scrollWheelZoom: false,
+	doubleClickZoom: false,
+	touchZoom: false
+	// boxZoom: false
+	// dragging: false
+}).setView([51.97, 7.63], 13);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+	attribution:
+		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(mapC);
+
+mapB.invalidateSize();
+mapC.invalidateSize();
 
 // DATA
 Promise.all([
-	d3.csv("data/LANUV_1oct-20nov.csv", function(d) {
+	d3.csv("data/lanuv_14Nov_modified.csv", function(d) {
 		return {
 			// date: (d.Datum),
 			time: parseTimeLANUV(d.Datum + "-" + d.Zeit),
@@ -106,53 +140,26 @@ Promise.all([
 	.then(function(data) {
 		console.log("LANUV: ", data[0], "senseBox: ", data[1], "Bike:", data[2]);
 
-		var bikeData = data[2];
+		var data1 = { lanuv: data[0], sensebox: data[1], bike: data[2] };
 
-		bikeData.forEach(function(d) {
-			L.circleMarker([d.lat, d.lon], {
-				stroke: false,
-				fill: true,
-				fillColor: colourPM10(d.pm10),
-				fillOpacity: 0.7,
-				radius: 8
-			}).addTo(mapC);
-		});
+		// start scrolly
+		initScrollyA(data1);
+		initScrollyB(data1);
+		initScrollyC(data1);
+
+		// bikeData.forEach(function(d) {
+		// 	L.circleMarker([d.lat, d.lon], {
+		// 		stroke: false,
+		// 		fill: true,
+		// 		fillColor: colourPM10(d.pm10),
+		// 		fillOpacity: 0.7,
+		// 		radius: 8
+		// 	}).addTo(mapC);
+		// });
 	})
 	.catch(function(err) {
 		if (err) throw err;
 	});
-
-// initialize two Leaflet maps B and C
-var mapB = L.map("mapB", {
-	// disable all zoom controls that interfere with scrolling
-	// zoomControl: false,
-	scrollWheelZoom: false,
-	doubleClickZoom: false,
-	touchZoom: false
-	// boxZoom: false
-	// dragging: false
-}).setView([51.97, 7.63], 13);
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-	attribution:
-		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(mapB);
-
-var mapC = L.map("mapC", {
-	// disable all zoom controls that interfere with scrolling
-	// zoomControl: false,
-	scrollWheelZoom: false,
-	doubleClickZoom: false,
-	touchZoom: false
-	// boxZoom: false
-	// dragging: false
-}).setView([51.97, 7.63], 13);
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-	attribution:
-		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(mapC);
-
-mapB.invalidateSize();
-mapC.invalidateSize();
 
 // SCROLLAMA FUNCTIONS
 
@@ -176,7 +183,7 @@ function handleResize() {
 // SCROLLY A ///////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-function initScrollyA() {
+function initScrollyA(data) {
 	setupStickyfill();
 
 	scrollerA
@@ -185,12 +192,13 @@ function initScrollyA() {
 			offset: 0.33,
 			debug: true
 		})
-		.onStepEnter(handleStepEnterA);
+		.onStepEnter(function(r) {
+			handleStepEnterA(r, data);
+		});
 }
 
 // scrollama event handlers
-function handleStepEnterA(response) {
-	console.log(response);
+function handleStepEnterA(response, data) {
 	// response = { element, direction, index }
 
 	// add color to current step only
@@ -209,7 +217,7 @@ function handleStepEnterA(response) {
 // SCROLLY B ///////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-function initScrollyB() {
+function initScrollyB(data) {
 	setupStickyfill();
 
 	scrollerB
@@ -218,12 +226,12 @@ function initScrollyB() {
 			offset: 0.33,
 			debug: true
 		})
-		.onStepEnter(handleStepEnterB);
+		.onStepEnter(r => handleStepEnterB(r, data));
 }
 
 // scrollama event handlers
-function handleStepEnterB(response) {
-	console.log("ScrollyB:", response.index);
+function handleStepEnterB(response, data) {
+	console.log("ScrollyB:", response.index, data);
 	// response = { element, direction, index }
 
 	// add color to current step only
@@ -231,12 +239,64 @@ function handleStepEnterB(response) {
 		return i === response.index;
 	});
 
+	switch (response.index) {
+		case 0:
+			// start timer
+			var el1_hour = -1; // to store hour of previous elapsed time
+			var t = d3.timer(timer, 150);
+			function timer(elapsed) {
+				var el = timerB.scale(elapsed);
+				// console.log(elapsed);
+				timerB.div.html(formatTime(el));
+				// check if new hour has started, only do stuff if yes
+				if (el.getHours() != el1_hour) {
+					var datanow = data.lanuv.find(function(d) {
+						return formatTimeHour(d.time) === formatTimeHour(el);
+					});
+					d3.select("#ptGeist").attr("fill", function() {
+						return colourPM10(datanow.pm10_Geist);
+					});
+					d3.select("#ptWeseler").attr("fill", function() {
+						return colourPM10(datanow.pm10_Weseler);
+					});
+				}
+
+				// update elapsed time
+				el1_hour = el.getHours();
+				// make timer loop through one day
+				if (timerB.scale(elapsed) > timerB.end) t.restart(timer);
+			}
+
+			//  dots for stations
+			svgB
+				.selectAll("circle")
+				.data([stationGeist, stationWeseler])
+				.enter()
+				.append("circle")
+				.attr("id", (d, i) => ["ptGeist", "ptWeseler"][i])
+				// .attr("fill", ) --> set in timer
+				.attr("cx", d => mapB.latLngToLayerPoint(d).x)
+				.attr("cy", d => mapB.latLngToLayerPoint(d).y)
+				.attr("r", 15);
+
+			break;
+		case 1:
+			// bike route
+			var lineGenerator = d3
+				.line()
+				.x(d => mapB.latLngToLayerPoint([d.lat, d.lon]).x)
+				.y(d => mapB.latLngToLayerPoint([d.lat, d.lon]).y);
+			var bikeRoute = lineGenerator(data.bike);
+			console.log(bikeRoute);
+			svgB
+				.append("path")
+				.attr("d", bikeRoute)
+				.attr("id", "bikeRoute");
+
+			break;
+	}
+
 	if (response.index == 0) {
-		var t = d3.timer(function(elapsed) {
-			console.log(elapsed);
-			timerB.div.html(timerB.scale(elapsed));
-			if (timerB.scale(elapsed) > timerB.end) t.stop(); // restart here
-		}, 150);
 	}
 
 	// update map based on step
@@ -248,7 +308,7 @@ function handleStepEnterB(response) {
 // SCROLLY C ///////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-function initScrollyC() {
+function initScrollyC(data) {
 	setupStickyfill();
 
 	scrollerC
@@ -257,11 +317,13 @@ function initScrollyC() {
 			offset: 0.33,
 			debug: true
 		})
-		.onStepEnter(handleStepEnterC);
+		.onStepEnter(function(r) {
+			handleStepEnterC(r, data);
+		});
 }
 
 // scrollama event handlers
-function handleStepEnterC(response) {
+function handleStepEnterC(response, data) {
 	console.log("ScrollyC:", response.index);
 	// response = { element, direction, index }
 

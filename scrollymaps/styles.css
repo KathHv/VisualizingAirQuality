@@ -89,7 +89,14 @@ figure img {
 	right: 0;
 	z-index: 1000; /*leaflet: 400*/
 	background-color: white;
-	padding: 10px;
+	padding: 16px;
+	opacity: 0.8;
+}
+
+#bikeRoute {
+	fill: transparent;
+	stroke-width: 2px;
+	stroke: #333;
 }
 
 #arbutton {
