@@ -1,24 +1,25 @@
 
 
+function loadMenueElements(){
+    var menue = document.getElementById("menue");
+    var menueTopic = document.getElementsByClassName("menue-topic");
+    var menueContent = document.getElementsByClassName("menue-content");
 
-var menue = document.getElementById("menue");
-var menueTopic = document.getElementsByClassName("menue-topic");
-var menueContent = document.getElementsByClassName("menue-content");
+    var introduction = document.getElementById("introduction");
+    var information = document.getElementById("information");
+    var slider = document.getElementById("slider");
+    var data = document.getElementById("data");
 
-var introduction = document.getElementById("introduction");
-var information = document.getElementById("information");
-var slider = document.getElementById("slider");
-var data = document.getElementById("data");
+    introduction.addEventListener("click", showIntroduction());
+    information.addEventListener("click", showInformation());
+    slider.addEventListener("click", showSlider());
+    data.addEventListener("click", showData());
+}
 
-
-introduction.addEventListener("click", showIntroduction());
-information.addEventListener("click", showInformation());
-slider.addEventListener("click", showSlider());
-data.addEventListener("click", showData());
 
 function hideMenue(){
   menue.style.display = "none";
-  }
+}
 
 
 function showIntroduction(){
