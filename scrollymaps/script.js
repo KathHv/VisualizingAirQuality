@@ -4,7 +4,7 @@ const initZoom = 12;
 const stationGeist = [51.936482, 7.611609]; // lat lon
 const stationWeseler = [51.953275, 7.619379];
 
-const scrollyImg = ["lanuv.jpg", "sensebox.jpg", "bike.jpg"];
+const scrollyImg = ["lanuv.jpg", "sensebox.jpg", "bike.jpg", "All.jpg"];
 
 // parsing functions
 // var parseDateLANUV = d3.timeParse("%d.%m.%Y"); // 01.12.2019
