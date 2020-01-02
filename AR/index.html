@@ -1,109 +1,233 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <!-- making the website conform to any device -->
-    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <!-- making the website conform to any device -->
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
-    <title>VAQIIS AR demo</title>
+  <title>VAQIIS AR demo</title>
 
-    <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="stylesheet" type="text/css" href="./stylesheets/style.css">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="stylesheet" type="text/css" href="./stylesheets/style.css">
 
-    <script src='https://aframe.io/releases/0.9.2/aframe.min.js'></script>
-    <script src="https://raw.githack.com/jeromeetienne/AR.js/master/aframe/build/aframe-ar.min.js"></script>
-    <script src="https://raw.githack.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
-    <script src="https://unpkg.com/aframe-particle-system-component@1.0.x/dist/aframe-particle-system-component.min.js"></script>
-
-
-    <script>
-			THREEx.ArToolkitContext.baseURL = 'https://raw.githack.com/jeromeetienne/ar.js/master/three.js/'
-    </script>
+  <script src='https://aframe.io/releases/0.9.2/aframe.min.js'></script>
+  <script src="https://raw.githack.com/jeromeetienne/AR.js/master/aframe/build/aframe-ar.min.js"></script>
+  <script src="https://raw.githack.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
+  <script src="https://unpkg.com/aframe-particle-system-component@1.0.x/dist/aframe-particle-system-component.min.js"></script>
 
 
-    <!-- Add icon library -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <!-- jsnlog -->
-    <script src="jsnlog.min.js"> </script>
-
-    <!-- color gradient library -->
-    <script src="rainbowvis.js"></script>
-
-    <script src="components.js"></script>
-    <script src="visualizeData.js"></script>
-    <script src="menue.js"></script>
+  <script>
+  THREEx.ArToolkitContext.baseURL = 'https://raw.githack.com/jeromeetienne/ar.js/master/three.js/'
+  </script>
 
 
-<!-- creating the consoleAppender to write logs into the console
-     also see http://js.jsnlog.com/ -->
-<jsnlog>
+  <!-- Add icon library -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- jsnlog -->
+  <script src="jsnlog.min.js"> </script>
+
+  <!-- color gradient library -->
+  <script src="rainbowvis.js"></script>
+
+  <script src="components.js"></script>
+  <script src="visualizeData.js"></script>
+  <script src="information.js"></script>
+
+
+  <!-- creating the consoleAppender to write logs into the console
+  also see http://js.jsnlog.com/ -->
+  <jsnlog>
     <consoleAppender name="consoleAppender" ></consoleAppender>
     <logger name ="mylogger" appenders="consoleAppender"></logger>
-</jsnlog>
+  </jsnlog>
 </head>
 
-<body style='margin: 0; overflow: hidden;' id="visArea" onload="loadGuideAreas('guide_areas.json')">
+<body style='margin: 0; overflow: hidden; font-family: Helvetica, Verdana, Times, serif; font-size: 1.3em;' id="visArea" onload="loadGuideAreas('guide_areas.json')">
 
-<a-scene
-        vr-mode-ui="enabled: false"
-        embedded
-        arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;'
-        cursor="rayOrigin: mouse; fuse: true; fuseTimeout: 0;"
-        raycaster="objects: [gps-entity-place];"
-        inspector
-        keyboard-shortcuts
-        screenshot
-        device-orientation-permission-ui>
-    <a-camera gps-camera="minDistance: 20;" rotation-reader id="camera" camera-listener id="camera">
-        <a-entity id="arrow" arrow="direction: 0 1 0; length: 0.5; headWidth: 0.1" position="0 -1.5 -3"></a-entity>
-    </a-camera>
+  <a-scene
+  vr-mode-ui="enabled: false"
+  embedded
+  arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;'
+  cursor="rayOrigin: mouse; fuse: true; fuseTimeout: 0;"
+  raycaster="objects: [gps-entity-place];"
+  inspector
+  keyboard-shortcuts
+  screenshot
+  device-orientation-permission-ui>
+  <a-camera gps-camera="minDistance: 20;" rotation-reader id="camera" camera-listener id="camera">
+    <a-entity id="arrow" arrow="direction: 0 1 0; length: 0.5; headWidth: 0.1" position="0 -1.5 -3"></a-entity>
+  </a-camera>
 
 
 </a-scene>
 
 <div class="centered">
-    <button id="exampleMarkerButtonCentered" onclick=promiseToLoadData("example.csv")>route</button>
-    <button id="bikeMarkerButtonCentered" onclick=startNavigation()>navi</button>
-</div>
-
-<div class="top-left">
-    <div class="icon-bar">
-     <a class="active" id="introduction"><i class="fa fa-question-circle"></i></a>
-     <a id="information"><i class=" 	fa fa-info-circle"></i></a>
-     <a id="slider"><i class="fa fa-clock-o"></i></a>
-     <a id="data"><i class="fa fa-bar-chart"></i></a>
-     <a href="../"><i class="fa fa-globe"></i></a>
-    </div>
+  <button id="exampleMarkerButtonCentered" onclick=promiseToLoadData("example.csv")>route</button>
+  <button id="bikeMarkerButtonCentered" onclick=startNavigation()>navi</button>
 </div>
 
 <div class="top-right" id="guide-buttons">
 </div>
 
-<div class="menue" id="menue">
 
 
-
-  <div class="menue-topic">
-    <h2>How to use the AR application:</h2>
-
-  <div>
-    <div class="menue-content">
-      <p>In the upper left corner is a questionmark \"?\". Click on it when you want to gain further information about the AR or if you want to return to this information text.</p>
-      <p>There is an associated website where you can get more information about air qualtiy and the way it is measured in the example of Muenster. The uncertanties between the differentmeasurements in space, time and ways of measurements are analyzed.</p>
-      <p> In the application an arrow directing to the next route point is displayed in the middle of the screen. When you follow it the amount of particles will change.The start point of the tour is here.(coordinates, adress, google maps link)
-        <iframe src=\"https://www.google.com/maps/d/embed?mid=1wKBvzSgLyZSQiVaxqd-n2ABefUzxqcMY\" width=\"640\" height=\"480\">
-        </iframe></p>
-        <p> Every mircrogramm of PM10 is displayed as 1000 particles on the screen.</p>
-        <p>Since we cylced a couple of times, there is a button to switch between the different data of the rides. More information about when we cycled and which factors influence at which time can be reached here. </p>
-        <p>Along the cycled route, there are serveral "guide sign areas". Those areas are marked with a red circle. When you enter one, you gain information about the place and why there might be a special situation for air quality measurements. They are not only placed at striking points but also at averaging places. Some guide sign areas focus on the varieties of the different rides. </p>
-        <p> When you want to gain more knowledge about the European standards or normal values in greater cities visit the associated website or the website of the European Union.</p>
-
-    </div>
-
-  <div class="bottom">
-  <button onclick="hideMenue()"> Got it! </button>
+<div class="top-left">
+  <button onclick=showAndHideInformation() class="active"><i class="fa fa-question-circle"></i></button>
 </div>
+
+<div class="information" id="information">
+
+    <table >
+      <colgroup>
+        <col style="width:15%" >
+        <col style="width:85%">
+      </colgroup>
+      <tr>
+        <th colspan = "2" style =" text-align:center">
+
+          <h1>Air quality in Münster(PM10)</h1>
+        </th>
+      </tr>
+      <tr>
+        <td>
+          <i class="fa fa-question-circle" style="font-size: 100px;"></i>
+        </td>
+        <td>
+          <h3> How to use the AR application </h3>
+          <p>
+            The AR application displays the air quality around the Geistviertel in Münster at two different times.
+            An arrow directing to the next route point is displayed in the middle of the AR screen. <br>
+            When you follow it the amount of particles will change since the value of PM10 varies. <br>
+            <br>
+            We decided for a route around the LANUV station in the Geistviertel to show whether the measurements of the LANUV station is representative or not. <br>
+            More information about this station can be found below. <br>
+            The start point of the tour is at point A on the map (51.9521303, 7.6167933; Geiststraße B, 48151 Münster). This is the tour:
+          </p>
+          <iframe src="https://www.google.com/maps/d/embed?mid=1wKBvzSgLyZSQiVaxqd-n2ABefUzxqcMY" width="640" height="480">
+          </iframe>
+          <p> Along the cycled route, there are serveral "guide sign areas". Those areas are marked with a red circle in the AR.
+            When you enter one, you gain information about the place and why there might be a special situation for air quality measurements.
+            They are not only placed at striking points but also at averaging places. Some guide sign areas focus on the varieties of the different rides.
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <i class="fa fa-clock-o" style="font-size: 100px;"></i>
+        </td>
+        <td>
+          <h3>Switch between rides</h3>
+
+          Slide for different rides with the bike. One was made on the 14th of November 2019 the other one on the 19th of December 2019.
+
+          <div class="slidecontainer">
+            <input type="range" min="1" max="2" value="1" class="slider" id="myRange">
+            <table style="width:100%;">
+              <tr>
+                <tab style="text-align:left;">
+                  14th of November 2019
+                </td>
+                <td style="text-align:right;">
+                  19th of December 2019
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <h3> Weather conditions </h3>
+            THe 14th of November 2019 an dthe 19th of December 2019 had more or less the same weather conditions: <br>
+            Passing clouds, some sun's rays and wind of 9 to 11km per hour out of east-south-eastern direction.<br>
+            There was a pressure of 1003mbar respectively 1008mbar with 69% relative humidity.<br>
+            The main difference was in the temperature. ON the 14th of November 2019 it was 6 to 8°C warm. <br>
+            On 19th of December there was a temperature of 11-14°C.<br>
+
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <i class="fa fa-bar-chart" style="font-size: 100px;"></i>
+        </td>
+        <td>
+          <h3>Current location based data</h3>
+          <p id="measurementData">
+          </p>
+          <p>
+            Please be aware that the data is updated when reopening the information block.
+          </p>
+          <table>
+          </table>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <i class="fa fa-thermometer-three-quarters" style="font-size: 100px;"></i>
+      </td>
+      <td>
+        <h3> Sensors </h3>
+        <ol>
+          <li>
+            <h4>LANUV stations</h4>
+            These are official air quality measurement stations. The Bundesumweltamt places them at certain points all over Germany.
+            Münster has two: One stands next to the Weselerstraße as a traffic measurement station.
+            The otherone located in the Geistviertel next to the Ludwig-Erhardt-Berufskolleg as a background station in a residential area.
+            The Bundesumweltamt provides averaged hourly PM10 data rounded to microgramm.
+            More information about the criteria for placements and the technical properties of the stations can be reached
+            <a href=\"https://www.lanuv.nrw.de/luqs/messorte/steckbrief.php?ort=MSGE\"> here </a>
+            for station in Geistviertel and
+            <a href=\"https://www.lanuv.nrw.de/luqs/messorte/steckbrief.php?ort=VMS2\"> here </a> for the station at the Weselerstraße.
+          </li>
+
+          <li>
+            <h4>Sensebox</h4>
+            With very kind support of the Sensebox Lap at the Institute for Geoinformatics at the University of Münster we were able to measure air quality place indepenent.
+            While going by bike we measured independently next to the LANUV station in the Geistviertel so that we can have a look on changes in the
+            air quality during the bike ride since there is only one averaged measurement published by LANUV. For measuring PM10 we used the <a href=\"https://sensebox.kaufen/product/feinstaub-sds01w1\"> Sensor sds01w1</a>
+            with a <a href=\"https://sensebox.kaufen/product/sensebox-home\"> Sensebox Home kit </a>.
+
+          </li>
+          <li>
+            <h4>Bike</h4>
+            With support of the Climatology Lab of the Institute for Landscape Ecology by Prof. Dr. Otto Klemm at the University of Münster we were able to do two bike rides.
+            The bike measures environmental data including PM10 data. Therefore, they are using the following sensores: </p>
+          </li>
+        </ol>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <i class="fa fa-globe" style="font-size: 100px;">
+        </td>
+        <td>
+          <h3>More information needed? </h3>
+          <p>
+            <a href=\"https://sensebox.kaufen/product/feinstaub-sds01w1\">This website</a> provides you more information about air quality and the way it is measured in the example of Muenster.
+            The uncertanties between the different measurements in space, time and technical differences between the various ways of measurements are analyzed.
+            The website is directly associated to this AR application.
+          </p>
+          <p> When you want to gain more knowledge about the European standards or standard values in greater cities we collected a couple of websites:
+            <ul>
+              <li>
+                <a href=\"https://sensebox.kaufen/product/feinstaub-sds01w1\">associated website</a>
+              </li>
+              <li>
+                <a href=\"https://www.lanuv.nrw.de/luqs/messorte/\"> LANUV stations </a>
+              </li>
+              <li>
+                <a href=\"https://ec.europa.eu/environment/air/quality/standards.htm\"> EU standards for Air Quality </a>
+              </li>
+              <li>
+                <a href=\"https://www.bmu.de/en/topics/air-mobility-noise/air-pollution-control/general-information/\"> air pollution control </a>
+              </li>
+              <li>
+                <a href=\"https://doi.org/10.1007/BF00705545\"> air quality uncertanties </a>
+              </li>
+            </ul>
+          </p>
+        </td>
+      </tr>
+    </table>
+    <button onclick="showAndHideInformation()" class= "bottom"> Got it! </button>
 </div>
 
 </body>
