@@ -1,7 +1,7 @@
 var menueTopic = document.getElementsByClassName("menue-topic");
 var menueContent = document.getElementsByClassName("menue-content");
 
-hideMenu();
+hideMenue();
 
 function hideMenue(){
   var x = document.getElementsByClassName("menue");
