@@ -19,7 +19,7 @@ data.addEventListener("click", showData());
 function hideMenue(){
   menue.style.display = "none";
   }
-}
+
 
 function showIntroduction(){
   var introductionTopic = "<h2>How to use the AR application:</h2>";
@@ -31,7 +31,6 @@ function showIntroduction(){
 }
 
 function showInformation(){
-  hideOrShowMenue();
   var informationTopic = "<h2>Information</h2>";
   var informationContent = "<p>The AR application displays the air quality around Münster.</p><p>There were three different measuring types: </p> <p> 1. LANUV station This is an official air quality measurement station. The Bundesumweltamt places them at certain points all over Germany. Münster has two: one at the Weselerstraße and the other in theGeistviertel next to the Ludwig-Erhardt-Berufskolleg. The Bundesumweltamt provides averaged hourly data. They are rounding to microgramm. More information about the criteria for placements and the technical properties of the stations can be reached <a href=\"https://www.lanuv.nrw.de/luqs/messorte/steckbrief.php?ort=MSGE\"> here </a> for station in Geistviertel and <a href=\"https://www.lanuv.nrw.de/luqs/messorte/steckbrief.php?ort=VMS2\"> here </a> for the station at the Weselerstraße. </p> <p> 2. Sensebox With very kind support of the Sensebox Lap at the Institute for Geoinformatics at the University of Münster we were able to measure air qualityplaceindepenent. While going by bike we measured independently next to the LANUV station in the Geistviertel so that we can have a look on changes in the airquality during the bike ride since there is only one averaged measurement published by LANUV. For measuring PM10 we used the Sensor.... Since it is an opensource project the box can be bought <a href=\"https://sensebox.kaufen/product/sensebox-home\"> here </a>. The pm10 sensor is available under this <a href=\"https://senseboasx.kaufen/product/feinstaub-sds01w1\">link</a>.</p><p>3. Bike With support of the Climatology Lab oftheInstitute for Landscape Ecology by Prof. Dr. Otto Klemm at the University of Münster we were able to do two bike rides. The bike measures environmental data including PM10 data. Therefore, they are using the following sensores: </p> <p> - route We decided for a route around the LANUV station in the Geistviertel to show whether the measurements of the LANUV station is representative or not. The detailed route can be viewed on this site. When using theAR the arrow directs along this route. The starting point of the route is here: coorindates, adress. <iframe src=\"https://www.google.com/maps/d/embed?mid=1wKBvzSgLyZSQiVaxqd-n2ABefUzxqcMY\" width=\"640\" height=\"480\"></iframe> </p> <p> -how did we measure </p> <p> - when did we measure One at the 14th of November 2019, the other on the 19th of December 2019. </p> <p> -what are the results The results of the bike ride are displayed in the AR. There is an information field on the top right corner where the measurements of the LANUV station and the Sensebox can be seen. </p> <p> - uncertanties </p> <p> -website For more information and more visual evaluations the associated website provides more detailed information. Espacially about uncertanties in time, space and technique. </p>";
 
@@ -41,7 +40,6 @@ function showInformation(){
 }
 
 function showSlider(){
-  hideOrShowMenue();
   var sliderTopic = "<h2>Select shown data</h2>";
   var sliderContent = "<div class=\"slidecontainer\"> <input type=\"range\" min=\"1\" max=\"3\" value=\"2\" class=\"slider\" id=\"myRange\"> </div>";
 
@@ -51,7 +49,6 @@ function showSlider(){
 }
 
 function showData(){
-  hideOrShowMenue();
   var dataTopic = "<h2>Data in numbers</h2>";
   var x = 5.10
   var dataContent = "your location:<h3> PM10 values in microgramm: </h3><p>bike measurement at your position: </p><p>LANUV station at Geistviertel(hourly averaged): " + x + "</p><p>Sensebox next to LANUV station at Geistviertel: " + x + "</p><p>LANUV station at Weserstraße (hourly averaged): " + x + "</p>";
