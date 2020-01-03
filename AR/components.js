@@ -13,7 +13,7 @@ AFRAME.registerComponent('camera-listener', {
             let directionRad = (direction - rotation.y) * (Math.PI/180);
             let tiltRad = (rotation.x) * (Math.PI/180);
             document.getElementById("arrow").setAttribute("arrow", "direction: "
-                + Math.cos(directionRad) + " " + Math.sin(directionRad) + " 0; length: 1; headWidth: 0.2");
+                + Math.cos(directionRad) + " " + Math.sin(directionRad) + " 0; length: 0.7; headWidth: 0.2;");
         }
     }
 });
@@ -50,6 +50,7 @@ AFRAME.registerComponent("arrow", {
         var headWidth = data.headWidth || headLength * .2;
         var color = new THREE.Color(data.color);
         this.arrow = new THREE.ArrowHelper(direction.normalize(), new THREE.Vector3(), length, color, headLength, headWidth);
+				this.arrow.line.material.linewidth = 5;
         this.el.setObject3D("arrow", this.arrow);
     },
     update: function (oldData) {
