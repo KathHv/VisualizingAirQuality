@@ -4,7 +4,7 @@
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <!-- making the website conform to any device -->
-    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
 
     <title>VAQIIS AR demo</title>
 
@@ -32,8 +32,6 @@
 
     <script src="components.js"></script>
     <script src="visualizeData.js"></script>
-    <script src="menue.js"></script>
-
 
 <!-- creating the consoleAppender to write logs into the console
      also see http://js.jsnlog.com/ -->
@@ -43,7 +41,7 @@
 </jsnlog>
 </head>
 
-<body style='margin: 0; overflow: hidden;' id="visArea" onload="loadGuideAreas('guide_areas.json')">
+<body style='margin: 0; overflow: hidden;' id="visArea" onload="loadContent()">
 
 <a-scene
         vr-mode-ui="enabled: false"
@@ -56,24 +54,24 @@
         screenshot
         device-orientation-permission-ui>
     <a-camera gps-camera="minDistance: 20;" rotation-reader id="camera" camera-listener id="camera">
-        <a-entity id="arrow" arrow="direction: 0 1 0; length: 0.5; headWidth: 0.1" position="0 -1.5 -3"></a-entity>
+        <a-entity id="arrow" arrow="direction: 0 1 0; length: 0.7; headWidth: 0.2; color: #4CAF50;" position="0 -1.5 -2.7"></a-entity>
     </a-camera>
 
 
 </a-scene>
 
 <div class="centered">
-    <button id="exampleMarkerButtonCentered" onclick=promiseToLoadData("example.csv")>route</button>
-    <button id="bikeMarkerButtonCentered" onclick=startNavigation()>navi</button>
+    <div id="distance" style="visibility: hidden"></div>
 </div>
 
 <div class="top-left">
     <div class="icon-bar">
-     <a class="active" id="introduction"><i class="fa fa-question-circle"></i></a>
-     <a id="information"><i class=" 	fa fa-info-circle"></i></a>
-     <a id="slider"><i class="fa fa-clock-o"></i></a>
-     <a id="data"><i class="fa fa-bar-chart"></i></a>
-     <a href="../"><i class="fa fa-globe"></i></a>
+        <a id="toggle"><i class="fa fa-bars"></i></a>
+        <a class="active" id="introduction"><i class="fa fa-question-circle"></i></a>
+        <a id="information"><i class="fa fa-info-circle"></i></a>
+        <a id="slider"><i class="fa fa-clock-o"></i></a>
+        <a id="data"><i class="fa fa-bar-chart"></i></a>
+        <a href="../"><i class="fa fa-globe"></i></a>
     </div>
 </div>
 
@@ -81,8 +79,6 @@
 </div>
 
 <div class="menue" id="menue">
-
-
 
   <div class="menue-topic">
     <h1>Menue Topic</h1>
@@ -99,3 +95,5 @@
 
 </body>
 </html>
+
+<script src="menue.js"></script>

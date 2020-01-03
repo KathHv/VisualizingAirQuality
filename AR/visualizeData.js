@@ -63,6 +63,10 @@ Promise.resolve().then(function resolver() {
         .catch(console.error);
 }).catch(console.error);
 
+/**
+ * Get current gps position
+ * @returns {Promise<any>}
+ */
 function getPosition() {
     return new Promise(function(resolve, reject) {
         try {
@@ -180,9 +184,9 @@ function loadGuideAreas(filename) {
  * @param position - the current position
  */
 function checkForGuideArea(dataArray, position) {
-    let possibleGuideAreas = selectData([position.coords.latitude, position.coords.longitude], dataArray, 0.000001);
-    if (possibleGuideAreas.length > 0) {
-        addGuide(possibleGuideAreas[0].text);
+    let possibleGuideAreas = getClosest(dataArray,position);
+    if (possibleGuideAreas.distance < 0.5) {
+        addGuide(possibleGuideAreas.closest.text);
     } else {
         removeGuide();
     }
@@ -208,7 +212,7 @@ function addGuideAreas(dataArray){
         icon.setAttribute('rotation', '-90 0 0');
         icon.setAttribute('radius-inner', '1');
         icon.setAttribute('radius-outer', '1.2');
-        icon.setAttribute('height', '-1');
+        icon.setAttribute('height', '-5');
 
         // for debug purposes, just show in a bigger scale, otherwise I have to personally go on places...
         icon.setAttribute('scale', '5 5 5');
@@ -227,11 +231,16 @@ function startNavigation() {
         .catch(console.error)
         .then(function (response) {
             let dataArray = readData(response);
+            let distDiv = document.getElementById("distance");
             x.registerListener(function(val) {
-                getDirection(dataArray,val);
+                let directionCoordinate = getDirectionCoordinate(dataArray,val);
+                direction = getAngle(val.coords.latitude, val.coords.longitude, directionCoordinate.location.lat, directionCoordinate.location.lng);
+                distDiv.innerHTML = (Math.round(distance(val.coords.latitude, val.coords.longitude,
+                  directionCoordinate.location.lat, directionCoordinate.location.lng, "K") * 100) / 100) + " km";
+                distDiv.style.visibility = "visible";
             }, "direction");
             x.registerListener(function(val) {
-                let closest = getClosest(dataArray,val);
+                let closest = getClosest(dataArray,val).closest;
                 if (closestPointToCurrentPosition !== closest) {
                     closestPointToCurrentPosition = closest;
                     visualizeParticles(closest.air_quality.pm10);
@@ -244,14 +253,16 @@ function getClosest(dataArray,position) {
     let closest = dataArray[0];
     let minDistance = Infinity;
     dataArray.forEach(function (current) {
-        let currentDistance = distance(current.location.lat, current.location.lng,
-            position.coords.latitude, position.coords.longitude, "K");
+        let currentDistance = distance(current, position, "K");
         if (currentDistance < minDistance) {
             minDistance = currentDistance;
             closest = current;
         }
     });
-    return closest;
+    return {
+        closest: closest,
+        distance: minDistance
+    };
 }
 
 /**
@@ -260,8 +271,8 @@ function getClosest(dataArray,position) {
  * @param dataArray - the route points
  * @param position
  */
-function getDirection(dataArray,position) {
-    let closest = getClosest(dataArray,position);
+function getDirectionCoordinate(dataArray,position) {
+    let closest = getClosest(dataArray,position).closest;
     let directionCoordinate = dataArray.find(coordinate => coordinate.name === closest.name + 2);
     if (!directionCoordinate) {
         directionCoordinate = dataArray.find(coordinate => coordinate.name === closest.name + 1);
@@ -269,8 +280,7 @@ function getDirection(dataArray,position) {
             directionCoordinate = closest;
         }
     }
-    direction = getAngle(position.coords.latitude, position.coords.longitude,
-        directionCoordinate.location.lat, directionCoordinate.location.lng);
+    return directionCoordinate;
 }
 
 /**
@@ -309,50 +319,26 @@ function distance(lat1, lon1, lat2, lon2, unit) {
 
 /**
 * visualizes data in the AR, writes into html
-*@param dataArray: array which contains the RELEVANT data of the air quality in format [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
+*@param pm10Value
 */
 function visualizeParticles(pm10Value){
     JL("mylogger").info("--------visualizeParticles()--------");
-    let scene = document.querySelector('a-scene');
 
+    if (document.getElementById("particles " + pm10Value) === null) {
+        // remove all other particle-systems
+        let alreadyExisting = document.querySelectorAll('[id^="particles"]');
+        alreadyExisting.forEach(function(current) {
+            alreadyExisting.parentNode.removeChild(current);
+        });
         // add particle icon
+        let scene = document.querySelector('a-scene');
         let dust = document.createElement('a-entity');
-        dust.setAttribute('position', '0 2.25 -15')
+        dust.setAttribute('position', '0 2.25 -15');
+        dust.setAttribute('id', 'particles ' + pm10Value);
         pm10ValueVisualized = pm10Value * 1000;
-        dust.setAttribute('particle-system', 'preset: dust; particleCount: ' + pm10ValueVisualized+';  color: #61210B, #61380B, #3B170B');
+        dust.setAttribute('particle-system', 'preset: dust; particleCount: ' + pm10ValueVisualized + ';  color: #61210B, #61380B, #3B170B');
         scene.appendChild(dust);
-}
-
-/**
- * select data that is around the current position of the device from the array
- * @param currentPosition - array containing the lat and long info of the current position
- * @param dataArray - array which contains objects with coordinates
- * @param radius - radius around current position (in degree)
- * @return array with relevant objects
- * @example selectData([51.2,7.3], [...], 0.00001)
- */
-function selectData(currentPosition, dataArray, radius){
-    //JL("mylogger").info("--------selectData()--------");
-    var relevantDataArray = [];
-
-    dataArray.forEach(function (current) {
-        //push all relevant value sets to the relevantDataArray
-        if(
-          (currentPosition[0] < (current.location.lat + radius)
-            && (currentPosition[1] < (current.location.lng + radius)
-              || currentPosition[1] > (current.location.lng - radius))
-          )
-          || (currentPosition[0] > (current.location.lat - radius)
-            && (currentPosition[1] < (current.location.lng + radius)
-            || currentPosition[1] > (current.location.lng - radius))
-          )
-        ){
-            relevantDataArray.push(current);
-        }
-    });
-    JL("mylogger").info("relevantDataArray: "+ relevantDataArray);
-    return relevantDataArray;
-
+    }
 }
 
 /**
@@ -412,4 +398,12 @@ function openClosePopup() {
             popup.setAttribute("visible", !(popup.getAttribute("visible") === true));
         }
     };
+}
+
+/**
+ *
+ */
+function loadContent() {
+    loadGuideAreas('guide_areas.json');
+    startNavigation()
 }
