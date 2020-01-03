@@ -31,17 +31,21 @@
   justify-content: center;
   position: fixed;
   top: 0%;
-  width: 5%;
   margin: 0px auto;
   left: 0%;
+}
+
+#infoBtn {
   text-align: center;
-    width: 80px; /* Set a specific width */
-    background-color: #4CAF50; /* Add an active/current color */
-    text-align: center; /* Center-align text */
-    padding: 16px; /* Add some padding */
-    transition: all 0.3s ease; /* Add transition for hover effects */
-    color: white; /* White text color */
-    font-size: 36px; /* Increased font-size */
+  background-color: #4CAF50; /* Add an active/current color */
+  padding: 0.2em; /* Add some padding */
+  transition: all 0.3s ease; /* Add transition for hover effects */
+  color: white; /* White text color */
+  font-size: 5.5vh; /* Increased font-size */
+
+  border: none;
+  display: flex;
+  outline: none;
 }
 
 .information {
@@ -74,25 +78,25 @@
     align-items: center;
     justify-content: center;
     position: fixed;
-    display: flex;
-    flex-direction: row;
-    width: 7%;
-    margin: 0px auto;
+  display: inline-block;
+  padding: 0.2em;
     left: 80%;
     text-align: center;
-    bottom: 12%
+    bottom: 12%;
+  font-size: 5.5vh; /* Increased font-size */
 }
 
 th, td {
-  padding: 20px;
+  padding: 5%;
 }
 
 i{
   align-items: center;
   background-color: #4CAF50;
+  padding: 0.2em;
 }
 
-button {
+#popupBtn, #infoCloseBtn{
     border: none;
     display: flex;
     font-size: 2em;

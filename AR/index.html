@@ -70,7 +70,7 @@
 
 
 <div class="top-left">
-  <button onclick=showAndHideInformation() class="active"><i class="fa fa-question-circle"></i></button>
+  <button onclick=showAndHideInformation() class="active" id="infoBtn"><i class="fa fa-question-circle"></i></button>
 </div>
 
 <div class="information" id="information">
@@ -88,7 +88,7 @@
       </tr>
       <tr>
         <td>
-          <i class="fa fa-question-circle" style="font-size: 100px;"></i>
+          <i class="fa fa-question-circle" style="font-size: 7vh;"></i>
         </td>
         <td>
           <h3> How to use the AR application </h3>
@@ -101,7 +101,7 @@
             More information about this station can be found below. <br>
             The start point of the tour is at point A on the map (51.9521303, 7.6167933; Geiststraße B, 48151 Münster). This is the tour:
           </p>
-          <iframe src="https://www.google.com/maps/d/embed?mid=1wKBvzSgLyZSQiVaxqd-n2ABefUzxqcMY" width="640" height="480">
+          <iframe src="https://www.google.com/maps/d/embed?mid=1wKBvzSgLyZSQiVaxqd-n2ABefUzxqcMY" width="100%" height="480px">
           </iframe>
           <p> Along the cycled route, there are serveral "guide sign areas". Those areas are marked with a red circle in the AR.
             When you enter one, you gain information about the place and why there might be a special situation for air quality measurements.
@@ -111,7 +111,7 @@
       </tr>
       <tr>
         <td>
-          <i class="fa fa-clock-o" style="font-size: 100px;"></i>
+          <i class="fa fa-clock-o" style="font-size: 7vh;"></i>
         </td>
         <td>
           <h3>Switch between rides</h3>
@@ -122,11 +122,11 @@
             <input type="range" min="1" max="2" value="1" class="slider" id="myRange">
             <table style="width:100%;">
               <tr>
-                <tab style="text-align:left;">
-                  14th of November 2019
+                <td style="text-align:left;">
+                  14/11/2019
                 </td>
                 <td style="text-align:right;">
-                  19th of December 2019
+                  19/12/2019
                 </td>
               </tr>
             </table>
@@ -143,7 +143,7 @@
       </tr>
       <tr>
         <td>
-          <i class="fa fa-bar-chart" style="font-size: 100px;"></i>
+          <i class="fa fa-bar-chart" style="font-size: 7vh;"></i>
         </td>
         <td>
           <h3>Current location based data</h3>
@@ -158,7 +158,7 @@
     </tr>
     <tr>
       <td>
-        <i class="fa fa-thermometer-three-quarters" style="font-size: 100px;"></i>
+        <i class="fa fa-thermometer-three-quarters" style="font-size: 7vh;"></i>
       </td>
       <td>
         <h3> Sensors </h3>
@@ -193,7 +193,7 @@
     </tr>
     <tr>
       <td>
-        <i class="fa fa-globe" style="font-size: 100px;">
+        <i class="fa fa-globe" style="font-size: 7vh;">
         </td>
         <td>
           <h3>More information needed? </h3>
@@ -224,7 +224,7 @@
         </td>
       </tr>
     </table>
-    <button onclick="showAndHideInformation()" class= "bottom"> Got it! </button>
+    <button onclick="showAndHideInformation()" class= "bottom" id="infoCloseBtn"> Got it! </button>
 </div>
 
 </body>
