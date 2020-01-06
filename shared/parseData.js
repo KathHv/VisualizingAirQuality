@@ -1,6 +1,6 @@
 // parsing functions
 var parseTimeLANUV = d3.timeParse("%d.%m.%Y-%H:%M"); // 01.12.2019-09:12
-var parseTimeBike = d3.timeParse("%Y-%m-%d%_H:%M:%S"); // 2019-11-14 14:35:00
+var parseTimeBike = d3.timeParse("%Y-%m-%d %H:%M:%S"); // 2019-11-14 14:35:00
 var parseTimeSensebox = d3.timeParse("%Y-%m-%d-%H:%M:%S,%L"); // 14:26:02,456
 
 function parseLANUV(d) {
@@ -29,7 +29,8 @@ function parseSensebox(d, date) {
 
 function parseBike(d) {
 	return {
-		time: parseTimeBike(d.TIMESTAMP),
+		// time: parseTimeBike(d.time),
+		time: d.time,
 		lat: +d.lat,
 		lon: +d.lon,
 		pm10: +d.pm10,
