@@ -9,10 +9,14 @@ function readAllData() {
 	// DATA
 	Promise.all([
 		d3.csv("../data/lanuv_14Nov_modified.csv", parseLANUV),
-		d3.csv("../data/Sensebox_Geist_14-11-19.csv", parseSensebox),
+		d3.csv("../data/Sensebox_Geist_14-11-19.csv", function(d) {
+			return parseSensebox(d, "2019-11-14-");
+		}),
 		d3.csv("../data/bike_14-11.csv", parseBike),
 		d3.csv("../data/lanuv_19Dec_modified.csv", parseLANUV),
-		d3.csv("../data/Sensebox_Geist_19-12-19.csv", parseSensebox),
+		d3.csv("../data/Sensebox_Geist_19-12-19.csv", function(d) {
+			return parseSensebox(d, "2019-12-19-");
+		}),
 		d3.csv("../data/bike_19-12.csv", parseBike)
 	])
 		.then(function(data) {

@@ -6,11 +6,7 @@ const stationWeseler = [51.953275, 7.619379];
 
 const scrollyImg = ["lanuv.jpg", "sensebox.jpg", "bike.jpg", "All.jpg"];
 
-// parsing functions
-// var parseDateLANUV = d3.timeParse("%d.%m.%Y"); // 01.12.2019
-var parseTimeLANUV = d3.timeParse("%d.%m.%Y-%H:%M"); // 01.12.2019-09:12
-var parseTimeSensebox = d3.timeParse("%Y-%m-%d-%H:%M:%S,%L"); // "2019-11-14-14:26:02,456"
-var parseTimeBike = d3.timeParse("%Y-%m-%d%_H:%M:%S"); // 2019-11-14 14:35:00
+// time formatters
 var formatTime = d3.timeFormat("%d/%m/%Y, %H:%M");
 var formatTimeHour = d3.timeFormat("%d%m%Y%H");
 
@@ -43,11 +39,6 @@ var scrollyC = {
 	scrolly: d3.select("#scrollyC"),
 	step: d3.select("#scrollyC").selectAll(".step")
 };
-
-// var figure = scrolly.select("figure");
-// var map = scrolly.select("#map");
-// var article = scrolly.select("article");
-// var step = article.selectAll(".step");
 
 // colour scale for pm10
 var colourPM10 = d3
@@ -104,38 +95,16 @@ mapC.invalidateSize();
 
 // DATA
 Promise.all([
-	d3.csv("data/lanuv_14Nov_modified.csv", function(d) {
-		return {
-			// date: (d.Datum),
-			time: parseTimeLANUV(d.Datum + "-" + d.Zeit),
-			pm10_Weseler: +d.Weseler,
-			pm10_Geist: +d.Geist
-		};
-	}),
+	d3.csv("data/lanuv_14Nov_modified.csv", parseLANUV),
 	d3.csv("data/Sensebox_Geist_14-11-19.csv", function(d) {
-		return {
-			humidity: +d.Humidity,
-			pm10: +d.P10,
-			p2_5: +d["P2.5"],
-			pressure: +d.Pressure,
-			temp: +d.Temperature,
-			time: parseTimeSensebox("2019-11-14-" + d["time of day"])
-			// skip "time since power on"​​​​
-		};
+		return parseSensebox(d, "2019-11-14-");
 	}),
-	d3.csv("data/bike_14-11.csv", function(d) {
-		return {
-			time: parseTimeBike(d.TIMESTAMP),
-			lat: +d.lat,
-			lon: +d.lon,
-			pm10: +d.pm10,
-			pm2_5: +d.pm25
-			// skip:
-			// AirTC_Avg: "8.12"
-			// RECORD: "36625"
-			// RH_Avg: "67.14"
-		};
-	})
+	d3.csv("data/bike_14-11.csv", parseBike)
+
+	// not using the 19 Dec data currently
+	// d3.csv("data/lanuv_19Dec_modified.csv", parseLANUV),
+	// d3.csv("data/Sensebox_Geist_19-12-19.csv", parseSensebox),
+	// d3.csv("data/bike_19-12.csv", parseBike)
 ])
 	.then(function(data) {
 		console.log("LANUV: ", data[0], "senseBox: ", data[1], "Bike:", data[2]);

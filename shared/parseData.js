@@ -1,6 +1,7 @@
 // parsing functions
 var parseTimeLANUV = d3.timeParse("%d.%m.%Y-%H:%M"); // 01.12.2019-09:12
 var parseTimeBike = d3.timeParse("%Y-%m-%d%_H:%M:%S"); // 2019-11-14 14:35:00
+var parseTimeSensebox = d3.timeParse("%Y-%m-%d-%H:%M:%S,%L"); // 14:26:02,456
 
 function parseLANUV(d) {
 	return {
@@ -11,17 +12,20 @@ function parseLANUV(d) {
 	};
 }
 
-function parseSensebox(d) {
+function parseSensebox(d, date) {
+	// date must be: "2019-12-19-" or "2019-11-14-"
 	return {
-		humidity: +d.Humidity,
-		pm10: +d.P10,
-		p2_5: +d["P2.5"],
+		//humidity: +d.Humidity,
+		pm10: +d.pm10,
+		p2_5: +d.pm25,
 		pressure: +d.Pressure,
-		temp: +d.Temperature,
-		time: +d.time
+		// temp: +d.Temperature,
+		time: parseTimeSensebox(date + d.time)
 		// skip "time since power on"​​​​
 	};
 }
+
+// time_since_power_on, time, pm25, pm10, AirTC_Avg, RH_Avg, Pressure;
 
 function parseBike(d) {
 	return {
