@@ -217,17 +217,35 @@ function handleStepEnterB(response, data) {
 				var el = timerB.scale(elapsed);
 				// console.log(elapsed);
 				timerB.div.html(formatTime(el));
-				// check if new hour has started, only do stuff if yes
-				if (el.getHours() != el1_hour) {
-					var datanow = data.lanuv.find(function(d) {
-						return formatTimeHour(d.time) === formatTimeHour(el);
-					});
-					d3.select("#ptGeist").attr("fill", function() {
-						return colourPM10(datanow.pm10_Geist);
-					});
-					d3.select("#ptWeseler").attr("fill", function() {
-						return colourPM10(datanow.pm10_Weseler);
-					});
+
+				updateStationDots();
+				updateSenseboxDots();
+
+				function updateStationDots() {
+					// check if new hour has started, only do stuff if yes
+					if (el.getHours() != el1_hour) {
+						var datanow = data.lanuv.find(function(d) {
+							return formatTimeHour(d.time) === formatTimeHour(el);
+						});
+						d3.select("#ptGeist").attr("fill", function() {
+							return colourPM10(datanow.pm10_Geist);
+						});
+						d3.select("#ptWeseler").attr("fill", function() {
+							return colourPM10(datanow.pm10_Weseler);
+						});
+					}
+				}
+
+				function updateSenseboxDots() {
+					// check if the dots are there (only in step 3)
+					if (!d3.select(".senseboxDots").empty()) {
+						var datanow = data.sensebox.find(function(d) {
+							return +d.time > +el;
+						});
+						d3.select("#ptSBGeist").attr("fill", function() {
+							return colourPM10(datanow.pm10);
+						});
+					}
 				}
 
 				// update elapsed time
@@ -262,6 +280,19 @@ function handleStepEnterB(response, data) {
 				.attr("d", bikeRoute)
 				.attr("id", "bikeRoute");
 
+			break;
+		case 2:
+			svgB
+				.append("circle")
+				.attr("id", "ptSBGeist")
+				.attr("class", "senseboxDots")
+				// .attr("fill", ) --> set in timer
+				.attr("cx", d => mapB.latLngToLayerPoint(stationGeist).x)
+				.attr("cy", d => mapB.latLngToLayerPoint(stationGeist).y)
+				.attr("r", 10);
+
+			break;
+		case 3:
 			break;
 	}
 
