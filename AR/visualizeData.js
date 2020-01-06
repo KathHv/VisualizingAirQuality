@@ -405,5 +405,6 @@ function openClosePopup() {
  */
 function loadContent() {
     loadGuideAreas('guide_areas.json');
-    startNavigation()
+    startNavigation();
+    readAllData();
 }
