@@ -29,8 +29,7 @@ function parseSensebox(d, date) {
 
 function parseBike(d) {
 	return {
-		// time: parseTimeBike(d.time),
-		time: d.time,
+		time: parseTimeBike(d.time),
 		lat: +d.lat,
 		lon: +d.lon,
 		pm10: +d.pm10,
