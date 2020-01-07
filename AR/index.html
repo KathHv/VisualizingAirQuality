@@ -16,6 +16,8 @@
   <script src="https://raw.githack.com/jeromeetienne/AR.js/master/aframe/build/aframe-ar.min.js"></script>
   <script src="https://raw.githack.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
   <script src="https://unpkg.com/aframe-particle-system-component@1.0.x/dist/aframe-particle-system-component.min.js"></script>
+  <!-- D3 -->
+  <script src="https://d3js.org/d3.v5.min.js"></script>
 
 
   <script>
@@ -33,6 +35,8 @@
 
   <script src="components.js"></script>
   <script src="visualizeData.js"></script>
+  <script src="../shared/parseData.js"></script>
+  <script src="readData.js"></script>
 
 
   <!-- creating the consoleAppender to write logs into the console
@@ -44,7 +48,7 @@
 </head>
 
 
-<body style='margin: 0; overflow: hidden; font-family: Helvetica, Verdana, Times, serif; font-size: 1.3em;' id="visArea" onload="loadGuideAreas('guide_areas.json')">
+<body style='margin: 0; overflow: hidden; font-family: Helvetica, Verdana, Times, serif; font-size: 1.3em;' id="visArea" onload="loadContent()">
 
   <a-scene
   vr-mode-ui="enabled: false"

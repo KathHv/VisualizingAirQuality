@@ -4,13 +4,11 @@ const initZoom = 12;
 const stationGeist = [51.936482, 7.611609]; // lat lon
 const stationWeseler = [51.953275, 7.619379];
 
+const boundsMuenster = [[51.982262, 7.590976], [51.927088, 7.679865]];
+
 const scrollyImg = ["lanuv.jpg", "sensebox.jpg", "bike.jpg", "All.jpg"];
 
-// parsing functions
-// var parseDateLANUV = d3.timeParse("%d.%m.%Y"); // 01.12.2019
-var parseTimeLANUV = d3.timeParse("%d.%m.%Y-%H:%M"); // 01.12.2019-09:12
-var parseTimeSensebox = d3.timeParse("%Y-%m-%d-%H:%M:%S,%L"); // "2019-11-14-14:26:02,456"
-var parseTimeBike = d3.timeParse("%Y-%m-%d%_H:%M:%S"); // 2019-11-14 14:35:00
+// time formatters
 var formatTime = d3.timeFormat("%d/%m/%Y, %H:%M");
 var formatTimeHour = d3.timeFormat("%d%m%Y%H");
 
@@ -44,11 +42,6 @@ var scrollyC = {
 	step: d3.select("#scrollyC").selectAll(".step")
 };
 
-// var figure = scrolly.select("figure");
-// var map = scrolly.select("#map");
-// var article = scrolly.select("article");
-// var step = article.selectAll(".step");
-
 // colour scale for pm10
 var colourPM10 = d3
 	.scaleSequential()
@@ -75,15 +68,21 @@ var mapB = L.map("mapB", {
 	// boxZoom: false
 	// dragging: false
 }).setView([51.97, 7.63], 13);
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+// L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+	// attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 	attribution:
-		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
 }).addTo(mapB);
 
 // SVG overlay for mapB
 L.svg().addTo(mapB);
 const overlayB = d3.select(mapB.getPanes().overlayPane);
 const svgB = overlayB.select("svg");
+const gBikePath = svgB.append("g").attr("id", "gBikePath");
+const gBikeDots = svgB.append("g").attr("id", "gBikeDots");
+const gStationDots = svgB.append("g").attr("id", "gStationDots");
+const gSenseBox = svgB.append("g").attr("id", "gSenseBox");
 
 var mapC = L.map("mapC", {
 	// disable all zoom controls that interfere with scrolling
@@ -94,48 +93,32 @@ var mapC = L.map("mapC", {
 	// boxZoom: false
 	// dragging: false
 }).setView([51.97, 7.63], 13);
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+	// L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+	// attribution:
+	// 	'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 	attribution:
-		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
 }).addTo(mapC);
 
 mapB.invalidateSize();
 mapC.invalidateSize();
 
+mapB.fitBounds(boundsMuenster);
+mapC.fitBounds(boundsMuenster);
+
 // DATA
 Promise.all([
-	d3.csv("data/lanuv_14Nov_modified.csv", function(d) {
-		return {
-			// date: (d.Datum),
-			time: parseTimeLANUV(d.Datum + "-" + d.Zeit),
-			pm10_Weseler: +d.Weseler,
-			pm10_Geist: +d.Geist
-		};
-	}),
+	d3.csv("data/lanuv_14Nov_modified.csv", parseLANUV),
 	d3.csv("data/Sensebox_Geist_14-11-19.csv", function(d) {
-		return {
-			humidity: +d.Humidity,
-			pm10: +d.P10,
-			p2_5: +d["P2.5"],
-			pressure: +d.Pressure,
-			temp: +d.Temperature,
-			time: parseTimeSensebox("2019-11-14-" + d["time of day"])
-			// skip "time since power on"​​​​
-		};
+		return parseSensebox(d, "2019-11-14-");
 	}),
-	d3.csv("data/bike_14-11.csv", function(d) {
-		return {
-			time: parseTimeBike(d.TIMESTAMP),
-			lat: +d.lat,
-			lon: +d.lon,
-			pm10: +d.pm10,
-			pm2_5: +d.pm25
-			// skip:
-			// AirTC_Avg: "8.12"
-			// RECORD: "36625"
-			// RH_Avg: "67.14"
-		};
-	})
+	d3.csv("data/bike_14-11.csv", parseBike)
+
+	// not using the 19 Dec data currently
+	// d3.csv("data/lanuv_19Dec_modified.csv", parseLANUV),
+	// d3.csv("data/Sensebox_Geist_19-12-19.csv", parseSensebox),
+	// d3.csv("data/bike_19-12.csv", parseBike)
 ])
 	.then(function(data) {
 		console.log("LANUV: ", data[0], "senseBox: ", data[1], "Bike:", data[2]);
@@ -146,16 +129,6 @@ Promise.all([
 		initScrollyA(data1);
 		initScrollyB(data1);
 		initScrollyC(data1);
-
-		// bikeData.forEach(function(d) {
-		// 	L.circleMarker([d.lat, d.lon], {
-		// 		stroke: false,
-		// 		fill: true,
-		// 		fillColor: colourPM10(d.pm10),
-		// 		fillOpacity: 0.7,
-		// 		radius: 8
-		// 	}).addTo(mapC);
-		// });
 	})
 	.catch(function(err) {
 		if (err) throw err;
@@ -248,17 +221,35 @@ function handleStepEnterB(response, data) {
 				var el = timerB.scale(elapsed);
 				// console.log(elapsed);
 				timerB.div.html(formatTime(el));
-				// check if new hour has started, only do stuff if yes
-				if (el.getHours() != el1_hour) {
-					var datanow = data.lanuv.find(function(d) {
-						return formatTimeHour(d.time) === formatTimeHour(el);
-					});
-					d3.select("#ptGeist").attr("fill", function() {
-						return colourPM10(datanow.pm10_Geist);
-					});
-					d3.select("#ptWeseler").attr("fill", function() {
-						return colourPM10(datanow.pm10_Weseler);
-					});
+
+				updateStationDots();
+				updateSenseboxDots();
+
+				function updateStationDots() {
+					// check if new hour has started, only do stuff if yes
+					if (el.getHours() != el1_hour) {
+						var datanow = data.lanuv.find(function(d) {
+							return formatTimeHour(d.time) === formatTimeHour(el);
+						});
+						d3.select("#ptGeist").attr("fill", function() {
+							return colourPM10(datanow.pm10_Geist);
+						});
+						d3.select("#ptWeseler").attr("fill", function() {
+							return colourPM10(datanow.pm10_Weseler);
+						});
+					}
+				}
+
+				function updateSenseboxDots() {
+					// check if the dots are there (only in step 3)
+					if (!d3.select(".senseboxDots").empty()) {
+						var datanow = data.sensebox.find(function(d) {
+							return +d.time > +el;
+						});
+						d3.select("#ptSBGeist").attr("fill", function() {
+							return colourPM10(datanow.pm10);
+						});
+					}
 				}
 
 				// update elapsed time
@@ -268,7 +259,7 @@ function handleStepEnterB(response, data) {
 			}
 
 			//  dots for stations
-			svgB
+			gStationDots
 				.selectAll("circle")
 				.data([stationGeist, stationWeseler])
 				.enter()
@@ -288,10 +279,35 @@ function handleStepEnterB(response, data) {
 				.y(d => mapB.latLngToLayerPoint([d.lat, d.lon]).y);
 			var bikeRoute = lineGenerator(data.bike);
 			console.log(bikeRoute);
-			svgB
+			gBikePath
 				.append("path")
 				.attr("d", bikeRoute)
 				.attr("id", "bikeRoute");
+
+			break;
+		case 2:
+			gSenseBox
+				.append("circle")
+				.attr("id", "ptSBGeist")
+				.attr("class", "senseboxDots")
+				// .attr("fill", ) --> set in timer
+				.attr("cx", d => mapB.latLngToLayerPoint(stationGeist).x)
+				.attr("cy", d => mapB.latLngToLayerPoint(stationGeist).y)
+				.attr("r", 10);
+
+			break;
+		case 3:
+			gBikeDots
+				.selectAll(".bikeDot")
+				.data(data.bike)
+				.enter()
+				.append("circle")
+				.attr("class", "bikeDot")
+				.attr("cx", d => mapB.latLngToLayerPoint([d.lat, d.lon]).x)
+				.attr("cy", d => mapB.latLngToLayerPoint([d.lat, d.lon]).y)
+				.attr("r", 5)
+				.attr("fill", d => colourPM10(d.pm10))
+				.attr("opacity", 0.2);
 
 			break;
 	}
