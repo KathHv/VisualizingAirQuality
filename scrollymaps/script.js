@@ -234,6 +234,11 @@ function handleStepExitB(response) {
 		console.log("stopping t2");
 		t2.stop();
 	}
+
+	if ((response.index === 2) & (response.direction === "up")) {
+		console.log("stopping t2");
+		t2.stop();
+	}
 }
 
 // scrollama event handlers
