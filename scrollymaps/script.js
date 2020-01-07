@@ -4,6 +4,8 @@ const initZoom = 12;
 const stationGeist = [51.936482, 7.611609]; // lat lon
 const stationWeseler = [51.953275, 7.619379];
 
+const boundsMuenster = [[51.982262, 7.590976], [51.927088, 7.679865]];
+
 const scrollyImg = ["lanuv.jpg", "sensebox.jpg", "bike.jpg", "All.jpg"];
 
 // time formatters
@@ -66,15 +68,21 @@ var mapB = L.map("mapB", {
 	// boxZoom: false
 	// dragging: false
 }).setView([51.97, 7.63], 13);
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+// L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+	// attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 	attribution:
-		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
 }).addTo(mapB);
 
 // SVG overlay for mapB
 L.svg().addTo(mapB);
 const overlayB = d3.select(mapB.getPanes().overlayPane);
 const svgB = overlayB.select("svg");
+const gBikePath = svgB.append("g").attr("id", "gBikePath");
+const gBikeDots = svgB.append("g").attr("id", "gBikeDots");
+const gStationDots = svgB.append("g").attr("id", "gStationDots");
+const gSenseBox = svgB.append("g").attr("id", "gSenseBox");
 
 var mapC = L.map("mapC", {
 	// disable all zoom controls that interfere with scrolling
@@ -85,13 +93,19 @@ var mapC = L.map("mapC", {
 	// boxZoom: false
 	// dragging: false
 }).setView([51.97, 7.63], 13);
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+	// L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+	// attribution:
+	// 	'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 	attribution:
-		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
 }).addTo(mapC);
 
 mapB.invalidateSize();
 mapC.invalidateSize();
+
+mapB.fitBounds(boundsMuenster);
+mapC.fitBounds(boundsMuenster);
 
 // DATA
 Promise.all([
@@ -115,16 +129,6 @@ Promise.all([
 		initScrollyA(data1);
 		initScrollyB(data1);
 		initScrollyC(data1);
-
-		// bikeData.forEach(function(d) {
-		// 	L.circleMarker([d.lat, d.lon], {
-		// 		stroke: false,
-		// 		fill: true,
-		// 		fillColor: colourPM10(d.pm10),
-		// 		fillOpacity: 0.7,
-		// 		radius: 8
-		// 	}).addTo(mapC);
-		// });
 	})
 	.catch(function(err) {
 		if (err) throw err;
@@ -255,7 +259,7 @@ function handleStepEnterB(response, data) {
 			}
 
 			//  dots for stations
-			svgB
+			gStationDots
 				.selectAll("circle")
 				.data([stationGeist, stationWeseler])
 				.enter()
@@ -275,14 +279,14 @@ function handleStepEnterB(response, data) {
 				.y(d => mapB.latLngToLayerPoint([d.lat, d.lon]).y);
 			var bikeRoute = lineGenerator(data.bike);
 			console.log(bikeRoute);
-			svgB
+			gBikePath
 				.append("path")
 				.attr("d", bikeRoute)
 				.attr("id", "bikeRoute");
 
 			break;
 		case 2:
-			svgB
+			gSenseBox
 				.append("circle")
 				.attr("id", "ptSBGeist")
 				.attr("class", "senseboxDots")
@@ -293,6 +297,18 @@ function handleStepEnterB(response, data) {
 
 			break;
 		case 3:
+			gBikeDots
+				.selectAll(".bikeDot")
+				.data(data.bike)
+				.enter()
+				.append("circle")
+				.attr("class", "bikeDot")
+				.attr("cx", d => mapB.latLngToLayerPoint([d.lat, d.lon]).x)
+				.attr("cy", d => mapB.latLngToLayerPoint([d.lat, d.lon]).y)
+				.attr("r", 5)
+				.attr("fill", d => colourPM10(d.pm10))
+				.attr("opacity", 0.2);
+
 			break;
 	}
 

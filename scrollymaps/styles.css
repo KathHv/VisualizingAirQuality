@@ -1,7 +1,29 @@
-body,
-html {
-	font-family: sans-serif;
-	margin: 0;
+body {
+	font-family: "Gelasio", serif;
+	margin: 10px;
+	background-color: #f3f3f3;
+}
+
+h1 {
+	max-width: 600px;
+	margin: 5rem auto 3rem auto;
+	font-size: 2.5rem;
+}
+
+h2 {
+	margin: 1.5rem auto;
+	font-size: 1.5rem;
+	max-width: 750px;
+}
+
+p {
+	max-width: 750px;
+	margin: auto;
+}
+
+h1,
+h2 {
+	text-align: center;
 }
 
 .scrolly {
@@ -9,7 +31,7 @@ html {
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
-	background-color: #f3f3f3;
+	/*background-color: #f3f3f3;*/
 	padding: 1rem;
 }
 .scrolly > * {
@@ -57,8 +79,8 @@ figure img {
 .step {
 	margin: 0 auto 2rem auto;
 	padding: 1rem;
-	background-color: #3b3b3b;
-	color: #fff;
+	background-color: #ddd;
+	color: #3b3b3b;
 }
 
 .step:last-child {
@@ -66,8 +88,7 @@ figure img {
 }
 
 .step.is-active {
-	background-color: goldenrod;
-	color: #3b3b3b;
+	background-color: #c5d2d9;
 }
 
 .step p {
@@ -93,10 +114,15 @@ figure img {
 	opacity: 0.8;
 }
 
-#bikeRoute {
+#gBikePath path {
 	fill: transparent;
+	stroke: #606060;
 	stroke-width: 2px;
-	stroke: #333;
+}
+
+#gBikePath.background path {
+	stroke: #848484;
+	stroke-width: 2px;
 }
 
 #arbutton {
