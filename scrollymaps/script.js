@@ -105,28 +105,9 @@ const gBikeDots = svgB.append("g").attr("id", "gBikeDots");
 const gStationDots = svgB.append("g").attr("id", "gStationDots");
 const gSenseBox = svgB.append("g").attr("id", "gSenseBox");
 
-var mapC = L.map("mapC", {
-	// disable all zoom controls that interfere with scrolling
-	// zoomControl: false,
-	scrollWheelZoom: false,
-	doubleClickZoom: false,
-	touchZoom: false
-	// boxZoom: false
-	// dragging: false
-}).setView([51.97, 7.63], 13);
-L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-	// L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-	// attribution:
-	// 	'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-	attribution:
-		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-}).addTo(mapC);
-
 mapB.invalidateSize();
-mapC.invalidateSize();
 
 mapB.fitBounds(boundsMuensterSmall);
-mapC.fitBounds(boundsMuenster);
 
 // DATA
 Promise.all([
@@ -419,6 +400,8 @@ function handleStepEnterC(response, data) {
 		return i === response.index;
 	});
 
+	// update image based on step
+	scrollyC.img.attr("src", "img/" + scrollyImg[response.index]);
 	// update map based on step
 	// updateMap(response.index);
 	// figure.select("p").text(response.index);
