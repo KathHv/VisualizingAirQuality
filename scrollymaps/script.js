@@ -4,6 +4,7 @@ const initZoom = 12;
 const stationGeist = [51.936482, 7.611609]; // lat lon
 const stationWeseler = [51.953275, 7.619379];
 
+const boundsMuensterSmall = [[51.965114, 7.601657], [51.928291, 7.628437]];
 const boundsMuenster = [[51.982262, 7.590976], [51.927088, 7.679865]];
 
 const scrollyImg = ["lanuv.jpg", "sensebox.jpg", "bike.jpg", "All.jpg"];
@@ -11,6 +12,8 @@ const scrollyImg = ["lanuv.jpg", "sensebox.jpg", "bike.jpg", "All.jpg"];
 // time formatters
 var formatTime = d3.timeFormat("%d/%m/%Y, %H:%M");
 var formatTimeHour = d3.timeFormat("%d%m%Y%H");
+
+var t1, t2;
 
 var main = d3.select("main");
 var allSteps = d3.selectAll(".step");
@@ -25,17 +28,29 @@ var scrollyB = {
 	scrolly: d3.select("#scrollyB"),
 	step: d3.select("#scrollyB").selectAll(".step")
 };
-var timerB = {
+var timerB1 = {
 	div: d3.select("#timeB"),
 	start: new Date(2019, 10, 14),
 	end: new Date(2019, 10, 14, 23, 59, 59),
 	speedFactor: 24 * 60
 };
 
-timerB.scale = d3
+timerB1.scale = d3
 	.scaleTime()
-	.range([timerB.start, timerB.end])
-	.domain([0, (timerB.end - timerB.start) / timerB.speedFactor]);
+	.range([timerB1.start, timerB1.end])
+	.domain([0, (timerB1.end - timerB1.start) / timerB1.speedFactor]);
+
+var timerB2 = {
+	div: d3.select("#timeB"),
+	start: new Date(2019, 10, 14, 14, 25, 0),
+	end: new Date(2019, 10, 14, 16, 3, 0),
+	speedFactor: 24 * 6
+};
+
+timerB2.scale = d3
+	.scaleTime()
+	.range([timerB2.start, timerB2.end])
+	.domain([0, (timerB2.end - timerB2.start) / timerB2.speedFactor]);
 
 var scrollyC = {
 	scrolly: d3.select("#scrollyC"),
@@ -47,6 +62,12 @@ var colourPM10 = d3
 	.scaleSequential()
 	.domain([65, 0]) // roughly the range of pm10 values
 	.interpolator(d3.interpolateRdBu);
+
+// opacity scale for fading in and out bike dots
+var opacityScale = d3
+	.scaleLinear()
+	.domain([120000, 0]) // 2 minutes are 120000 ms
+	.range([0, 1]);
 
 // initialize the scrollama
 var scrollerA = scrollama();
@@ -104,7 +125,7 @@ L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
 mapB.invalidateSize();
 mapC.invalidateSize();
 
-mapB.fitBounds(boundsMuenster);
+mapB.fitBounds(boundsMuensterSmall);
 mapC.fitBounds(boundsMuenster);
 
 // DATA
@@ -141,7 +162,7 @@ function handleResize() {
 	// 1. update height of step elements
 	var stepH = Math.floor(window.innerHeight * 0.75);
 	allSteps.style("height", stepH + "px");
-	var figureHeight = window.innerHeight * 0.75;
+	var figureHeight = window.innerHeight * 0.95;
 	var figureMarginTop = (window.innerHeight - figureHeight) / 2;
 	allFigures
 		.style("height", figureHeight + "px")
@@ -199,12 +220,24 @@ function initScrollyB(data) {
 			offset: 0.33,
 			debug: true
 		})
-		.onStepEnter(r => handleStepEnterB(r, data));
+		.onStepEnter(r => handleStepEnterB(r, data))
+		.onStepExit(r => handleStepExitB(r));
+}
+
+function handleStepExitB(response) {
+	if ((response.index === 0) & (response.direction === "up")) {
+		console.log("stopping t1");
+		t1.stop();
+	}
+
+	if ((response.index === 3) & (response.direction === "down")) {
+		console.log("stopping t2");
+		t2.stop();
+	}
 }
 
 // scrollama event handlers
 function handleStepEnterB(response, data) {
-	console.log("ScrollyB:", response.index, data);
 	// response = { element, direction, index }
 
 	// add color to current step only
@@ -216,46 +249,19 @@ function handleStepEnterB(response, data) {
 		case 0:
 			// start timer
 			var el1_hour = -1; // to store hour of previous elapsed time
-			var t = d3.timer(timer, 150);
-			function timer(elapsed) {
-				var el = timerB.scale(elapsed);
-				// console.log(elapsed);
-				timerB.div.html(formatTime(el));
+			t1 = d3.timer(timer1, 150);
+			function timer1(elapsed) {
+				var el = timerB1.scale(elapsed);
+				timerB1.div.html(formatTime(el));
 
-				updateStationDots();
-				updateSenseboxDots();
-
-				function updateStationDots() {
-					// check if new hour has started, only do stuff if yes
-					if (el.getHours() != el1_hour) {
-						var datanow = data.lanuv.find(function(d) {
-							return formatTimeHour(d.time) === formatTimeHour(el);
-						});
-						d3.select("#ptGeist").attr("fill", function() {
-							return colourPM10(datanow.pm10_Geist);
-						});
-						d3.select("#ptWeseler").attr("fill", function() {
-							return colourPM10(datanow.pm10_Weseler);
-						});
-					}
-				}
-
-				function updateSenseboxDots() {
-					// check if the dots are there (only in step 3)
-					if (!d3.select(".senseboxDots").empty()) {
-						var datanow = data.sensebox.find(function(d) {
-							return +d.time > +el;
-						});
-						d3.select("#ptSBGeist").attr("fill", function() {
-							return colourPM10(datanow.pm10);
-						});
-					}
-				}
+				updateStationDots(data, el, el1_hour);
+				updateSenseboxDots(data, el);
+				updateBikeDots(el);
 
 				// update elapsed time
 				el1_hour = el.getHours();
 				// make timer loop through one day
-				if (timerB.scale(elapsed) > timerB.end) t.restart(timer);
+				if (timerB1.scale(elapsed) > timerB1.end) t1.restart(timer1);
 			}
 
 			//  dots for stations
@@ -278,7 +284,7 @@ function handleStepEnterB(response, data) {
 				.x(d => mapB.latLngToLayerPoint([d.lat, d.lon]).x)
 				.y(d => mapB.latLngToLayerPoint([d.lat, d.lon]).y);
 			var bikeRoute = lineGenerator(data.bike);
-			console.log(bikeRoute);
+
 			gBikePath
 				.append("path")
 				.attr("d", bikeRoute)
@@ -286,6 +292,10 @@ function handleStepEnterB(response, data) {
 
 			break;
 		case 2:
+			// bike route in background
+			gBikePath.classed("background", true);
+
+			// add dot for senseBox data
 			gSenseBox
 				.append("circle")
 				.attr("id", "ptSBGeist")
@@ -295,8 +305,29 @@ function handleStepEnterB(response, data) {
 				.attr("cy", d => mapB.latLngToLayerPoint(stationGeist).y)
 				.attr("r", 10);
 
+			// new timer w/ more limited time span
+			t1.stop();
+
+			el1_hour = -1; // to store hour of previous elapsed time
+			t2 = d3.timer(timer2, 150);
+			function timer2(elapsed) {
+				var el = timerB2.scale(elapsed);
+				timerB2.div.html(formatTime(el));
+
+				updateStationDots(data, el, el1_hour);
+				updateSenseboxDots(data, el);
+				updateBikeDots(el);
+
+				// update elapsed time
+				el1_hour = el.getHours();
+				// make timer loop through one day
+				if (timerB2.scale(elapsed) > timerB2.end) t2.restart(timer2);
+			}
+
 			break;
 		case 3:
+			// add all bike dots
+			// opacity is changed in timer
 			gBikeDots
 				.selectAll(".bikeDot")
 				.data(data.bike)
@@ -306,18 +337,54 @@ function handleStepEnterB(response, data) {
 				.attr("cx", d => mapB.latLngToLayerPoint([d.lat, d.lon]).x)
 				.attr("cy", d => mapB.latLngToLayerPoint([d.lat, d.lon]).y)
 				.attr("r", 5)
-				.attr("fill", d => colourPM10(d.pm10))
-				.attr("opacity", 0.2);
+				.attr("fill", d => colourPM10(d.pm10));
+			// .attr("opacity", 0.2);
 
 			break;
-	}
-
-	if (response.index == 0) {
 	}
 
 	// update map based on step
 	// updateMap(response.index);
 	// figure.select("p").text(response.index);
+}
+
+function updateStationDots(data, el, el1_hour) {
+	// check if new hour has started, only do stuff if yes
+	if (el.getHours() != el1_hour) {
+		var datanow = data.lanuv.find(function(d) {
+			return formatTimeHour(d.time) === formatTimeHour(el);
+		});
+		d3.select("#ptGeist").attr("fill", function() {
+			return colourPM10(datanow.pm10_Geist);
+		});
+		d3.select("#ptWeseler").attr("fill", function() {
+			return colourPM10(datanow.pm10_Weseler);
+		});
+	}
+}
+
+function updateSenseboxDots(data, el) {
+	// check if the dots are there (only in step 3)
+	if (!d3.select(".senseboxDots").empty()) {
+		var datanow = data.sensebox.find(function(d) {
+			return +d.time > +el;
+		});
+		d3.select("#ptSBGeist").attr("fill", function() {
+			return typeof datanow === "undefined"
+				? "transparent"
+				: colourPM10(datanow.pm10);
+		});
+	}
+}
+
+function updateBikeDots(el) {
+	// check if the dots are there (step 4)
+	if (!gBikeDots.selectAll("circle").empty()) {
+		console.log("update bike dots op");
+		gBikeDots
+			.selectAll("circle")
+			.attr("opacity", d => opacityScale(Math.abs(+d.time - +el)));
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -340,7 +407,6 @@ function initScrollyC(data) {
 
 // scrollama event handlers
 function handleStepEnterC(response, data) {
-	console.log("ScrollyC:", response.index);
 	// response = { element, direction, index }
 
 	// add color to current step only
