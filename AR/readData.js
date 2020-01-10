@@ -1,9 +1,9 @@
 var bike1411;
-var bike1911;
+var bike1912;
 var sensebox1411;
-var sensebox1911;
+var sensebox1912;
 var lanuv1411;
-var lanuv1911;
+var lanuv1912;
 
 function readAllData() {
 	// DATA
@@ -23,9 +23,9 @@ function readAllData() {
 			lanuv1411 = data[0];
 			sensebox1411 = data[1];
 			bike1411 = data[2];
-			lanuv1911 = data[3];
-			sensebox1911 = data[4];
-			bike1911 = data[5];
+			lanuv1912 = data[3];
+			sensebox1912 = data[4];
+			bike1912 = data[5];
 
 			console.log(
 				"14.11.2019: LANUV: ",
@@ -34,7 +34,7 @@ function readAllData() {
 				data[1],
 				"Bike:",
 				data[2],
-				"/r/n  19.12.2019: LANUV: ",
+				"19.12.2019: LANUV: ",
 				data[3],
 				"senseBox: ",
 				data[4],

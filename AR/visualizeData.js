@@ -116,7 +116,7 @@ function promiseToLoadData(input) {
                     JL("mylogger").info("response Text: " + this.responseText);
                     resolve(this.responseText);
                 } else {
-                    reject("couldnt load");
+                    reject("couldnt load " + input);
                 }
             }
         };
@@ -253,7 +253,7 @@ function getClosest(dataArray,position) {
     let closest = dataArray[0];
     let minDistance = Infinity;
     dataArray.forEach(function (current) {
-        let currentDistance = distance(current, position, "K");
+        let currentDistance = dist ance(current, position, "K");
         if (currentDistance < minDistance) {
             minDistance = currentDistance;
             closest = current;

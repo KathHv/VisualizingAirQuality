@@ -17,7 +17,12 @@ h2 {
 }
 
 p {
-	max-width: 750px;
+	max-width: 850px;
+	margin: auto;
+}
+
+ul {
+	max-width: 850px;
 	margin: auto;
 }
 
