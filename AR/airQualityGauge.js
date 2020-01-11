@@ -1,3 +1,4 @@
+var linearGauge;
 (function(HyyanAF) {
 
 	'use strict';
@@ -38,6 +39,8 @@
 
 			// setup drawing context
 			var ctx = this.canvas.getContext("2d");
+			//clear before redrawing
+			ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 
 			// define the gradient
 			var gradient = ctx.createLinearGradient(
@@ -58,7 +61,7 @@
 			ctx.fillStyle = gradient;
 
 			// draw the a rect filled with created gradient
-			ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
+			ctx.fillRect(this.canvasWidth/4, 0, this.canvasWidth/2, this.canvasHeight);
 
 			return this;
 		},
@@ -133,7 +136,7 @@ var stops = [
 	[45, "#f3f31c"],
 	[65, "#fd070e"]
 ]
-new HyyanAF.LinearGauge(gauge,65,0)
+linearGauge = new HyyanAF.LinearGauge(gauge,65,0)
 	.draw(stops)
 	.drawPointer(30, "#252cef", "30")
 	.drawPointerLanuv(13, "#0c0c26", 65);

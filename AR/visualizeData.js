@@ -11,6 +11,7 @@
  */
 var url = "../data/";
 var closestPointToCurrentPosition;
+var lanuvPm10;
 var visArea = document.getElementById("visArea");
 var cameraOrientation=0;
 var direction;
@@ -30,20 +31,20 @@ x = {
         return this.currentPositionInternal;
     },
     registerListener: function(listener,name) {
-        let alreadyExisting = false;
 
-        this.currentPositionListener.forEach(function (current) {
-            if (current.name === name) {
-                alreadyExisting = true;
-            }
+        this.currentPositionListener = this.currentPositionListener.filter(function( obj ) {
+            return obj.name !== name;
         });
 
-        if (!alreadyExisting) {
-            this.currentPositionListener.push({
-                name: name,
-                function: listener
-            });
-        }
+        this.currentPositionListener.push({
+            name: name,
+            function: listener
+        });
+    },
+    callListeners: function(position) {
+        this.currentPositionListener.forEach(function (listener) {
+            listener.function(position);
+        });
     }
 };
 
@@ -164,16 +165,14 @@ function readData(dataCSV){
     return dataArrayOfObjects;
 }
 
-function loadGuideAreas(filename) {
-    promiseToLoadData(filename)
-      .catch(console.error)
-      .then(function (response) {
-          let dataArray = JSON.parse(response).areas;
+function loadGuideAreas(dataArray) {
           addGuideAreas(dataArray);
           x.registerListener(function(val) {
                   checkForGuideArea(dataArray,val);
           }, "guide-areas");
-      });
+          if (x.currentPosition) {
+              x.callListeners(x.currentPosition);
+          }
 }
 
 /**
@@ -201,8 +200,8 @@ function addGuideAreas(dataArray){
     let scene = document.querySelector('a-scene');
 
     dataArray.forEach((place) => {
-        let latitude = place.location.lat;
-        let longitude = place.location.lng;
+        let latitude = place.lat;
+        let longitude = place.lon;
 
         // add place icon
         let icon = document.createElement('a-ring');
@@ -226,34 +225,52 @@ function addGuideAreas(dataArray){
 /**
  * Load the data and then use it for the navigation
  */
-function startNavigation() {
-    promiseToLoadData("example.csv")
-        .catch(console.error)
-        .then(function (response) {
-            let dataArray = readData(response);
+function startNavigation(dataArray) {
             let distDiv = document.getElementById("distance");
             x.registerListener(function(val) {
                 let directionCoordinate = getDirectionCoordinate(dataArray,val);
-                direction = getAngle(val.coords.latitude, val.coords.longitude, directionCoordinate.location.lat, directionCoordinate.location.lng);
+                direction = getAngle(val.coords.latitude, val.coords.longitude, directionCoordinate.lat, directionCoordinate.lon);
                 distDiv.innerHTML = (Math.round(distance(val.coords.latitude, val.coords.longitude,
-                  directionCoordinate.location.lat, directionCoordinate.location.lng, "K") * 100) / 100) + " km";
+                  directionCoordinate.lat, directionCoordinate.lon, "K") * 100) / 100) + " km";
                 distDiv.style.visibility = "visible";
             }, "direction");
             x.registerListener(function(val) {
                 let closest = getClosest(dataArray,val).closest;
-                if (closestPointToCurrentPosition !== closest) {
+                if (!closestPointToCurrentPosition) {
                     closestPointToCurrentPosition = closest;
-                    visualizeParticles(closest.air_quality.pm10);
+                }
+                let closestLanuvPm10 = getClosest(getLanuvPm10(), val).closest.pm10;
+                if (closestPointToCurrentPosition !== closest || lanuvPm10 !== closestLanuvPm10) {
+                    closestPointToCurrentPosition = closest;
+                    lanuvPm10 = closestLanuvPm10;
+                    visualizeParticles(closest.pm10);
+                    redrawGauge(closest.pm10,closestLanuvPm10);
                 }
             }, "particles");
-        });
+    if (x.currentPosition) {
+        x.callListeners(x.currentPosition);
+    }
+}
+
+function redrawGauge(pointerBike,pointerLanuv) {
+    if (linearGauge) {
+        linearGauge
+          .draw(stops)
+          .drawPointer(pointerBike, "#252cef", "" + Math.round(pointerBike * 100) / 100)
+          .drawPointerLanuv(pointerLanuv, "#0c0c26", 65);
+    } else {
+        linearGauge = new HyyanAF.LinearGauge(gauge,65,0)
+          .draw(stops)
+          .drawPointer(pointerBike, "#252cef", "" + Math.round(pointerBike * 100) / 100)
+          .drawPointerLanuv(pointerLanuv, "#0c0c26", 65);
+    }
 }
 
 function getClosest(dataArray,position) {
     let closest = dataArray[0];
     let minDistance = Infinity;
     dataArray.forEach(function (current) {
-        let currentDistance = distance(current, position, "K");
+        let currentDistance = distance(current.lat, current.lon, position.coords.latitude, position.coords.longitude, "K");
         if (currentDistance < minDistance) {
             minDistance = currentDistance;
             closest = current;
@@ -328,7 +345,7 @@ function visualizeParticles(pm10Value){
         // remove all other particle-systems
         let alreadyExisting = document.querySelectorAll('[id^="particles"]');
         alreadyExisting.forEach(function(current) {
-            alreadyExisting.parentNode.removeChild(current);
+            current.parentNode.removeChild(current);
         });
         // add particle icon
         let scene = document.querySelector('a-scene');
@@ -336,6 +353,9 @@ function visualizeParticles(pm10Value){
         dust.setAttribute('position', '0 2.25 -15');
         dust.setAttribute('id', 'particles ' + pm10Value);
         pm10ValueVisualized = pm10Value * 1000;
+        if (pm10ValueVisualized > 25000) {
+            pm10ValueVisualized = 25000;
+        }
         dust.setAttribute('particle-system', 'preset: dust; particleCount: ' + pm10ValueVisualized + ';  color: #61210B, #61380B, #3B170B');
         scene.appendChild(dust);
     }
@@ -403,8 +423,48 @@ function openClosePopup() {
 /**
  *
  */
-function loadContent() {
-    loadGuideAreas('guide_areas.json');
-    startNavigation();
-    readAllData();
+function loadContent(date) {
+    readAllData()
+      .then(function () {
+          loadGuideAreas((date === "1") ? guide1912 : guide1411);
+          startNavigation((date === "1") ? bike1912 : bike1411);
+      });
+}
+
+function getLanuvPm10(){
+    let lanuv = [];
+    if(date === "2"){
+        lanuv1912.forEach(function (e){
+            if(e.time.getHours() === closestPointToCurrentPosition.time.getHours()) {
+                lanuv.push({
+                    lat: 51.953289,
+                    lon: 7.619380,
+                    pm10: e.pm10_Weseler
+                });
+                lanuv.push({
+                    lat: 51.936482,
+                    lon: 7.611618,
+                    pm10: e.pm10_Geist
+                });
+            }
+        });
+    }
+    else
+    {
+        lanuv1411.forEach(function (e){
+            if(e.time.getHours() === closestPointToCurrentPosition.time.getHours()) {
+                lanuv.push({
+                    lat: 51.953289,
+                    lon: 7.619380,
+                    pm10: e.pm10_Weseler
+                });
+                lanuv.push({
+                    lat: 51.936482,
+                    lon: 7.611618,
+                    pm10: e.pm10_Geist
+                });
+            }
+        });
+    }
+    return lanuv;
 }
