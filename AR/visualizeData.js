@@ -253,7 +253,7 @@ function getClosest(dataArray,position) {
     let closest = dataArray[0];
     let minDistance = Infinity;
     dataArray.forEach(function (current) {
-        let currentDistance = dist ance(current, position, "K");
+        let currentDistance = distance(current, position, "K");
         if (currentDistance < minDistance) {
             minDistance = currentDistance;
             closest = current;
