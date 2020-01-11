@@ -48,7 +48,8 @@
 </head>
 
 
-<body style='margin: 0; overflow: hidden; font-family: Helvetica, Verdana, Times, serif; font-size: 1.3em;' id="visArea" onload="loadContent()">
+<body style='margin: 0; overflow: hidden; font-family: Helvetica, Verdana, Times, serif; font-size: 1.3em;' id="visArea"
+onload="loadContent()">
 
   <a-scene
   vr-mode-ui="enabled: false"
@@ -72,6 +73,7 @@
 <div class="top-right" id="guide-buttons">
 </div>
 
+    <canvas id="gauge" width="30" height="300" style="right:0%; top: 20%; position: fixed; margin: 0px auto;"></canvas>
 
 <div class="top-left">
   <button onclick=showAndHideInformation() class="active" id="infoBtn"><i class="fa fa-question-circle"></i></button>
@@ -236,3 +238,4 @@
 </html>
 
 <script src="information.js"></script>
+<script src="airQualityGauge.js"></script>

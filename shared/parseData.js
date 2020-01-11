@@ -40,3 +40,12 @@ function parseBike(d) {
 		// RH_Avg: "67.14"
 	};
 }
+
+function parseGuide(d) {
+	return {
+		name: d.name,
+		lat: +d.lat,
+		lon: +d.lon,
+		text: d.text
+	};
+}
