@@ -1,7 +1,9 @@
+html,
 body {
 	font-family: "Gelasio", serif;
-	margin: 10px;
-	background-color: #f3f3f3;
+	margin: 0;
+	background-color: #fcfcfc; /*almost white*/
+	color: #242424; /*almost black*/
 }
 
 h1 {
@@ -11,19 +13,44 @@ h1 {
 }
 
 h2 {
-	margin: 1.5rem auto;
-	font-size: 1.5rem;
+	margin: 4.5rem auto 1.5rem auto;
+	font-size: 2rem;
 	max-width: 750px;
 }
 
-p {
+p,
+#sectionList {
 	max-width: 850px;
 	margin: auto;
 }
 
-ul {
-	max-width: 850px;
-	margin: auto;
+#sectionList {
+	text-align: center;
+	border-spacing: 10px;
+}
+
+#sectionList a {
+	display: table-cell;
+	text-decoration: none;
+	text-align: left;
+	color: #000;
+	padding: 15px;
+}
+
+.sectionContainer {
+	padding: 1px;
+}
+
+.colourSectionA {
+	background-color: #cbd2e1;
+}
+
+.colourSectionB {
+	background-color: #e8e5db;
+}
+
+.colourSectionC {
+	background-color: #cdd;
 }
 
 h1,
@@ -39,11 +66,13 @@ h2 {
 	/*background-color: #f3f3f3;*/
 	padding: 1rem;
 }
+
 .scrolly > * {
 	-webkit-box-flex: 1;
 	-ms-flex: 1;
 	flex: 1;
 }
+
 article {
 	position: relative;
 	padding: 0 1rem;
@@ -84,8 +113,6 @@ figure img {
 .step {
 	margin: 0 auto 2rem auto;
 	padding: 1rem;
-	background-color: #ddd;
-	color: #3b3b3b;
 }
 
 .step:last-child {
@@ -93,7 +120,7 @@ figure img {
 }
 
 .step.is-active {
-	background-color: #c5d2d9;
+	background-color: #eeea; /*transparent light grey*/
 }
 
 .step p {
@@ -109,15 +136,31 @@ figure img {
 	width: 100%;
 }
 
-#timeB {
+#timeB,
+#legendB {
 	display: block;
 	position: fixed;
+	z-index: 1000; /*leaflet: 400*/
+}
+
+#timeB {
 	top: 0;
 	right: 0;
-	z-index: 1000; /*leaflet: 400*/
 	background-color: white;
 	padding: 16px;
 	opacity: 0.8;
+}
+
+#legendB {
+	bottom: 16px; /*avoid overlap with OSM attribution*/
+	right: 0;
+}
+
+.legendLabel {
+	font-family: sans-serif;
+	font-size: 12px;
+	text-anchor: end;
+	dominant-baseline: central;
 }
 
 #gBikePath path {
@@ -133,16 +176,17 @@ figure img {
 
 #arbutton {
 	display: table;
-	background-color: #3b3b3b;
+	background-color: #666;
 	color: white;
-	padding: 30px 50px;
-	margin: 15px auto;
+	padding: 50px 80px;
+	margin: 100px auto;
 	text-decoration: none;
 	text-align: center;
-	font-size: 16px;
+	font-size: 1.2rem;
 	cursor: pointer;
 }
 
 #arbutton:hover {
-	background-color: green;
+	background-color: #444;
+	box-shadow: 0px 0px 10px #919191;
 }

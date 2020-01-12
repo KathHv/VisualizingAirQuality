@@ -58,9 +58,10 @@ var scrollyC = {
 };
 
 // colour scale for pm10
+const pmBounds = [0, 65]; // roughly the range of pm10 values
 var colourPM10 = d3
-	.scaleSequential()
-	.domain([65, 0]) // roughly the range of pm10 values
+	.scaleSequentialSqrt()
+	.domain([pmBounds[1], pmBounds[0]]) // flip because we want red to be highest
 	.interpolator(d3.interpolateRdBu);
 
 // opacity scale for fading in and out bike dots
@@ -68,6 +69,58 @@ var opacityScale = d3
 	.scaleLinear()
 	.domain([120000, 0]) // 2 minutes are 120000 ms
 	.range([0, 1]);
+
+// legend on scrolly B
+// based on: https://www.visualcinnamon.com/2016/05/smooth-color-legend-d3-svg-gradient.html
+var legendSVG = d3
+	.select("#legendB")
+	.append("svg")
+	.attr("width", 100)
+	.attr("height", 300);
+
+var legend = legendSVG.append("g").attr("transform", "translate(65,10)");
+
+// Create linear gradient
+var defs = legendSVG.append("defs");
+var linearGradient = defs
+	.append("linearGradient")
+	.attr("id", "linear-gradient");
+linearGradient
+	.attr("x1", "0%")
+	.attr("y1", "0%")
+	.attr("x2", "0%")
+	.attr("y2", "100%");
+
+var colourPct = d3.zip(
+	d3.range(0, 101, 10).map(d => Math.round(d) + "%"),
+	d3.schemeRdBu[11]
+);
+console.log(colourPct);
+
+colourPct.forEach(function(d) {
+	linearGradient
+		.append("stop")
+		.attr("offset", d[0])
+		.attr("stop-color", d[1]);
+});
+
+// Rectangle w/ gradient
+legend
+	.append("rect")
+	.attr("width", 25)
+	.attr("height", 280)
+	.style("fill", "url(#linear-gradient)");
+
+// labels
+legend
+	.selectAll("text")
+	.data([[280, "0ppm -"], [0, ">65ppm -"]])
+	.enter()
+	.append("text")
+	.classed("legendLabel", true)
+	.attr("x", 0)
+	.attr("y", d => d[0])
+	.text(d => d[1]);
 
 // initialize the scrollama
 var scrollerA = scrollama();
@@ -79,19 +132,17 @@ handleResize();
 // setup resize event
 window.addEventListener("resize", handleResize);
 
-// initialize two Leaflet maps B and C
+// initialise Leaflet map for scrolly B
 var mapB = L.map("mapB", {
-	// disable all zoom controls that interfere with scrolling
-	// zoomControl: false,
+	// disable all zoom controls
+	zoomControl: false,
 	scrollWheelZoom: false,
 	doubleClickZoom: false,
-	touchZoom: false
-	// boxZoom: false
-	// dragging: false
+	touchZoom: false,
+	boxZoom: false,
+	dragging: false
 }).setView([51.97, 7.63], 13);
-// L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-	// attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 	attribution:
 		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
 }).addTo(mapB);
@@ -314,6 +365,12 @@ function handleStepEnterB(response, data) {
 		case 3:
 			// add all bike dots
 			// opacity is changed in timer
+
+			var dotScale = d3
+				.scaleSqrt()
+				.domain(pmBounds)
+				.range([0, 10]);
+
 			gBikeDots
 				.selectAll(".bikeDot")
 				.data(data.bike)
@@ -322,7 +379,7 @@ function handleStepEnterB(response, data) {
 				.attr("class", "bikeDot")
 				.attr("cx", d => mapB.latLngToLayerPoint([d.lat, d.lon]).x)
 				.attr("cy", d => mapB.latLngToLayerPoint([d.lat, d.lon]).y)
-				.attr("r", 5)
+				.attr("r", d => dotScale(d.pm10))
 				.attr("fill", d => colourPM10(d.pm10));
 			// .attr("opacity", 0.2);
 
