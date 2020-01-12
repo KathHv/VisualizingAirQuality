@@ -49,7 +49,7 @@
 
 
 <body style='margin: 0; overflow: hidden; font-family: Helvetica, Verdana, Times, serif; font-size: 1.3em;' id="visArea"
-onload="loadContent()">
+onload="loadContent('1')">
 
   <a-scene
   vr-mode-ui="enabled: false"
@@ -73,7 +73,10 @@ onload="loadContent()">
 <div class="top-right" id="guide-buttons">
 </div>
 
-    <canvas id="gauge" width="30" height="300" style="right:0%; top: 20%; position: fixed; margin: 0px auto;"></canvas>
+  <div class="right">
+    <p style="float:top; text-align:center; font-size: 12px">PM10 (ppm)</p>
+    <canvas id="gauge" width="30" height="300" style="float:bottom; margin-right: 0px;"></canvas>
+  </div>
 
 <div class="top-left">
   <button onclick=showAndHideInformation() class="active" id="infoBtn"><i class="fa fa-question-circle"></i></button>

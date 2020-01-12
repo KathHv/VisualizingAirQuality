@@ -1,4 +1,16 @@
 var linearGauge;
+function translateRange(Input , inputHigh , inputLow , outputHigh , OutputLow) {
+
+	inputHigh = inputHigh ? inputHigh : this.inputHigh;
+	inputLow = inputLow ? inputLow : this.inputLow;
+
+	outputHigh =  outputHigh ? outputHigh : 1;
+	OutputLow = OutputLow ? OutputLow : 0;
+
+	return ((Input - inputLow) / (inputHigh - inputLow)) *
+		(outputHigh - OutputLow) + OutputLow;
+}
+
 (function(HyyanAF) {
 
 	'use strict';
@@ -21,21 +33,9 @@ var linearGauge;
 
 		constructor: HyyanAF.LinearGauge,
 
-		translateRange: function(
-			Input , inputHigh , inputLow , outputHigh , OutputLow
-		){
+		translateRange: translateRange,
 
-			inputHigh = inputHigh ? inputHigh : this.inputHigh;
-			inputLow = inputLow ? inputLow : this.inputLow;
-
-			outputHigh =  outputHigh ? outputHigh : 1;
-			OutputLow = OutputLow ? OutputLow : 0;
-
-			return ((Input - inputLow) / (inputHigh - inputLow)) *
-				(outputHigh - OutputLow) + OutputLow;
-		},
-
-		draw: function(stops){
+		draw: function(stops, min, max){
 
 			// setup drawing context
 			var ctx = this.canvas.getContext("2d");
@@ -63,6 +63,17 @@ var linearGauge;
 			// draw the a rect filled with created gradient
 			ctx.fillRect(this.canvasWidth/4, 0, this.canvasWidth/2, this.canvasHeight);
 
+			this.drawMinMax(min, max)
+
+			return this;
+		},
+
+		drawMinMax: function(min, max) {
+			var ctx = this.canvas.getContext("2d");
+			ctx.font = "bold 8px Arial";
+			ctx.fillStyle = "white";
+			ctx.fillText(max,this.canvasWidth/2,8);
+			ctx.fillText(min,this.canvasWidth/2,this.canvasHeight-4);
 			return this;
 		},
 
@@ -130,13 +141,16 @@ var linearGauge;
 
 // Init
 var gauge = document.getElementById('gauge');
-var stops = [
-	[0, "#09ef0f"],
-	[15, "#f3f31c"],
-	[45, "#f3f31c"],
-	[65, "#fd070e"]
-]
+var colourPct = d3.zip(
+	d3.range(0, 66, 6).map(d => Math.round(d)),
+	d3.schemeRdBu[11]
+);
+var stops = [];
+for(let i = colourPct.length-1; i>=0; i--) {
+	stops.push([colourPct[i][0],colourPct[(colourPct.length-1) - i][1]]);
+}
+
 linearGauge = new HyyanAF.LinearGauge(gauge,65,0)
-	.draw(stops)
-	.drawPointer(30, "#252cef", "30")
+	.draw(stops, "0", "65")
+	.drawPointer(30, "#4CAF50", "30")
 	.drawPointerLanuv(13, "#0c0c26", 65);
