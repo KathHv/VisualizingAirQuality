@@ -61,13 +61,13 @@ onload="loadContent()">
   keyboard-shortcuts
   screenshot
   device-orientation-permission-ui>
-    <a-camera gps-camera="minDistance: 20;" rotation-reader id="camera" camera-listener id="camera">
-      <a-entity id="arrow" arrow="direction: 0 1 0; length: 0.7; headWidth: 0.2; color: #4CAF50;" position="0 -1.5 -2.7"></a-entity>
-    </a-camera>
-  </a-scene>
+  <a-camera gps-camera="minDistance: 20;" rotation-reader id="camera" camera-listener id="camera">
+    <a-entity id="arrow" arrow="direction: 0 1 0; length: 0.7; headWidth: 0.2; color: #4CAF50;" position="0 -1.5 -2.7"></a-entity>
+  </a-camera>
+</a-scene>
 
 <div class="centered">
-    <div id="distance" style="visibility: hidden"></div>
+  <div id="distance" style="visibility: hidden"></div>
 </div>
 
 <div class="top-right" id="guide-buttons">
@@ -79,159 +79,44 @@ onload="loadContent()">
   <button onclick=showAndHideInformation() class="active" id="infoBtn"><i class="fa fa-question-circle"></i></button>
 </div>
 
-<div class="information" id="information">
-
-    <table>
-      <colgroup>
-        <col style="width:15%" >
-        <col style="width:85%">
-      </colgroup>
-      <tr>
-        <th colspan = "2" style ="text-align:center; font-size: 3vh;">
-
-          <h1>Air quality in Münster (PM10)</h1>
-        </th>
-      </tr>
-      <tr>
-        <td>
-          <i class="fa fa-question-circle" style="font-size: 7vw;"></i>
-        </td>
-        <td>
-          <h3> How to use the AR application </h3>
-          <p>
-            The AR application displays the air quality around the Geistviertel in Münster at two different times.
-            An arrow directing to the next route point is displayed in the middle of the AR screen. <br>
-            When you follow it the amount of particles will change since the value of PM10 varies. <br>
-            <br>
-            We decided for a route around the LANUV station in the Geistviertel to show whether the measurements of the LANUV station is representative or not. <br>
-            More information about this station can be found below. <br>
-            The start point of the tour is at point A on the map (51.9521303, 7.6167933; Geiststraße B, 48151 Münster). This is the tour:
-          </p>
-          <iframe src="https://www.google.com/maps/d/embed?mid=1wKBvzSgLyZSQiVaxqd-n2ABefUzxqcMY" width="100%" height="480px">
-          </iframe>
-          <p> Along the cycled route, there are serveral "guide sign areas". Those areas are marked with a red circle in the AR.
-            When you enter one, you gain information about the place and why there might be a special situation for air quality measurements.
-            They are not only placed at striking points but also at averaging places. Some guide sign areas focus on the varieties of the different rides.
-          </p>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <i class="fa fa-clock-o" style="font-size: 7vw;"></i>
-        </td>
-        <td>
-          <h3>Switch between rides</h3>
-
-          Slide for different rides with the bike. One was made on the 14th of November 2019 the other one on the 19th of December 2019.
-
-          <div class="slidecontainer">
-            <input type="range" min="1" max="2" value="1" class="slider" id="range">
-            <table style="width:100%;">
-              <tr>
-                <td style="text-align:left;">
-                  14/11/2019
-                </td>
-                <td style="text-align:right;">
-                  19/12/2019
-                </td>
-              </tr>
-            </table>
-            <button onclick="setDate()"> Set! </button>
-          </div>
-
-          <h3> Weather conditions </h3>
-            THe 14th of November 2019 an dthe 19th of December 2019 had more or less the same weather conditions: <br>
-            Passing clouds, some sun's rays and wind of 9 to 11km per hour out of east-south-eastern direction.<br>
-            There was a pressure of 1003mbar respectively 1008mbar with 69% relative humidity.<br>
-            The main difference was in the temperature. ON the 14th of November 2019 it was 6 to 8°C warm. <br>
-            On 19th of December there was a temperature of 11-14°C.<br>
-
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <i class="fa fa-bar-chart" style="font-size: 7vw;"></i>
-        </td>
-        <td>
-          <h3>Current location based data</h3>
-          <p id="measurementData">
-          </p>
-          <p>
-            Please be aware that the data is updated when reopening the information block.
-          </p>
-          <table>
-          </table>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <i class="fa fa-thermometer-three-quarters" style="font-size: 7vw;"></i>
-      </td>
-      <td>
-        <h3> Sensors </h3>
-        <ol>
-          <li>
-            <h4>LANUV stations</h4>
-            These are official air quality measurement stations. The Bundesumweltamt places them at certain points all over Germany.
-            Münster has two: One stands next to the Weselerstraße as a traffic measurement station.
-            The otherone located in the Geistviertel next to the Ludwig-Erhardt-Berufskolleg as a background station in a residential area.
-            The Bundesumweltamt provides averaged hourly PM10 data rounded to microgramm.
-            More information about the criteria for placements and the technical properties of the stations can be reached
-            <a href=\"https://www.lanuv.nrw.de/luqs/messorte/steckbrief.php?ort=MSGE\"> here </a>
-            for station in Geistviertel and
-            <a href=\"https://www.lanuv.nrw.de/luqs/messorte/steckbrief.php?ort=VMS2\"> here </a> for the station at the Weselerstraße.
-          </li>
-
-          <li>
-            <h4>Sensebox</h4>
-            With very kind support of the Sensebox Lap at the Institute for Geoinformatics at the University of Münster we were able to measure air quality place indepenent.
-            While going by bike we measured independently next to the LANUV station in the Geistviertel so that we can have a look on changes in the
-            air quality during the bike ride since there is only one averaged measurement published by LANUV. For measuring PM10 we used the <a href=\"https://sensebox.kaufen/product/feinstaub-sds01w1\"> Sensor sds01w1</a>
-            with a <a href=\"https://sensebox.kaufen/product/sensebox-home\"> Sensebox Home kit </a>.
-
-          </li>
-          <li>
-            <h4>Bike</h4>
-            With support of the Climatology Lab of the Institute for Landscape Ecology by Prof. Dr. Otto Klemm at the University of Münster we were able to do two bike rides.
-            The bike measures environmental data including PM10 data. Therefore, they are using the following sensores: </p>
-          </li>
-        </ol>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <i class="fa fa-globe" style="font-size: 7vw;"></i>
-        </td>
-        <td>
-          <h3>More information needed? </h3>
-          <p>
-            <a href=\"https://sensebox.kaufen/product/feinstaub-sds01w1\">This website</a> provides you more information about air quality and the way it is measured in the example of Muenster.
-            The uncertanties between the different measurements in space, time and technical differences between the various ways of measurements are analyzed.
-            The website is directly associated to this AR application.
-          </p>
-          <p> When you want to gain more knowledge about the European standards or standard values in greater cities we collected a couple of websites:
-            <ul>
-              <li>
-                <a href=\"https://sensebox.kaufen/product/feinstaub-sds01w1\">associated website</a>
-              </li>
-              <li>
-                <a href=\"https://www.lanuv.nrw.de/luqs/messorte/\"> LANUV stations </a>
-              </li>
-              <li>
-                <a href=\"https://ec.europa.eu/environment/air/quality/standards.htm\"> EU standards for Air Quality </a>
-              </li>
-              <li>
-                <a href=\"https://www.bmu.de/en/topics/air-mobility-noise/air-pollution-control/general-information/\"> air pollution control </a>
-              </li>
-              <li>
-                <a href=\"https://doi.org/10.1007/BF00705545\"> air quality uncertanties </a>
-              </li>
-            </ul>
-          </p>
-        </td>
-      </tr>
-    </table>
+<div class="information" id="information" style="display: none;">
+  <h3>Air quality in Münster (PM10)</h3>
+    <p> Choose a dataset:</p>
+    <div class="slidecontainer">
+      <input type="range" min="1" max="2" value="1" class="slider" id="range">
+      <p style="text-align:left;"> 14/11/2019  -  19/12/2019 </p>
+      <button onclick="setDate()" id="infoCloseBtn"> Set! </button>
+    </div>
+    <button onclick="introduction(1)" class= "bottom" id="infoCloseBtn"> Show Intro </button>y
     <button onclick="showAndHideInformation()" class= "bottom" id="infoCloseBtn"> Got it! </button>
+</div>
+
+<div class="introduction">
+  <div  id = "introduction-1">
+    <p> This is healthy air with less PM10. </p>
+      <button onclick="introduction(2)" class= "bottom" id="infoCloseBtn"> Next </button>
+  </div>
+  <div  id = "introduction-2">
+    <p> This is unhealthy air with a lot of PM10. </p>
+    <button onclick="introduction(3)" class= "bottom" id="infoCloseBtn"> Next </button>
+  </div>
+  <div  id = "introduction-3">
+    <p> This is the PM10 value of Muenster in average. </p>
+    <button onclick="introduction(4)" class= "bottom" id="infoCloseBtn"> Next </button>
+  </div>
+  <div  id = "introduction-4">
+    <p> The slider on the right displays the PM10 value of the next LANUV station in the middle.
+      In comparison is the PM10 value for the closest point on the route to your location at the
+      chosen time displayed. </p>
+      <p> The arrow shows the direction of the route. Following it, you can find guide areas. </p>
+      <button onclick="introduction(5)" class= "bottom" id="infoCloseBtn"> Next </button>
+  </div>
+  <div id = "introduction-5">
+    <p> To see this introduction again click on the question mark in the top-left corner.
+      More information about air quality is available on <a href = "../"> this site.</a></p>
+
+    <button onclick="introduction(6)" class= "bottom" id="infoCloseBtn"> Close </button>
+  </div>
 </div>
 
 </body>

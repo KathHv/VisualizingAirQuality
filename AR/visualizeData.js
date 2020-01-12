@@ -4,12 +4,10 @@
 
 /**
  * initialzing variables
- *@param url: URL to the csv-file which contains the data
  *@param currentPosition: current position of the device [lat,lng]
  *@param closestPointToCurrentPosition: point with clostest point on route according to the current position
  *@param visArea: area in document where something can be visualized
  */
-var url = "../data/";
 var closestPointToCurrentPosition;
 var lanuvPm10;
 var visArea = document.getElementById("visArea");
@@ -99,71 +97,9 @@ function getAngle(lat1, lng1, lat2, lng2) {
     return theta;
 }
 
-/**
- * load and then read Data from csv file
- * @param input - the name of the csv from which the data is loaded
- */
-function promiseToLoadData(input) {
-    return new Promise(function(resolve, reject) {
-        JL("mylogger").info("--------loadData()--------");
-        var xhttp = new XMLHttpRequest();
 
-        xhttp.onreadystatechange = function () {
-            if (this.readyState === 4) {
-                if (this.status === 200) {
-                    if (this.responseText.length === 0) {
-                        JL("mylogger").error("The URL field or the content of the field is emtpy.1");
-                    }
-                    JL("mylogger").info("response Text: " + this.responseText);
-                    resolve(this.responseText);
-                } else {
-                    reject("couldnt load " + input);
-                }
-            }
-        };
-        xhttp.open("GET", url + input, true);
-        xhttp.send();
-    });
-}
+//------------------- Guide Areas ----------------------------------------
 
-/**
- * read Data out of the submitted responseText
- *@param dataCSV csv text from air quality data
- *@return returns array of processed csv-text
- */
-function readData(dataCSV){
-    JL("mylogger").info("--------readData()--------");
-    var dataArraySplittedByBrake = dataCSV.split("\n");
-    dataArraySplittedByBrake.shift();
-    JL("mylogger").info("dataArraySplittedByBrake[0]: " + dataArraySplittedByBrake[0]);
-    var dataArraySplittedByBrakeAndComma = [];
-    var x;
-    for (x in dataArraySplittedByBrake){
-
-        var dataElementSplittedByBrakeAndComma = dataArraySplittedByBrake[x].split(",");
-        dataElementSplittedByBrakeAndComma.shift();
-        dataArraySplittedByBrakeAndComma.push(dataElementSplittedByBrakeAndComma);
-    }
-    let dataArrayOfObjects = [];
-    dataArraySplittedByBrakeAndComma.forEach((item) => {
-        let placeObject = {
-            name: JSON.parse(item[1]),
-            location: {
-                lat: parseFloat(item[2]),
-                lng: parseFloat(item[3])
-            },
-            air_quality: {
-                airTC: parseFloat(item[4]),
-                rH: parseFloat(item[5]),
-                pm25: parseFloat(item[6]),
-                pm10: parseFloat(item[7])
-            }
-        };
-        dataArrayOfObjects.push(placeObject);
-    });
-    JL("mylogger").info("read data is ready.");
-    return dataArrayOfObjects;
-}
 
 function loadGuideAreas(dataArray) {
           addGuideAreas(dataArray);
@@ -222,6 +158,11 @@ function addGuideAreas(dataArray){
 }
 
 
+
+//------------------- Navigation Arrow ----------------------------------------
+
+
+
 /**
  * Load the data and then use it for the navigation
  */
@@ -252,19 +193,10 @@ function startNavigation(dataArray) {
     }
 }
 
-function redrawGauge(pointerBike,pointerLanuv) {
-    if (linearGauge) {
-        linearGauge
-          .draw(stops)
-          .drawPointer(pointerBike, "#252cef", "" + Math.round(pointerBike * 100) / 100)
-          .drawPointerLanuv(pointerLanuv, "#0c0c26", 65);
-    } else {
-        linearGauge = new HyyanAF.LinearGauge(gauge,65,0)
-          .draw(stops)
-          .drawPointer(pointerBike, "#252cef", "" + Math.round(pointerBike * 100) / 100)
-          .drawPointerLanuv(pointerLanuv, "#0c0c26", 65);
-    }
-}
+
+
+
+
 
 function getClosest(dataArray,position) {
     let closest = dataArray[0];
@@ -281,6 +213,10 @@ function getClosest(dataArray,position) {
         distance: minDistance
     };
 }
+
+
+
+
 
 /**
  * this retrieves the current position and calculates the direction from it. The direction is then saved in the global
@@ -332,34 +268,26 @@ function distance(lat1, lon1, lat2, lon2, unit) {
     }
 }
 
+//------------------- Gauge ----------------------------------------
 
 
-/**
-* visualizes data in the AR, writes into html
-*@param pm10Value
-*/
-function visualizeParticles(pm10Value){
-    JL("mylogger").info("--------visualizeParticles()--------");
-
-    if (document.getElementById("particles " + pm10Value) === null) {
-        // remove all other particle-systems
-        let alreadyExisting = document.querySelectorAll('[id^="particles"]');
-        alreadyExisting.forEach(function(current) {
-            current.parentNode.removeChild(current);
-        });
-        // add particle icon
-        let scene = document.querySelector('a-scene');
-        let dust = document.createElement('a-entity');
-        dust.setAttribute('position', '0 2.25 -15');
-        dust.setAttribute('id', 'particles ' + pm10Value);
-        pm10ValueVisualized = pm10Value * 1000;
-        if (pm10ValueVisualized > 25000) {
-            pm10ValueVisualized = 25000;
-        }
-        dust.setAttribute('particle-system', 'preset: dust; particleCount: ' + pm10ValueVisualized + ';  color: #61210B, #61380B, #3B170B');
-        scene.appendChild(dust);
+function redrawGauge(pointerBike,pointerLanuv) {
+    if (linearGauge) {
+        linearGauge
+          .draw(stops)
+          .drawPointer(pointerBike, "#252cef", "" + Math.round(pointerBike * 100) / 100)
+          .drawPointerLanuv(pointerLanuv, "#0c0c26", 65);
+    } else {
+        linearGauge = new HyyanAF.LinearGauge(gauge,65,0)
+          .draw(stops)
+          .drawPointer(pointerBike, "#252cef", "" + Math.round(pointerBike * 100) / 100)
+          .drawPointerLanuv(pointerLanuv, "#0c0c26", 65);
     }
 }
+
+
+//------------------- Gauge Guide ----------------------------------------
+
 
 /**
  * This function adds the guide to the scene. If theres already an active guide its content will be replaced.
@@ -420,16 +348,7 @@ function openClosePopup() {
     };
 }
 
-/**
- *
- */
-function loadContent(date) {
-    readAllData()
-      .then(function () {
-          loadGuideAreas((date === "1") ? guide1912 : guide1411);
-          startNavigation((date === "1") ? bike1912 : bike1411);
-      });
-}
+
 
 function getLanuvPm10(){
     let lanuv = [];
@@ -467,4 +386,105 @@ function getLanuvPm10(){
         });
     }
     return lanuv;
+}
+
+
+//------------------- Particles ----------------------------------------
+
+/**
+* This function visualizes the particles in the AR.
+*@param pm10Value
+*/
+function visualizeParticles(pm10Value){
+    JL("mylogger").info("--------visualizeParticles()--------");
+
+    if (document.getElementById("particles " + pm10Value) === null) {
+        // remove all other particle-systems
+        let alreadyExisting = document.querySelectorAll('[id^="particles"]');
+        alreadyExisting.forEach(function(current) {
+            current.parentNode.removeChild(current);
+        });
+        // add particle icon
+        let scene = document.querySelector('a-scene');
+        let dust = document.createElement('a-entity');
+        dust.setAttribute('position', '0 2.25 -15');
+        dust.setAttribute('id', 'particles ' + pm10Value);
+        pm10ValueVisualized = pm10Value * 1000;
+        if (pm10ValueVisualized > 25000) {
+            pm10ValueVisualized = 25000;
+        }
+        dust.setAttribute('particle-system', 'preset: dust; particleCount: ' + pm10ValueVisualized + ';  color: #61210B, #61380B, #3B170B');
+        scene.appendChild(dust);
+    }
+}
+
+
+
+
+//------------------- Inital ----------------------------------------
+
+/**
+ *
+ */
+function loadContent(date) {
+introduction(1);
+
+    readAllData()
+      .then(function () {
+          loadGuideAreas((date === "1") ? guide1912 : guide1411);
+          startNavigation((date === "1") ? bike1912 : bike1411);
+      });
+}
+
+function introduction(step){
+  var information = document.getElementById("information");
+  information.style.display = "none";
+  var introduction = document.getElementsByClassName("introduction");
+  for(var i = 0; i < introduction.length; i++) {
+    introduction[i].style.display = "flex";
+  }
+
+
+
+  var introduction1 = document.getElementById("introduction-1");
+  var introduction2 = document.getElementById("introduction-2");
+  var introduction3 = document.getElementById("introduction-3");
+  var introduction4 = document.getElementById("introduction-4");
+  var introduction5 = document.getElementById("introduction-5");
+  introduction1.style.display = "none";
+  introduction2.style.display = "none";
+  introduction3.style.display = "none";
+  introduction4.style.display = "none";
+  introduction5.style.display = "none";
+
+  switch (step){
+    case 1:
+    introduction1.style.display = "flex";
+    visualizeParticles(5);
+    break;
+
+    case 2:
+    introduction2.style.display = "flex";
+    visualizeParticles(40);
+    break;
+
+    case 3:
+    introduction3.style.display = "flex";
+    visualizeParticles(11);
+    break;
+
+    case 4:
+    introduction4.style.display = "flex";
+    break;
+
+    case 5:
+    introduction5.style.display = "flex";
+    break;
+
+    case 6:
+    for(var i = 0; i < introduction.length; i++) {
+      introduction[i].style.display = "none";
+    }
+    break;
+  }
 }
