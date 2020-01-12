@@ -192,20 +192,6 @@ function startNavigation(dataArray) {
     }
 }
 
-function redrawGauge(pointerBike,pointerLanuv) {
-    if (linearGauge) {
-        linearGauge
-          .draw(stops, "0", "65")
-          .drawPointer(pointerBike, "#4CAF50", "" + Math.round(pointerBike * 100) / 100)
-          .drawPointerLanuv(pointerLanuv, "#0c0c26", 65);
-    } else {
-        linearGauge = new HyyanAF.LinearGauge(gauge,65,0)
-          .draw(stops, "0", "65")
-          .drawPointer((pointerBike>65) ? 65 : (pointerBike<0) ? 0 : pointerBike, "#4CAF50", "" + Math.round(pointerBike * 100) / 100)
-          .drawPointerLanuv((pointerLanuv>65) ? 65 : (pointerLanuv<0) ? 0 : pointerLanuv, "#0c0c26", 65);
-    }
-}
-
 
 
 
@@ -286,16 +272,17 @@ function distance(lat1, lon1, lat2, lon2, unit) {
 function redrawGauge(pointerBike,pointerLanuv) {
     if (linearGauge) {
         linearGauge
-          .draw(stops)
-          .drawPointer(pointerBike, "#252cef", "" + Math.round(pointerBike * 100) / 100)
+          .draw(stops, "0", "65")
+          .drawPointer(pointerBike, "#4CAF50", "" + Math.round(pointerBike * 100) / 100)
           .drawPointerLanuv(pointerLanuv, "#0c0c26", 65);
     } else {
         linearGauge = new HyyanAF.LinearGauge(gauge,65,0)
-          .draw(stops)
-          .drawPointer(pointerBike, "#252cef", "" + Math.round(pointerBike * 100) / 100)
-          .drawPointerLanuv(pointerLanuv, "#0c0c26", 65);
+          .draw(stops, "0", "65")
+          .drawPointer((pointerBike>65) ? 65 : (pointerBike<0) ? 0 : pointerBike, "#4CAF50", "" + Math.round(pointerBike * 100) / 100)
+          .drawPointerLanuv((pointerLanuv>65) ? 65 : (pointerLanuv<0) ? 0 : pointerLanuv, "#0c0c26", 65);
     }
 }
+
 
 
 //------------------- Gauge Guide ----------------------------------------
