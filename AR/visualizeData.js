@@ -505,7 +505,7 @@ function setDate(){
 }
 
 
-//------------------- Inital Function after Introduction ----------------------------------------
+//------------------- Initial Function after Introduction ----------------------------------------
 
 /**
  *
