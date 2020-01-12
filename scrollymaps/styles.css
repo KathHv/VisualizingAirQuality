@@ -2,7 +2,8 @@ html,
 body {
 	font-family: "Gelasio", serif;
 	margin: 0;
-	background-color: #f3f3f3;
+	background-color: #fcfcfc; /*almost white*/
+	color: #242424; /*almost black*/
 }
 
 h1 {
@@ -112,8 +113,6 @@ figure img {
 .step {
 	margin: 0 auto 2rem auto;
 	padding: 1rem;
-	background-color: #ddd;
-	color: #3b3b3b;
 }
 
 .step:last-child {
@@ -121,7 +120,7 @@ figure img {
 }
 
 .step.is-active {
-	background-color: #c5d2d9;
+	background-color: #eeea; /*transparent light grey*/
 }
 
 .step p {
