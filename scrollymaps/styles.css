@@ -136,15 +136,31 @@ figure img {
 	width: 100%;
 }
 
-#timeB {
+#timeB,
+#legendB {
 	display: block;
 	position: fixed;
+	z-index: 1000; /*leaflet: 400*/
+}
+
+#timeB {
 	top: 0;
 	right: 0;
-	z-index: 1000; /*leaflet: 400*/
 	background-color: white;
 	padding: 16px;
 	opacity: 0.8;
+}
+
+#legendB {
+	bottom: 16px; /*avoid overlap with OSM attribution*/
+	right: 0;
+}
+
+.legendLabel {
+	font-family: sans-serif;
+	font-size: 12px;
+	text-anchor: end;
+	dominant-baseline: central;
 }
 
 #gBikePath path {
