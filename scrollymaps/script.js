@@ -79,19 +79,17 @@ handleResize();
 // setup resize event
 window.addEventListener("resize", handleResize);
 
-// initialize two Leaflet maps B and C
+// initialise Leaflet map for scrolly B
 var mapB = L.map("mapB", {
-	// disable all zoom controls that interfere with scrolling
-	// zoomControl: false,
+	// disable all zoom controls
+	zoomControl: false,
 	scrollWheelZoom: false,
 	doubleClickZoom: false,
-	touchZoom: false
-	// boxZoom: false
-	// dragging: false
+	touchZoom: false,
+	boxZoom: false,
+	dragging: false
 }).setView([51.97, 7.63], 13);
-// L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-	// attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 	attribution:
 		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
 }).addTo(mapB);
