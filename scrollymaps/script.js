@@ -365,6 +365,12 @@ function handleStepEnterB(response, data) {
 		case 3:
 			// add all bike dots
 			// opacity is changed in timer
+
+			var dotScale = d3
+				.scaleSqrt()
+				.domain(pmBounds)
+				.range([0, 10]);
+
 			gBikeDots
 				.selectAll(".bikeDot")
 				.data(data.bike)
@@ -373,7 +379,7 @@ function handleStepEnterB(response, data) {
 				.attr("class", "bikeDot")
 				.attr("cx", d => mapB.latLngToLayerPoint([d.lat, d.lon]).x)
 				.attr("cy", d => mapB.latLngToLayerPoint([d.lat, d.lon]).y)
-				.attr("r", 5)
+				.attr("r", d => dotScale(d.pm10))
 				.attr("fill", d => colourPM10(d.pm10));
 			// .attr("opacity", 0.2);
 
