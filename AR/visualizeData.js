@@ -255,14 +255,14 @@ function startNavigation(dataArray) {
 function redrawGauge(pointerBike,pointerLanuv) {
     if (linearGauge) {
         linearGauge
-          .draw(stops)
-          .drawPointer(pointerBike, "#252cef", "" + Math.round(pointerBike * 100) / 100)
+          .draw(stops, "0", "65")
+          .drawPointer(pointerBike, "#4CAF50", "" + Math.round(pointerBike * 100) / 100)
           .drawPointerLanuv(pointerLanuv, "#0c0c26", 65);
     } else {
         linearGauge = new HyyanAF.LinearGauge(gauge,65,0)
-          .draw(stops)
-          .drawPointer(pointerBike, "#252cef", "" + Math.round(pointerBike * 100) / 100)
-          .drawPointerLanuv(pointerLanuv, "#0c0c26", 65);
+          .draw(stops, "0", "65")
+          .drawPointer((pointerBike>65) ? 65 : (pointerBike<0) ? 0 : pointerBike, "#4CAF50", "" + Math.round(pointerBike * 100) / 100)
+          .drawPointerLanuv((pointerLanuv>65) ? 65 : (pointerLanuv<0) ? 0 : pointerLanuv, "#0c0c26", 65);
     }
 }
 
@@ -426,8 +426,8 @@ function openClosePopup() {
 function loadContent(date) {
     readAllData()
       .then(function () {
-          loadGuideAreas((date === "1") ? guide1912 : guide1411);
-          startNavigation((date === "1") ? bike1912 : bike1411);
+          loadGuideAreas((date === "1") ? guide1411 : guide1912);
+          startNavigation((date === "1") ? bike1411 : bike1912);
       });
 }
 

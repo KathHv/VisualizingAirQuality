@@ -35,6 +35,14 @@
   left: 0%;
 }
 
+.right {
+  right:0%;
+  top: 20%;
+  position: fixed;
+  max-width: 60px;
+  max-width: 40px;
+}
+
 #infoBtn {
   text-align: center;
   background-color: #4CAF50; /* Add an active/current color */
