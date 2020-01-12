@@ -160,6 +160,30 @@ mapB.invalidateSize();
 
 mapB.fitBounds(boundsMuensterSmall);
 
+
+//////////////////////////////////////////////////////////////
+/// map C
+//////////////////////////////////////////////////////////////
+/*
+var mapC = L.map("mapC", {
+	// disable all zoom controls that interfere with scrolling
+	// zoomControl: false,
+	scrollWheelZoom: false,
+	doubleClickZoom: false,
+	touchZoom: false
+	// boxZoom: false
+	// dragging: false
+}).setView([51.97, 7.63], 13);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+	attribution:
+		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(mapC);
+
+var layer = L.leafletGeotiff("data/idw_14-11.tif").addTo(mapC);
+console.log(layer);
+mapC.invalidateSize();
+*/
+
 // DATA
 Promise.all([
 	d3.csv("data/lanuv_14Nov_modified.csv", parseLANUV),
