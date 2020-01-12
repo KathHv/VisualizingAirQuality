@@ -77,18 +77,19 @@
 }
 
 .introduction {
-  height: 15%;
+  height: 20%;
   position: fixed;
-  top: 78%;
-  bottom: 7%;
-  display:  flex;
-  width: 80%;
+  top: 77%;
+  bottom: 3%;
+  display:  block;
+  width: 70%;
   margin: 0px auto;
   left: 10%;
-  right: 10%;
+  right: 20%;
   text-align: left;
   background-color: #555;
   color: white;
+  font-size: 85%;
   align: center;
   overflow-y: scroll;
 }
@@ -104,10 +105,12 @@
 
 
 .bottom {
-    position: fixed;
-  display: inline-block;
+  position: fixed;
+  display: flex;
   padding: 0.2em;
-    right: 5vw;
+    right:5%;
+    width:10%;
+    max-width: 200px;
     text-align: center;
     bottom: 5vh;
   min-width: 50px;
@@ -125,9 +128,18 @@ i{
   padding: 0.2em;
 }
 
+#infoBtn{
+  display: flex;
+  font-size: 1.5em;
+  background-color: #4CAF50;
+  color: white;
+  text-align: center;
+  border-width: 2px;
+  border-color: #006600;
 
-#popupBtn, #infoCloseBtn{
-    border: none;
+}
+
+#popupBtn, #introBtn{
     display: flex;
     font-size: 1.5em;
     background-color: #4CAF50;

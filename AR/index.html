@@ -49,7 +49,7 @@
 
 
 <body style='margin: 0; overflow: hidden; font-family: Helvetica, Verdana, Times, serif; font-size: 1.3em;' id="visArea"
-onload="loadContent('1')">
+onload="introduction(1);">
 
   <a-scene
   vr-mode-ui="enabled: false"
@@ -88,42 +88,40 @@ onload="loadContent('1')">
     <div class="slidecontainer">
       <input type="range" min="1" max="2" value="1" class="slider" id="range">
       <p style="text-align:left;"> 14/11/2019  -  19/12/2019 </p>
-      <button onclick="setDate()" id="infoCloseBtn"> Set! </button>
     </div>
-    <button onclick="introduction(1)" class= "bottom" id="infoCloseBtn"> Show Intro </button>y
-    <button onclick="showAndHideInformation()" class= "bottom" id="infoCloseBtn"> Got it! </button>
+    <button onclick="introduction(1)" class= "bottom" id="infoBtn"> Show Intro </button>
+    <button onclick="setDate()" class= "bottom" id="infoBtn"> Got it! </button>
 </div>
 
 <div class="introduction">
   <div  id = "introduction-1">
-    <p> This is healthy air with less PM10. </p>
-      <button onclick="introduction(2)" class= "bottom" id="infoCloseBtn"> Next </button>
+    <p> This is healthy air with less PM10. <br> (5 microgram PM10)</p>
+      <button onclick="introduction(2)" class= "bottom" id="introBtn"> Next </button>
   </div>
   <div  id = "introduction-2">
-    <p> This is unhealthy air with a lot of PM10. </p>
-    <button onclick="introduction(3)" class= "bottom" id="infoCloseBtn"> Next </button>
+    <p> This is unhealthy air with a lot of PM10.<br>  (40 microgram PM10) </p>
+    <button onclick="introduction(3)" class= "bottom" id="introBtn"> Next </button>
   </div>
   <div  id = "introduction-3">
-    <p> This is the PM10 value of Muenster in average. </p>
-    <button onclick="introduction(4)" class= "bottom" id="infoCloseBtn"> Next </button>
+    <p> This is the PM10 value of Muenster in average in 2016 <br> (15 microgram PM10). </p>
+    <button onclick="introduction(4)" class= "bottom" id="introBtn"> Next </button>
   </div>
   <div  id = "introduction-4">
-    <p> The slider on the right displays the PM10 value of the next LANUV station in the middle.
-      In comparison is the PM10 value for the closest point on the route to your location at the
-      chosen time displayed. </p>
-      <p> The arrow shows the direction of the route. Following it, you can find guide areas. </p>
-      <button onclick="introduction(5)" class= "bottom" id="infoCloseBtn"> Next </button>
+    <p> The PM10 value of the next LANUV station is displayed as a circle in the slider on the right.
+      The stroke represents the PM10 value for the closest point on the route to your location at the
+      chosen time. <br>
+      The arrow shows the direction of the route. Following it, you can find guide areas. </p>
+      <button onclick="introduction(5)" class= "bottom" id="introBtn"> Next </button>
   </div>
   <div id = "introduction-5">
-    <p> To see this introduction again click on the question mark in the top-left corner.
+    <p> To choose between different dates or to see this introduction again click on the question mark in the top-left corner.
       More information about air quality is available on <a href = "../"> this site.</a></p>
 
-    <button onclick="introduction(6)" class= "bottom" id="infoCloseBtn"> Close </button>
+    <button onclick="introduction(6)" class= "bottom" id="introBtn"> Close </button>
   </div>
 </div>
 
 </body>
 </html>
 
-<script src="information.js"></script>
 <script src="airQualityGauge.js"></script>

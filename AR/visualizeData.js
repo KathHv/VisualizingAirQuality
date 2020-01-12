@@ -14,6 +14,7 @@ var visArea = document.getElementById("visArea");
 var cameraOrientation=0;
 var direction;
 var guideAreas;
+var date = "1";
 x = {
     currentPositionInternal: undefined,
     currentPositionListener: [],
@@ -160,8 +161,6 @@ function addGuideAreas(dataArray){
 
 
 //------------------- Navigation Arrow ----------------------------------------
-
-
 
 /**
  * Load the data and then use it for the navigation
@@ -432,23 +431,12 @@ function visualizeParticles(pm10Value){
 }
 
 
-
-
-//------------------- Inital ----------------------------------------
+//------------------- Introduction ----------------------------------------
 
 /**
- *
- */
-function loadContent(date) {
-introduction(1);
-
-    readAllData()
-      .then(function () {
-          loadGuideAreas((date === "1") ? guide1912 : guide1411);
-          startNavigation((date === "1") ? bike1912 : bike1411);
-      });
-}
-
+*Function that controlles the content of the introduction.
+* @param step Number between 1 and 6, displays page of introduction
+*/
 function introduction(step){
   var information = document.getElementById("information");
   information.style.display = "none";
@@ -483,21 +471,63 @@ function introduction(step){
 
     case 3:
     introduction3.style.display = "flex";
-    visualizeParticles(11);
+    visualizeParticles(15);
     break;
 
     case 4:
-    introduction4.style.display = "flex";
+    introduction4.style.display = "block";
     break;
 
     case 5:
-    introduction5.style.display = "flex";
+    introduction5.style.display = "block";
     break;
 
     case 6:
     for(var i = 0; i < introduction.length; i++) {
       introduction[i].style.display = "none";
     }
+    loadContent();
     break;
   }
+}
+
+//------------------- Menue ----------------------------------------
+/*
+* hides or shows the information block on top of the AR
+*/
+function showAndHideInformation(){
+
+  var information = document.getElementById("information");
+  if(information.style.display === "none"){
+    var introduction = document.getElementsByClassName("introduction");
+    for(var i = 0; i < introduction.length; i++) {
+      introduction[i].style.display = "none";
+    }
+    information.style.display = "flex";
+  }
+  else{
+    information.style.display = "none";
+  }
+}
+
+function setDate(){
+  date =  document.getElementById("range").value;
+
+  showAndHideInformation();
+  loadContent(date);
+}
+
+
+//------------------- Inital Function after Introduction ----------------------------------------
+
+/**
+ *
+ */
+function loadContent(date) {
+
+    readAllData()
+      .then(function () {
+          loadGuideAreas((date === "1") ? guide1912 : guide1411);
+          startNavigation((date === "1") ? bike1912 : bike1411);
+      });
 }
