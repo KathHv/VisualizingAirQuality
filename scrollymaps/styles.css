@@ -1,6 +1,7 @@
+html,
 body {
 	font-family: "Gelasio", serif;
-	margin: 10px;
+	margin: 0;
 	background-color: #f3f3f3;
 }
 
@@ -11,19 +12,44 @@ h1 {
 }
 
 h2 {
-	margin: 1.5rem auto;
-	font-size: 1.5rem;
+	margin: 4.5rem auto 1.5rem auto;
+	font-size: 2rem;
 	max-width: 750px;
 }
 
-p {
+p,
+#sectionList {
 	max-width: 850px;
 	margin: auto;
 }
 
-ul {
-	max-width: 850px;
-	margin: auto;
+#sectionList {
+	text-align: center;
+	border-spacing: 10px;
+}
+
+#sectionList a {
+	display: table-cell;
+	text-decoration: none;
+	text-align: left;
+	color: #000;
+	padding: 15px;
+}
+
+.sectionContainer {
+	padding: 1px;
+}
+
+.colourSectionA {
+	background-color: #cbd2e1;
+}
+
+.colourSectionB {
+	background-color: #eeeac5;
+}
+
+.colourSectionC {
+	background-color: #cfe3da;
 }
 
 h1,
@@ -39,11 +65,13 @@ h2 {
 	/*background-color: #f3f3f3;*/
 	padding: 1rem;
 }
+
 .scrolly > * {
 	-webkit-box-flex: 1;
 	-ms-flex: 1;
 	flex: 1;
 }
+
 article {
 	position: relative;
 	padding: 0 1rem;
@@ -100,7 +128,6 @@ figure img {
 	text-align: center;
 	/*padding: 1rem;*/
 }
-}
 
 #mapB,
 #mapC {
@@ -133,16 +160,17 @@ figure img {
 
 #arbutton {
 	display: table;
-	background-color: #3b3b3b;
+	background-color: #666;
 	color: white;
-	padding: 30px 50px;
-	margin: 15px auto;
+	padding: 50px 80px;
+	margin: 100px auto;
 	text-decoration: none;
 	text-align: center;
-	font-size: 16px;
+	font-size: 1.2rem;
 	cursor: pointer;
 }
 
 #arbutton:hover {
-	background-color: green;
+	background-color: #444;
+	box-shadow: 0px 0px 10px #919191;
 }
