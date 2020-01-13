@@ -16,7 +16,6 @@ var formatTimeHour = d3.timeFormat("%d%m%Y%H");
 var t1, t2;
 
 var main = d3.select("main");
-var allSteps = d3.selectAll(".step");
 var allFigures = d3.selectAll("figure");
 var scrollyA = {
 	scrolly: d3.select("#scrollyA"),
@@ -160,7 +159,6 @@ mapB.invalidateSize();
 
 mapB.fitBounds(boundsMuensterSmall);
 
-
 //////////////////////////////////////////////////////////////
 /// map C
 //////////////////////////////////////////////////////////////
@@ -217,7 +215,9 @@ Promise.all([
 function handleResize() {
 	// 1. update height of step elements
 	var stepH = Math.floor(window.innerHeight * 0.75);
-	allSteps.style("height", stepH + "px");
+	scrollyA.step.style("height", stepH + "px");
+	scrollyB.step.style("height", stepH + "px");
+	scrollyC.step.style("height", stepH + "px");
 	var figureHeight = window.innerHeight * 0.95;
 	var figureMarginTop = (window.innerHeight - figureHeight) / 2;
 	allFigures
@@ -268,151 +268,114 @@ function handleStepEnterA(response, data) {
 ////////////////////////////////////////////////////////////////////////////////
 
 function initScrollyB(data) {
-	setupStickyfill();
-
+	// 1. setup the scroller with the bare-bones settings
+	// this will also initialize trigger observations
+	// 3. bind scrollama event handlers (this can be chained like below)
 	scrollerB
 		.setup({
 			step: "#scrollyB article .step",
-			offset: 0.33,
+			progress: true,
+			offset: 0.8,
 			debug: true
 		})
-		.onStepEnter(r => handleStepEnterB(r, data))
-		.onStepExit(r => handleStepExitB(r));
+		.onStepEnter(handleStepEnterB)
+		.onStepExit(handleStepExitB)
+		.onStepProgress(handleStepProgressB);
+
+	// draw all visualisations //
+	// we will not draw anything new while scrolling, only show/hide things
+	// which hopefully makes this run more smoothly than it would otherwise
+
+	//  dots for stations
+	gStationDots
+		.selectAll("circle")
+		.data([stationGeist, stationWeseler])
+		.enter()
+		.append("circle")
+		.attr("id", (d, i) => ["ptGeist", "ptWeseler"][i])
+		// .attr("fill", ) --> set in timer
+		.attr("cx", d => mapB.latLngToLayerPoint(d).x)
+		.attr("cy", d => mapB.latLngToLayerPoint(d).y)
+		.attr("r", 15);
+
+	// bike route
+	var lineGenerator = d3
+		.line()
+		.x(d => mapB.latLngToLayerPoint([d.lat, d.lon]).x)
+		.y(d => mapB.latLngToLayerPoint([d.lat, d.lon]).y);
+	var bikeRoute = lineGenerator(data.bike);
+	gBikePath
+		.append("path")
+		.attr("d", bikeRoute)
+		.attr("id", "bikeRoute");
+
+	// add dot for senseBox data
+	gSenseBox
+		.append("circle")
+		.attr("id", "ptSBGeist")
+		.attr("class", "senseboxDots")
+		.attr("fill", "#fff") // --> set in timer
+		.attr("cx", d => mapB.latLngToLayerPoint(stationGeist).x)
+		.attr("cy", d => mapB.latLngToLayerPoint(stationGeist).y)
+		.attr("r", 10);
+
+	// add bike dots
+	var dotScale = d3
+		.scaleSqrt()
+		.domain(pmBounds)
+		.range([0, 10]);
+
+	gBikeDots
+		.selectAll(".bikeDot")
+		.data(data.bike)
+		.enter()
+		.append("circle")
+		.attr("class", "bikeDot")
+		.attr("cx", d => mapB.latLngToLayerPoint([d.lat, d.lon]).x)
+		.attr("cy", d => mapB.latLngToLayerPoint([d.lat, d.lon]).y)
+		.attr("r", d => dotScale(d.pm10))
+		.attr("fill", d => colourPM10(d.pm10));
+	// .attr("opacity", 0.2);
 }
 
-function handleStepExitB(response) {
-	if ((response.index === 0) & (response.direction === "up")) {
-		console.log("stopping t1");
-		t1.stop();
-	}
-
-	if ((response.index === 3) & (response.direction === "down")) {
-		console.log("stopping t2");
-		t2.stop();
-	}
-
-	if ((response.index === 2) & (response.direction === "up")) {
-		console.log("stopping t2");
-		t2.stop();
-	}
-}
-
-// scrollama event handlers
-function handleStepEnterB(response, data) {
-	// response = { element, direction, index }
-
-	// add color to current step only
-	scrollyB.step.classed("is-active", function(d, i) {
-		return i === response.index;
-	});
-
+function handleStepEnterB(response) {
 	switch (response.index) {
 		case 0:
-			// start timer
-			var el1_hour = -1; // to store hour of previous elapsed time
-			t1 = d3.timer(timer1, 150);
-			function timer1(elapsed) {
-				var el = timerB1.scale(elapsed);
-				timerB1.div.html(formatTime(el));
-
-				updateStationDots(data, el, el1_hour);
-				updateSenseboxDots(data, el);
-				updateBikeDots(el);
-
-				// update elapsed time
-				el1_hour = el.getHours();
-				// make timer loop through one day
-				if (timerB1.scale(elapsed) > timerB1.end) t1.restart(timer1);
-			}
-
-			//  dots for stations
-			gStationDots
-				.selectAll("circle")
-				.data([stationGeist, stationWeseler])
-				.enter()
-				.append("circle")
-				.attr("id", (d, i) => ["ptGeist", "ptWeseler"][i])
-				// .attr("fill", ) --> set in timer
-				.attr("cx", d => mapB.latLngToLayerPoint(d).x)
-				.attr("cy", d => mapB.latLngToLayerPoint(d).y)
-				.attr("r", 15);
-
+			gStationDots.classed("hidden", false);
+			gBikePath.classed("hidden", true);
+			gSenseBox.classed("hidden", true);
+			gBikeDots.classed("hidden", true);
 			break;
 		case 1:
-			// bike route
-			var lineGenerator = d3
-				.line()
-				.x(d => mapB.latLngToLayerPoint([d.lat, d.lon]).x)
-				.y(d => mapB.latLngToLayerPoint([d.lat, d.lon]).y);
-			var bikeRoute = lineGenerator(data.bike);
-
-			gBikePath
-				.append("path")
-				.attr("d", bikeRoute)
-				.attr("id", "bikeRoute");
-
+			gStationDots.classed("hidden", false);
+			gBikePath.classed("hidden", false);
+			gSenseBox.classed("hidden", true);
+			gBikeDots.classed("hidden", true);
 			break;
 		case 2:
-			// bike route in background
-			gBikePath.classed("background", true);
-
-			// add dot for senseBox data
-			gSenseBox
-				.append("circle")
-				.attr("id", "ptSBGeist")
-				.attr("class", "senseboxDots")
-				// .attr("fill", ) --> set in timer
-				.attr("cx", d => mapB.latLngToLayerPoint(stationGeist).x)
-				.attr("cy", d => mapB.latLngToLayerPoint(stationGeist).y)
-				.attr("r", 10);
-
-			// new timer w/ more limited time span
-			t1.stop();
-
-			el1_hour = -1; // to store hour of previous elapsed time
-			t2 = d3.timer(timer2, 150);
-			function timer2(elapsed) {
-				var el = timerB2.scale(elapsed);
-				timerB2.div.html(formatTime(el));
-
-				updateStationDots(data, el, el1_hour);
-				updateSenseboxDots(data, el);
-				updateBikeDots(el);
-
-				// update elapsed time
-				el1_hour = el.getHours();
-				// make timer loop through one day
-				if (timerB2.scale(elapsed) > timerB2.end) t2.restart(timer2);
-			}
-
+			gStationDots.classed("hidden", false);
+			gBikePath.classed("hidden", false);
+			gSenseBox.classed("hidden", false);
+			gBikeDots.classed("hidden", true);
 			break;
 		case 3:
-			// add all bike dots
-			// opacity is changed in timer
-
-			var dotScale = d3
-				.scaleSqrt()
-				.domain(pmBounds)
-				.range([0, 10]);
-
-			gBikeDots
-				.selectAll(".bikeDot")
-				.data(data.bike)
-				.enter()
-				.append("circle")
-				.attr("class", "bikeDot")
-				.attr("cx", d => mapB.latLngToLayerPoint([d.lat, d.lon]).x)
-				.attr("cy", d => mapB.latLngToLayerPoint([d.lat, d.lon]).y)
-				.attr("r", d => dotScale(d.pm10))
-				.attr("fill", d => colourPM10(d.pm10));
-			// .attr("opacity", 0.2);
-
+			gStationDots.classed("hidden", false);
+			gBikePath.classed("hidden", false);
+			gSenseBox.classed("hidden", false);
+			gBikeDots.classed("hidden", false);
 			break;
 	}
+}
 
-	// update map based on step
-	// updateMap(response.index);
-	// figure.select("p").text(response.index);
+function handleStepExitB(response) {}
+
+function handleStepProgressB(response) {
+	var el = d3.select(response.element);
+
+	// var val = el.attr('data-step');
+	// var rgba = 'rgba(' + val + ', ' + response.progress + ')';
+	el.classed("is-active", true);
+	el.select(".progress").text(d3.format(".1%")(response.progress));
 }
 
 function updateStationDots(data, el, el1_hour) {
