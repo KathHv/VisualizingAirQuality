@@ -448,6 +448,8 @@ function introduction(step){
   switch (step){
     case 1:
     introduction1.style.display = "flex";
+    document.getElementById("gaugeContainer").style.visibility = "hidden";
+    document.getElementById("arrow").setAttribute("visible",false);
     visualizeParticles(5);
     break;
 
@@ -463,6 +465,8 @@ function introduction(step){
 
     case 4:
     introduction4.style.display = "block";
+    document.getElementById("gaugeContainer").style.visibility = "visible";
+    document.getElementById("arrow").setAttribute("visible",true);
     break;
 
     case 5:
