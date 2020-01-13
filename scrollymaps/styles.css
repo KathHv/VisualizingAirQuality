@@ -128,6 +128,19 @@ figure img {
 	/*padding: 1rem;*/
 }
 
+.step .stepInner {
+	position: sticky;
+	top: 25px;
+	background-color: #fff5;
+	color: #888;
+	padding: 15px;
+}
+
+.step.is-active .stepInner {
+	background-color: #fcfcfc;
+	color: inherit;
+}
+
 #mapB,
 #mapC {
 	/*setting height explicitly is required for Leaflet*/
@@ -140,18 +153,6 @@ figure img {
 	display: block;
 	position: fixed;
 	z-index: 1000; /*leaflet: 400*/
-}
-
-.stepInner {
-	position: sticky;
-	top: 25px;
-	background-color: #fcfcfc;
-	padding: 15px;
-}
-
-.substep {
-	margin: 150px 0;
-	text-align: left;
 }
 
 #timeB {

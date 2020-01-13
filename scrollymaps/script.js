@@ -27,29 +27,16 @@ var scrollyB = {
 	scrolly: d3.select("#scrollyB"),
 	step: d3.select("#scrollyB").selectAll(".step")
 };
-var timerB1 = {
-	div: d3.select("#timeB"),
-	start: new Date(2019, 10, 14),
-	end: new Date(2019, 10, 14, 23, 59, 59),
-	speedFactor: 24 * 60
-};
 
-timerB1.scale = d3
+var timerLong = d3
 	.scaleTime()
-	.range([timerB1.start, timerB1.end])
-	.domain([0, (timerB1.end - timerB1.start) / timerB1.speedFactor]);
+	.range([new Date(2019, 10, 14), new Date(2019, 10, 14, 23, 59, 59)])
+	.domain([0, 1]);
 
-var timerB2 = {
-	div: d3.select("#timeB"),
-	start: new Date(2019, 10, 14, 14, 25, 0),
-	end: new Date(2019, 10, 14, 16, 3, 0),
-	speedFactor: 24 * 6
-};
-
-timerB2.scale = d3
+var timerShort = d3
 	.scaleTime()
-	.range([timerB2.start, timerB2.end])
-	.domain([0, (timerB2.end - timerB2.start) / timerB2.speedFactor]);
+	.range([new Date(2019, 10, 14, 14, 25, 0), new Date(2019, 10, 14, 16, 3, 0)])
+	.domain([0, 1]);
 
 var scrollyC = {
 	scrolly: d3.select("#scrollyC"),
@@ -150,10 +137,22 @@ L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
 L.svg().addTo(mapB);
 const overlayB = d3.select(mapB.getPanes().overlayPane);
 const svgB = overlayB.select("svg");
-const gBikePath = svgB.append("g").attr("id", "gBikePath");
-const gBikeDots = svgB.append("g").attr("id", "gBikeDots");
-const gStationDots = svgB.append("g").attr("id", "gStationDots");
-const gSenseBox = svgB.append("g").attr("id", "gSenseBox");
+const gBikePath = svgB
+	.append("g")
+	.attr("id", "gBikePath")
+	.classed("hidden", true);
+const gBikeDots = svgB
+	.append("g")
+	.attr("id", "gBikeDots")
+	.classed("hidden", true);
+const gStationDots = svgB
+	.append("g")
+	.attr("id", "gStationDots")
+	.classed("hidden", true);
+const gSenseBox = svgB
+	.append("g")
+	.attr("id", "gSenseBox")
+	.classed("hidden", true);
 
 mapB.invalidateSize();
 
@@ -249,8 +248,6 @@ function initScrollyA(data) {
 
 // scrollama event handlers
 function handleStepEnterA(response, data) {
-	// response = { element, direction, index }
-
 	// add color to current step only
 	scrollyA.step.classed("is-active", function(d, i) {
 		return i === response.index;
@@ -258,9 +255,6 @@ function handleStepEnterA(response, data) {
 
 	// update image based on step
 	scrollyA.img.attr("src", "img/" + scrollyImg[response.index]);
-	// update map based on step
-	// updateMap(response.index);
-	// figure.select("p").text(response.index);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -268,9 +262,7 @@ function handleStepEnterA(response, data) {
 ////////////////////////////////////////////////////////////////////////////////
 
 function initScrollyB(data) {
-	// 1. setup the scroller with the bare-bones settings
-	// this will also initialize trigger observations
-	// 3. bind scrollama event handlers (this can be chained like below)
+	// set up scroller
 	scrollerB
 		.setup({
 			step: "#scrollyB article .step",
@@ -282,7 +274,7 @@ function initScrollyB(data) {
 		.onStepExit(handleStepExitB)
 		.onStepProgress(handleStepProgressB);
 
-	// draw all visualisations //
+	// draw all visualisations into g elements
 	// we will not draw anything new while scrolling, only show/hide things
 	// which hopefully makes this run more smoothly than it would otherwise
 
@@ -335,10 +327,11 @@ function initScrollyB(data) {
 		.attr("cy", d => mapB.latLngToLayerPoint([d.lat, d.lon]).y)
 		.attr("r", d => dotScale(d.pm10))
 		.attr("fill", d => colourPM10(d.pm10));
-	// .attr("opacity", 0.2);
 }
 
 function handleStepEnterB(response) {
+	d3.select(response.element).classed("is-active", true);
+
 	switch (response.index) {
 		case 0:
 			gStationDots.classed("hidden", false);
@@ -367,15 +360,24 @@ function handleStepEnterB(response) {
 	}
 }
 
-function handleStepExitB(response) {}
+function handleStepExitB(response) {
+	d3.select(response.element).classed("is-active", false);
+
+	// hide station dots when scrolling out to the top
+	if ((response.index === 0) & (response.direction === "up")) {
+		gStationDots.classed("hidden", true);
+	}
+}
 
 function handleStepProgressB(response) {
 	var el = d3.select(response.element);
 
-	// var val = el.attr('data-step');
-	// var rgba = 'rgba(' + val + ', ' + response.progress + ')';
-	el.classed("is-active", true);
-	el.select(".progress").text(d3.format(".1%")(response.progress));
+	// timerLong timerShort
+	var time = timerLong(response.progress);
+
+	el.select(".progress").html(
+		d3.format(".1%")(response.progress) + "<br/>" + formatTime(time)
+	);
 }
 
 function updateStationDots(data, el, el1_hour) {
