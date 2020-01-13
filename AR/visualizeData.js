@@ -122,7 +122,7 @@ function loadGuideAreas(dataArray) {
  */
 function checkForGuideArea(dataArray, position) {
     let possibleGuideAreas = getClosest(dataArray,position);
-    if (possibleGuideAreas.distance < 100) {
+    if (possibleGuideAreas.distance < 0.2) {
         addGuide(possibleGuideAreas.closest.text);
     } else {
         removeGuide();
@@ -492,7 +492,7 @@ function introduction(step){
 function showAndHideInformation(){
 
   var information = document.getElementById("information");
-  if(information){
+	if(information.style.display === "none"){
     var introduction = document.getElementsByClassName("introduction");
     for(var i = 0; i < introduction.length; i++) {
       introduction[i].style.display = "none";
@@ -521,7 +521,7 @@ function loadContent(date) {
 
     readAllData()
       .then(function () {
-          loadGuideAreas((date === "1") ? guide1912 : guide1411);
-          startNavigation((date === "1") ? bike1912 : bike1411);
+          loadGuideAreas((date === "1") ? guide1411 : guide1912);
+          startNavigation((date === "1") ? bike1411 : bike1912);
       });
 }
