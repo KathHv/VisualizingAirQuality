@@ -15,6 +15,7 @@ var cameraOrientation=0;
 var direction;
 var guideAreas;
 var date = "1";
+
 x = {
     currentPositionInternal: undefined,
     currentPositionListener: [],
@@ -121,7 +122,7 @@ function loadGuideAreas(dataArray) {
  */
 function checkForGuideArea(dataArray, position) {
     let possibleGuideAreas = getClosest(dataArray,position);
-    if (possibleGuideAreas.distance < 0.5) {
+    if (possibleGuideAreas.distance < 0.2) {
         addGuide(possibleGuideAreas.closest.text);
     } else {
         removeGuide();
@@ -170,8 +171,9 @@ function startNavigation(dataArray) {
             x.registerListener(function(val) {
                 let directionCoordinate = getDirectionCoordinate(dataArray,val);
                 direction = getAngle(val.coords.latitude, val.coords.longitude, directionCoordinate.lat, directionCoordinate.lon);
-                distDiv.innerHTML = (Math.round(distance(val.coords.latitude, val.coords.longitude,
-                  directionCoordinate.lat, directionCoordinate.lon, "K") * 100) / 100) + " km";
+                let closestDistance = getClosest(dataArray,val).distance;
+
+              distDiv.innerHTML = "Closest Data Point: " + (Math.round(closestDistance * 100) / 100) + " km";
                 distDiv.style.visibility = "visible";
             }, "direction");
             x.registerListener(function(val) {
@@ -295,43 +297,29 @@ function redrawGauge(pointerBike,pointerLanuv) {
  * @param content - content for the guide
  */
 function addGuide(content) {
-    let existingPopup = document.getElementById( 'popup' );
-    if (existingPopup === null) {
-        // button
-        let btnContainer = document.getElementById("guide-buttons");
-        let popupBtn = document.createElement("button");
-        popupBtn.setAttribute("id", "popupBtn");
-        popupBtn.onclick = openClosePopup();
-        popupBtn.innerText = "info";
-        btnContainer.appendChild(popupBtn);
-        // the popup
-        let popup = document.createElement("a-entity");
-        popup.setAttribute("id", "popup");
-        popup.setAttribute("geometry", "primitive: plane; height: auto; width: 1");
-        popup.setAttribute("material", "color: blue");
-        popup.setAttribute("text", "wrapCount:10; value: " + content);
-        popup.setAttribute("position", "0 3 -5");
-        popup.setAttribute("visible", false);
-        let ppContainer = document.getElementById("camera");
-        ppContainer.appendChild(popup)
-    } else {
-        existingPopup.setAttribute("text", "wrapCount:10; value: " + content);
-    }
-
+  let popupBtn = document.getElementById("popupBtn");
+  if (popupBtn === null) {
+    let btnContainer = document.getElementById("guide-buttons");
+    let popupBtn = document.createElement("button");
+    popupBtn.setAttribute("id", "popupBtn");
+    popupBtn.onclick = openClosePopup();
+    popupBtn.innerText = "info";
+    btnContainer.appendChild(popupBtn);
+  }
+  let guidePane = document.getElementById("guideContent");
+  guidePane.innerText = content;
 }
 
 /**
  * This function removes active guides.
  */
 function removeGuide() {
-    let popupBtn = document.getElementById("popupBtn");
-    let popup = document.getElementById("popup");
-    if (popupBtn !== null) {
-        popupBtn.parentNode.removeChild(popupBtn);
-    }
-    if (popup !== null) {
-        popup.parentNode.removeChild(popup);
-    }
+  let guidePane = document.getElementById("guideContent");
+  guidePane.setAttribute("visible",false);
+  let popupBtn = document.getElementById("popupBtn");
+  if (popupBtn !== null) {
+    popupBtn.parentNode.removeChild(popupBtn);
+  }
 }
 
 /**
@@ -340,11 +328,24 @@ function removeGuide() {
  */
 function openClosePopup() {
     return function() {
-        let popup = document.getElementById("popup");
-        if (popup !== null) {
-            popup.setAttribute("visible", !(popup.getAttribute("visible") === true));
-        }
+      var guidePane = document.getElementById("guideAreaInfo");
+      if(guidePane.style.visibility === "hidden"){
+        guidePane.style.visibility = "visible";
+      }
+      else{
+        guidePane.style.visibility = "hidden";
+      }
     };
+}
+
+function openClosePopup2() {
+    var guidePane = document.getElementById("guideAreaInfo");
+    if(guidePane.style.visibility === "hidden"){
+      guidePane.style.visibility = "visible";
+    }
+    else{
+      guidePane.style.visibility = "hidden";
+    }
 }
 
 
@@ -449,6 +450,7 @@ function introduction(step){
     case 1:
     introduction1.style.display = "flex";
     document.getElementById("gaugeContainer").style.visibility = "hidden";
+    document.getElementById("distance").style.visibility = "hidden";
     document.getElementById("arrow").setAttribute("visible",false);
     visualizeParticles(5);
     break;
@@ -466,6 +468,7 @@ function introduction(step){
     case 4:
     introduction4.style.display = "block";
     document.getElementById("gaugeContainer").style.visibility = "visible";
+    document.getElementById("distance").style.visibility = "visible";
     document.getElementById("arrow").setAttribute("visible",true);
     break;
 
@@ -489,7 +492,7 @@ function introduction(step){
 function showAndHideInformation(){
 
   var information = document.getElementById("information");
-  if(information.style.display === "none"){
+	if(information.style.display === "none"){
     var introduction = document.getElementsByClassName("introduction");
     for(var i = 0; i < introduction.length; i++) {
       introduction[i].style.display = "none";
@@ -518,7 +521,7 @@ function loadContent(date) {
 
     readAllData()
       .then(function () {
-          loadGuideAreas((date === "1") ? guide1912 : guide1411);
-          startNavigation((date === "1") ? bike1912 : bike1411);
+          loadGuideAreas((date === "1") ? guide1411 : guide1912);
+          startNavigation((date === "1") ? bike1411 : bike1912);
       });
 }
