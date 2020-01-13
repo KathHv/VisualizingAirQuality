@@ -43,7 +43,7 @@
   max-width: 40px;
 }
 
-#infoBtn {
+#infoBtn, #guideBtn {
   text-align: center;
   background-color: #4CAF50; /* Add an active/current color */
   padding: 0.2em; /* Add some padding */

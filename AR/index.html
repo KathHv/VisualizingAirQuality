@@ -30,8 +30,6 @@
   <!-- jsnlog -->
   <script src="jsnlog.min.js"> </script>
 
-  <!-- color gradient library -->
-  <script src="rainbowvis.js"></script>
 
   <script src="components.js"></script>
   <script src="visualizeData.js"></script>
@@ -74,7 +72,7 @@ onload="introduction(1);">
 </div>
 
   <div class="right" style="visibility: hidden" id="gaugeContainer">
-    <p style="text-align:center; font-size: 12px">PM10 (ppm)</p>
+    <div style="text-align:center; font-size: 12px; background-color: #555; color: white; padding: 0.1em;">PM10 (ppm)</div>
     <canvas id="gauge" width="30" height="300" style="margin-right: 0px;"></canvas>
   </div>
 
@@ -94,6 +92,11 @@ onload="introduction(1);">
     <button onclick="setDate()" class= "bottom" id="infoBtn"> Got it! </button>
   
 </div>
+  <div class="information" id="guideAreaInfo" style="visibility: hidden;">
+    <div id="guideContent"></div>
+
+    <button onclick="openClosePopup2()" class= "bottom" id="guideBtn" style="min-width: 70px;"> Got it! </button>
+  </div>
 
 <div class="introduction">
   <div  id = "introduction-1">
