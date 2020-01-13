@@ -108,8 +108,9 @@
   position: fixed;
   display: flex;
   padding: 0.2em;
+  left: 80%;
   right:5%;
-  width:10%;
+  width:15%;
   text-align: center;
   bottom: 5vh;
   min-width: 50px;
