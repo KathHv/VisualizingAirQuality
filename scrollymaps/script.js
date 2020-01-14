@@ -239,7 +239,7 @@ function initScrollyA(data) {
 		.setup({
 			step: "#scrollyA article .step",
 			offset: 0.33,
-			debug: true
+			debug: false
 		})
 		.onStepEnter(function(r) {
 			handleStepEnterA(r, data);
@@ -268,7 +268,7 @@ function initScrollyB(data) {
 			step: "#scrollyB article .step",
 			progress: true,
 			offset: 0.5,
-			debug: true
+			debug: false
 		})
 		.onStepEnter(handleStepEnterB)
 		.onStepExit(handleStepExitB)
@@ -448,7 +448,7 @@ function initScrollyC(data) {
 		.setup({
 			step: "#scrollyC article .step",
 			offset: 0.33,
-			debug: true
+			debug: false
 		})
 		.onStepEnter(function(r) {
 			handleStepEnterC(r, data);
