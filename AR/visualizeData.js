@@ -176,6 +176,7 @@ function startNavigation(dataArray) {
               distDiv.innerHTML = "Closest Data Point: " + (Math.round(closestDistance * 100) / 100) + " km";
                 distDiv.style.visibility = "visible";
             }, "direction");
+            distDiv.onclick = function(){showAndHideMap()};
             x.registerListener(function(val) {
                 let closest = getClosest(dataArray,val).closest;
                 if (!closestPointToCurrentPosition) {
@@ -492,12 +493,50 @@ function introduction(step){
 function showAndHideInformation(){
 
   var information = document.getElementById("information");
+
 	if(information.style.display === "none"){
     var introduction = document.getElementsByClassName("introduction");
     for(var i = 0; i < introduction.length; i++) {
       introduction[i].style.display = "none";
     }
+    var settings = document.getElementById("settings");
+    var map = document.getElementById("map");
     information.style.display = "flex";
+    settings.style.display = "flex";
+    map.style.display = "none";
+
+  }
+  else{
+    information.style.display = "none";
+
+  }
+}
+
+function setDate(){
+  date =  document.getElementById("range").value;
+
+  showAndHideInformation();
+  loadContent(date);
+}
+
+//------------------- Map ----------------------------------------
+/*
+* hides or shows the map block on top of the AR
+*/
+function showAndHideMap(){
+
+  var information = document.getElementById("information");
+
+	if(information.style.display === "none"){
+    var introduction = document.getElementsByClassName("introduction");
+    for(var i = 0; i < introduction.length; i++) {
+      introduction[i].style.display = "none";
+    }
+    var settings = document.getElementById("settings");
+    var map = document.getElementById("map");
+    information.style.display = "flex";
+    settings.style.display = "none";
+    map.style.display = "flex";
   }
   else{
     information.style.display = "none";
@@ -510,7 +549,6 @@ function setDate(){
   showAndHideInformation();
   loadContent(date);
 }
-
 
 //------------------- Initial Function after Introduction ----------------------------------------
 

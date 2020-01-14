@@ -77,21 +77,38 @@ onload="introduction(1);">
   </div>
 
 <div class="top-left">
-  <button onclick=showAndHideInformation() class="active" id="infoBtn"><i class="fa fa-question-circle"></i></button>
+
+    <button onclick=showAndHideInformation() id="iconBarBtn"><i class="fa fa-question-circle"></i></button>
+     <a href="../" class="active" id="iconBarBtn"><i class="fa fa-globe"></i></a>
+
+
 </div>
 
 <div class="information" id="information" style="display: none;">
+  <div id = "settings">
   <h3>Air quality in Münster (PM10)</h3>
     <p> Choose a dataset:</p>
     <div class="slidecontainer">
       <input type="range" min="1" max="2" value="1" class="slider" id="range">
       <p style="text-align:left;"> 14/11/2019  -  19/12/2019 </p>
-      <button onclick="introduction(1)" id="infoBtn" > Show Intro </button> <br>
+            <button onclick="setDate()"  id="infoBtn"> Set date! </button>
+            <br>
+            <br>
+            <br>
+      <button onclick="introduction(1)" id="infoBtn" > Show Intro </button>
+
     </div>
 
-    <button onclick="setDate()" class= "bottom" id="infoBtn"> Got it! </button>
-  
+
 </div>
+<div id="map">
+  <iframe src="https://www.google.com/maps/d/embed?mid=1wKBvzSgLyZSQiVaxqd-n2ABefUzxqcMY" width="100%" height="480px">
+    <br>
+    <button onclick="showAndHideMap()" id="infoBtn"> Close </button>
+  </iframe>
+</div>
+</div>
+
   <div class="information" id="guideAreaInfo" style="visibility: hidden;">
     <div id="guideContent"></div>
 

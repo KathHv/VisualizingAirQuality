@@ -1,3 +1,9 @@
+button {
+-webkit-appearance: none;
+-moz-appearance: none;
+appearance: none;
+}
+
 .centered {
     align-items: center;
     justify-content: center;
@@ -43,27 +49,16 @@
   max-width: 40px;
 }
 
-#infoBtn, #guideBtn {
-  text-align: center;
-  background-color: #4CAF50; /* Add an active/current color */
-  padding: 0.2em; /* Add some padding */
-  transition: all 0.3s ease; /* Add transition for hover effects */
-  color: white; /* White text color */
-  font-size: 5.5vh; /* Increased font-size */
 
-  border: none;
-  display: flex;
-  outline: none;
-}
 
-.information {
+.information, #settings, #map {
   height: 83%;
   align-items: baseline;
   justify-content: flex-start;
   position: fixed;
   top: 10%;
   bottom: 7%;
-  display:  flex;
+  display: flex;
   flex-direction: column;
   width: 80%;
   margin: 0px auto;
@@ -76,12 +71,14 @@
   overflow-y: scroll;
 }
 
+
 .introduction {
   height: 20%;
   position: fixed;
   top: 77%;
   bottom: 3%;
-  display:  block;
+  display:  flex;
+  flex-direction: column;
   width: 70%;
   margin: 0px auto;
   left: 10%;
@@ -127,15 +124,29 @@ i{
 }
 
 
-#popupBtn, #introBtn , #infoBtn{
+#popupBtn, #introBtn , #infoBtn, #iconBarBtn{
     display: flex;
-    font-size: 1.5em;
+    font-size: 0.9em;
     background-color: #4CAF50;
     color: white;
     outline: none;
     text-align: center;
     border-width: 1px;
     border-color: #006600;
+    padding: 0.2em; /* Add some padding */
+}
+
+#iconBarBtn, #guideBtn {
+  text-align: center;
+  background-color: #4CAF50; /* Add an active/current color */
+  padding: 0.2em; /* Add some padding */
+  transition: all 0.3s ease; /* Add transition for hover effects */
+  color: white; /* White text color */
+  font-size: 5.5vh; /* Increased font-size */
+
+  border: none;
+  display: flex;
+  outline: none;
 }
 
 
@@ -205,4 +216,19 @@ a:active {
 .navbar-toggle {
     display: inline-block;
     float: none;
+}
+
+/*-------------------icon bar------------------------------*/
+.icon-bar {
+  width: 90px; /* Set a specific width */
+  background-color: #555; /* Dark-grey background */
+}
+
+.icon-bar a {
+  display: block; /* Make the links appear below each other instead of side-by-side */
+  text-align: center; /* Center-align text */
+  padding: 16px; /* Add some padding */
+  transition: all 0.3s ease; /* Add transition for hover effects */
+  color: white; /* White text color */
+  font-size: 36px; /* Increased font-size */
 }
