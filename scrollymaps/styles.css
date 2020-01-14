@@ -7,15 +7,19 @@ body {
 }
 
 h1 {
-	max-width: 600px;
-	margin: 5rem auto 3rem auto;
-	font-size: 2.5rem;
+	max-width: 750px;
+	margin: 5rem auto 1rem auto;
+	font-size: 3rem;
 }
 
 h2 {
-	margin: 4.5rem auto 1.5rem auto;
+	margin: 1rem auto 2rem auto;
 	font-size: 2rem;
 	max-width: 750px;
+}
+
+.sectionContainer h2 {
+	margin: 4.5rem auto 1.5rem auto;
 }
 
 p,
