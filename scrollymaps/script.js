@@ -267,12 +267,12 @@ function initScrollyB(data) {
 		.setup({
 			step: "#scrollyB article .step",
 			progress: true,
-			offset: 0.8,
+			offset: 0.5,
 			debug: true
 		})
 		.onStepEnter(handleStepEnterB)
 		.onStepExit(handleStepExitB)
-		.onStepProgress(handleStepProgressB);
+		.onStepProgress(r => handleStepProgressB(r, data));
 
 	// draw all visualisations into g elements
 	// we will not draw anything new while scrolling, only show/hide things
@@ -369,53 +369,71 @@ function handleStepExitB(response) {
 	}
 }
 
-function handleStepProgressB(response) {
+function handleStepProgressB(response, data) {
 	var el = d3.select(response.element);
+	var timenow;
 
-	// timerLong timerShort
-	var time = timerLong(response.progress);
+	console.log(response.index);
+
+	switch (response.index) {
+		case 0:
+			timenow = timerLong(response.progress);
+			updateStationDots(timenow, data);
+			break;
+		case 1:
+			// only showing the static bike route here
+			break;
+		case 2:
+			timenow = timerShort(response.progress);
+			updateStationDots(timenow, data);
+			updateSenseboxDots(timenow, data);
+			break;
+		case 3:
+			timenow = timerShort(response.progress);
+			updateStationDots(timenow, data);
+			updateSenseboxDots(timenow, data);
+			updateBikeDots(timenow);
+			break;
+	}
 
 	el.select(".progress").html(
-		d3.format(".1%")(response.progress) + "<br/>" + formatTime(time)
+		// d3.format(".1%")(response.progress) + "<br/>" +
+		formatTime(timenow)
 	);
 }
 
-function updateStationDots(data, el, el1_hour) {
-	// check if new hour has started, only do stuff if yes
-	if (el.getHours() != el1_hour) {
-		var datanow = data.lanuv.find(function(d) {
-			return formatTimeHour(d.time) === formatTimeHour(el);
-		});
-		d3.select("#ptGeist").attr("fill", function() {
-			return colourPM10(datanow.pm10_Geist);
-		});
-		d3.select("#ptWeseler").attr("fill", function() {
-			return colourPM10(datanow.pm10_Weseler);
-		});
-	}
+function updateStationDots(timenow, data) {
+	// get data for the current hour and colour dots
+	var datanow = data.lanuv.find(function(d) {
+		return formatTimeHour(d.time) === formatTimeHour(timenow);
+	});
+
+	d3.select("#ptGeist").attr("fill", function() {
+		return colourPM10(datanow.pm10_Geist);
+	});
+	d3.select("#ptWeseler").attr("fill", function() {
+		return colourPM10(datanow.pm10_Weseler);
+	});
 }
 
-function updateSenseboxDots(data, el) {
-	// check if the dots are there (only in step 3)
-	if (!d3.select(".senseboxDots").empty()) {
-		var datanow = data.sensebox.find(function(d) {
-			return +d.time > +el;
-		});
-		d3.select("#ptSBGeist").attr("fill", function() {
-			return typeof datanow === "undefined"
-				? "transparent"
-				: colourPM10(datanow.pm10);
-		});
-	}
+function updateSenseboxDots(timenow, data) {
+	var datanow = data.sensebox.find(function(d) {
+		return +d.time > +timenow;
+	});
+	d3.select("#ptSBGeist").attr("fill", function() {
+		return typeof datanow === "undefined"
+			? "transparent"
+			: colourPM10(datanow.pm10);
+	});
 }
 
-function updateBikeDots(el) {
+function updateBikeDots(timenow) {
 	// check if the dots are there (step 4)
 	if (!gBikeDots.selectAll("circle").empty()) {
 		console.log("update bike dots op");
 		gBikeDots
 			.selectAll("circle")
-			.attr("opacity", d => opacityScale(Math.abs(+d.time - +el)));
+			.attr("opacity", d => opacityScale(Math.abs(+d.time - +timenow)));
 	}
 }
 
