@@ -123,6 +123,9 @@ i{
   padding: 0.2em;
 }
 
+p{
+  width: 100%
+}
 
 #popupBtn, #introBtn , #infoBtn, #iconBarBtn{
     display: flex;
