@@ -136,6 +136,11 @@ color: #f3f3f3;
   border: none;
 }
 
+#iconBarBtn{
+  padding: 0.2em;
+  background-color: #ff760d;
+}
+
 #popupBtn, #introBtn , #infoBtn, #iconBarBtn{
     display: flex;
     font-size: 0.9em;
