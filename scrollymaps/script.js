@@ -1,5 +1,5 @@
-const initCoord = [51.96, 7.63];
-const initZoom = 12;
+const initCoord = [51.95, 7.63];
+const initZoom = 14;
 
 const stationGeist = [51.936482, 7.611609]; // lat lon
 const stationWeseler = [51.953275, 7.619379];
@@ -161,27 +161,38 @@ mapB.fitBounds(boundsMuensterSmall);
 //////////////////////////////////////////////////////////////
 /// map C
 //////////////////////////////////////////////////////////////
-/*
+
 var mapC = L.map("mapC", {
 	// disable all zoom controls that interfere with scrolling
-	// zoomControl: false,
+	zoomControl: false,
 	scrollWheelZoom: false,
 	doubleClickZoom: false,
-	touchZoom: false
-	// boxZoom: false
-	// dragging: false
-}).setView([51.97, 7.63], 13);
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+	touchZoom: false,
+	boxZoom: false,
+	dragging: false
+}).setView(initCoord, initZoom);
+L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
 	attribution:
-		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
 }).addTo(mapC);
 
-var layer = L.leafletGeotiff("data/idw_14-11.tif").addTo(mapC);
+var layer = L.leafletGeotiff(
+    "data/idw_14-11.tif",
+    {
+          renderer: new L.LeafletGeotiff.Plotty({
+          band: 1,
+            colorScale: 'greys'
+          })
+    }
+    ).addTo(mapC);
 console.log(layer);
+console.log(layer.getValueAtLatLng(51.96,7.62));
 mapC.invalidateSize();
-*/
 
+
+//////////
 // DATA
+//////////
 Promise.all([
 	d3.csv("data/lanuv_14Nov_modified.csv", parseLANUV),
 	d3.csv("data/Sensebox_Geist_14-11-19.csv", function(d) {
@@ -465,10 +476,10 @@ function handleStepEnterC(response, data) {
 	});
 
 	// update image based on step
-	scrollyC.img.attr("src", "img/" + scrollyImg[response.index]);
+	//scrollyC.img.attr("src", "img/" + scrollyImg[response.index]);
 	// update map based on step
-	// updateMap(response.index);
-	// figure.select("p").text(response.index);
+	 //updateMap(response.index);
+	 //figure.select("p").text(response.index);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
