@@ -1,5 +1,5 @@
-const initCoord = [51.96, 7.63];
-const initZoom = 12;
+const initCoord = [51.95, 7.63];
+const initZoom = 14;
 
 const stationGeist = [51.936482, 7.611609]; // lat lon
 const stationWeseler = [51.953275, 7.619379];
@@ -161,27 +161,86 @@ mapB.fitBounds(boundsMuensterSmall);
 //////////////////////////////////////////////////////////////
 /// map C
 //////////////////////////////////////////////////////////////
-/*
+
 var mapC = L.map("mapC", {
 	// disable all zoom controls that interfere with scrolling
-	// zoomControl: false,
+	zoomControl: false,
 	scrollWheelZoom: false,
 	doubleClickZoom: false,
-	touchZoom: false
-	// boxZoom: false
-	// dragging: false
-}).setView([51.97, 7.63], 13);
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+	touchZoom: false,
+	boxZoom: false,
+	dragging: false
+}).setView(initCoord, initZoom);
+
+L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
 	attribution:
-		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
 }).addTo(mapC);
 
-var layer = L.leafletGeotiff("data/idw_14-11.tif").addTo(mapC);
-console.log(layer);
-mapC.invalidateSize();
-*/
+// add interpolation
+var imageURL = "data/idw_14-11.png";
+var imageBounds = [[51.93095,7.60295],[51.96405,7.62205]];
+var layer = L.imageOverlay(imageURL,imageBounds,{ opacity: 0.7});
+layer.addTo(mapC);
 
+// add stations
+stationOptions = {
+    color: '#0570b0',
+    fillColor: '#74a9cf',
+    fillOpacity: 0.5,
+    radius: 10
+};
+var geist = L.circleMarker(stationGeist, stationOptions).addTo(mapC);
+var weseler = L.circleMarker(stationWeseler,stationOptions).addTo(mapC);
+
+// add POI
+const poiPos = [51.957,7.609];
+let poi = L.circleMarker(poiPos,{
+    fillColor: "#ffffff",//"#7a0177",
+    color: "#ae017e",
+    //zIndexOffset: 1
+}).addTo(mapC);
+
+// add line
+const latSep = 51.945;
+const dotSep = [latSep,7.5]
+const linePos = [dotSep,[latSep,7.7]];
+let line = L.polyline(linePos, {
+    color: "#49006a"
+}).addTo(mapC);
+
+// add color
+
+const bBoxN = [dotSep, [52,7.7]];
+const bBoxS = [dotSep, [51.9,7.7]];
+
+let backgroundN = L.rectangle(bBoxN, {
+    color: "#004529",
+    fillColor: "#41ab5d",
+    opacity: 0.7
+}).addTo(mapC);
+
+let backgroundS = L.rectangle(bBoxS, {
+                      color: "#081d58",
+                      fillColor: "#41b6c4",
+                      opacity: 0.7
+                  }).addTo(mapC);
+
+
+// question mark
+const questionUrl = "img/question-mark.png";
+const questionBBox = [[51.958,7.606],[51.962,7.601]];
+
+
+let qm = L.imageOverlay(questionUrl, questionBBox,{ opacity: 1, zindex: 100});
+qm.addTo(mapC);
+// end creating elements
+
+mapC.invalidateSize();
+
+//////////
 // DATA
+//////////
 Promise.all([
 	d3.csv("data/lanuv_14Nov_modified.csv", parseLANUV),
 	d3.csv("data/Sensebox_Geist_14-11-19.csv", function(d) {
@@ -465,10 +524,10 @@ function handleStepEnterC(response, data) {
 	});
 
 	// update image based on step
-	scrollyC.img.attr("src", "img/" + scrollyImg[response.index]);
+	//scrollyC.img.attr("src", "img/" + scrollyImg[response.index]);
 	// update map based on step
-	// updateMap(response.index);
-	// figure.select("p").text(response.index);
+	 //updateMap(response.index);
+	 //figure.select("p").text(response.index);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
