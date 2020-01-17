@@ -133,5 +133,5 @@ linearGauge = new HyyanAF.LinearGauge(gauge,65,0)
 	.drawPointerLanuv(40, "#d9d9d9", 5)
 	.drawPointerLanuv(50, "#d9d9d9", 5)
 	.drawPointerLanuv(60, "#d9d9d9", 5)
-	.drawPointer(35, "#4CAF50", "35")
-	.drawPointer(15, "#28572b", "15");
+	.drawPointer(35, "#ff760d", "35")
+	.drawPointer(15, "#af5a0d", "15");
