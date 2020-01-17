@@ -288,7 +288,7 @@ function redrawGauge(pointerBike,pointerLanuv) {
           .drawPointer((pointerLanuv>62) ? 62 : (pointerLanuv<0) ? 0 : pointerLanuv, "#af5a0d", "" + Math.round(pointerLanuv * 100) / 100)
 					.drawPointer((pointerBike>62) ? 62 : (pointerBike<0) ? 0 : pointerBike, "#ff760d", "" + Math.round(pointerBike * 100) / 100)				;
     } else {
-        linearGauge = new HyyanAF.LinearGauge(gauge,65,0)
+        linearGauge = new HyyanAF.LinearGauge(gauge,0,65)
           .draw("0", "65")
           .drawPointerLanuv(10, "#d9d9d9", 5)
           .drawPointerLanuv(20, "#d9d9d9", 5)
@@ -426,10 +426,7 @@ function visualizeParticles(pm10Value){
         let dust = document.createElement('a-entity');
         dust.setAttribute('position', '0 2.25 -15');
         dust.setAttribute('id', 'particles ' + pm10Value);
-        pm10ValueVisualized = pm10Value * 1000;
-        if (pm10ValueVisualized > 25000) {
-            pm10ValueVisualized = 25000;
-        }
+        pm10ValueVisualized = Math.floor(translateRange(pm10Value, 65, 0, 200000, 0));
         dust.setAttribute('particle-system', 'preset: dust; particleCount: ' + pm10ValueVisualized + ';  color: #61210B, #61380B, #3B170B');
         scene.appendChild(dust);
     }

@@ -1,8 +1,8 @@
 var linearGauge;
 function translateRange(Input , inputHigh , inputLow , outputHigh , OutputLow) {
 
-	inputHigh = inputHigh ? inputHigh : this.inputHigh;
-	inputLow = inputLow ? inputLow : this.inputLow;
+	inputHigh = inputHigh ? inputHigh : (this.inputHigh ? this.inputHigh : 65);
+	inputLow = inputLow ? inputLow : (this.inputLow ? this.inputLow : 0);
 
 	outputHigh =  outputHigh ? outputHigh : 1;
 	OutputLow = OutputLow ? OutputLow : 0;
@@ -125,7 +125,7 @@ function translateRange(Input , inputHigh , inputLow , outputHigh , OutputLow) {
 }(window.HyyanAF = window.HyyanAF || {}));
 
 
-linearGauge = new HyyanAF.LinearGauge(gauge,65,0)
+linearGauge = new HyyanAF.LinearGauge(gauge,0, 65)
 	.draw("0", "65")
 	.drawPointerLanuv(10, "#d9d9d9", 5)
 	.drawPointerLanuv(20, "#d9d9d9", 5)
