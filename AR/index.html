@@ -19,7 +19,6 @@
   <!-- D3 -->
   <script src="https://d3js.org/d3.v5.min.js"></script>
 
-
   <script>
   THREEx.ArToolkitContext.baseURL = 'https://raw.githack.com/jeromeetienne/ar.js/master/three.js/'
   </script>
@@ -60,12 +59,12 @@ onload="introduction(1);">
   screenshot
   device-orientation-permission-ui>
   <a-camera gps-camera="minDistance: 20;" rotation-reader id="camera" camera-listener id="camera">
-    <a-entity id="arrow" style="visibility: hidden" arrow="direction: 0 1 0; length: 0.7; headWidth: 0.2; color: #4CAF50;" position="0 -1.5 -2.7"></a-entity>
+    <a-entity id="arrow" style="visibility: hidden" arrow="direction: 0 1 0; length: 0.7; headWidth: 0.2; color: #ff760d;" position="0 -1.5 -2.7"></a-entity>
   </a-camera>
 </a-scene>
 
 <div class="centered">
-  <div id="distance" style="visibility: hidden"></div>
+  <div id="distance" style="visibility: hidden">ClosestDataPoint: -.-- km</div>
 </div>
 
 <div class="top-right" id="guide-buttons">
@@ -85,7 +84,6 @@ onload="introduction(1);">
 </div>
 
 <div class="information" id="information" style="display: none;">
-  <div id = "settings">
   <h3>Air quality in Münster (PM10)</h3>
     <p> Choose a dataset:</p>
     <div class="slidecontainer">
@@ -97,99 +95,6 @@ onload="introduction(1);">
             <br>
       <button onclick="introduction(1)" id="infoBtn" > Show Intro </button>
 
-    </div>
-
-
-</div>
-<div id="map">
-  <iframe src="https://www.google.com/maps/d/embed?mid=1wKBvzSgLyZSQiVaxqd-n2ABefUzxqcMY" width="100%" height="480px">
-    <br>
-    B219 54, 48151 Münster, Germany
-Head southwest on Weseler Str./B219 toward Kolde-Ring<br>
-1.03 km<br>
-Turn left onto Sentmaringer Weg<br>
-86 m<br>
-Turn right onto AlthoffstraßePartial restricted usage road<br>
-405 m<br>
-Turn right onto Inselbogen<br>
-10 m<br>
-Turn left to stay on Inselbogen<br>
-132 m<br>
-Turn left onto Oberschlesier Str.<br>
-51 m<br>
-Turn right to stay on Oberschlesier Str.<br>
-95 m<br>
-Turn right onto Gut Insel<br>
-67 m<br>
-Make a U-turn at Kappenberger Damm<br>
-67 m<br>
-Turn right onto Oberschlesier Str.<br>
-174 m<br>
-Turn right to stay on Oberschlesier Str.<br>
-107 m<br>
-Turn right onto Kappenberger Damm<br>
-173 m<br>
-Turn right onto Gut Insel<br>
-90 m<br>
-Turn right onto Oberschlesier Str.<br>
-474 m<br>
-Turn left onto Kappenberger Damm<br>
-124 m<br>
-Turn left onto Sudetenweg<br>
-219 m<br>
-Turn left at Glatzer Weg<br>
-87 m<br>
-Turn right<br>
-269 m<br>
-Turn right toward Saarbrücker Str.<br>
-19 m<br>
-Turn left onto Saarbrücker Str.<br>
-151 m<br>
-Turn left onto Habichtshöhe<br>
-296 m<br>
-Turn left onto Gut Insel<br>
-376 m<br>
-Make a U-turn<br>
-376 m<br>
-Turn left onto HabichtshöhePartial restricted usage road<br>
-242 m<br>
-Turn left to stay on HabichtshöheRestricted usage road<br>
-64 m<br>
-Continue onto Grüner GrundPartial restricted usage road<br>
-115 m<br>
-Turn left to stay on Grüner GrundRestricted usage road<br>
-164 m<br>
-Turn right onto Inselbogen<br>
-85 m<br>
-Turn left onto Oberschlesier Str.<br>
-207 m<br>
-Turn right onto Gut Insel<br>
-90 m<br>
-Turn left onto Kappenberger Damm<br>
-66 m<br>
-Turn right onto Franz-Hitze-Straße<br>
-115 m<br>
-Turn left onto RüpingstraßePartial restricted usage road<br>
-124 m<br>
-Turn right onto Eifelstraße<br>
-189 m<br>
-Turn right to stay on Eifelstraße<br>
-80 m<br>
-Turn right onto Weseler Str./B219<br>
-548 m<br>
-Turn right onto Inselbogen<br>
-27 m<br>
-Turn right onto Kappenberger Damm<br>
-316 m<br>
-Turn right onto Franz-Hitze-Straße<br>
-187 m<br>
-Turn right onto Weseler Str./B219Destination will be on the right<br>
-1.52 km<br>
-<br>
-Weseler Str. 93, 48151 Münster, Germany<br>
-<br>
-    <button onclick="showAndHideMap()" id="infoBtn"> Close </button>
-  </iframe>
 </div>
 </div>
 
