@@ -171,24 +171,18 @@ var mapC = L.map("mapC", {
 	boxZoom: false,
 	dragging: false
 }).setView(initCoord, initZoom);
+
 L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
 	attribution:
 		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
 }).addTo(mapC);
 
-var layer = L.leafletGeotiff(
-    "data/idw_14-11.tif",
-    {
-          renderer: new L.LeafletGeotiff.Plotty({
-          band: 1,
-            colorScale: 'greys'
-          })
-    }
-    ).addTo(mapC);
-console.log(layer);
-console.log(layer.getValueAtLatLng(51.96,7.62));
-mapC.invalidateSize();
+var imageURL = "data/idw_14-11.png";
+var imageBounds = [[51.93095,7.60295],[51.96405,7.62205]];
+var layer = L.imageOverlay(imageURL,imageBounds,{ opacity: 0.5});
+layer.addTo(mapC);
 
+mapC.invalidateSize();
 
 //////////
 // DATA
