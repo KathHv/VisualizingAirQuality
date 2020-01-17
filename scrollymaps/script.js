@@ -177,10 +177,64 @@ L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
 		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
 }).addTo(mapC);
 
+// add interpolation
 var imageURL = "data/idw_14-11.png";
 var imageBounds = [[51.93095,7.60295],[51.96405,7.62205]];
-var layer = L.imageOverlay(imageURL,imageBounds,{ opacity: 0.5});
+var layer = L.imageOverlay(imageURL,imageBounds,{ opacity: 0.7});
 layer.addTo(mapC);
+
+// add stations
+stationOptions = {
+    color: '#0570b0',
+    fillColor: '#74a9cf',
+    fillOpacity: 0.5,
+    radius: 10
+};
+var geist = L.circleMarker(stationGeist, stationOptions).addTo(mapC);
+var weseler = L.circleMarker(stationWeseler,stationOptions).addTo(mapC);
+
+// add POI
+const poiPos = [51.957,7.609];
+let poi = L.circleMarker(poiPos,{
+    fillColor: "#ffffff",//"#7a0177",
+    color: "#ae017e",
+    //zIndexOffset: 1
+}).addTo(mapC);
+
+// add line
+const latSep = 51.945;
+const dotSep = [latSep,7.5]
+const linePos = [dotSep,[latSep,7.7]];
+let line = L.polyline(linePos, {
+    color: "#49006a"
+}).addTo(mapC);
+
+// add color
+
+const bBoxN = [dotSep, [52,7.7]];
+const bBoxS = [dotSep, [51.9,7.7]];
+
+let backgroundN = L.rectangle(bBoxN, {
+    color: "#004529",
+    fillColor: "#41ab5d",
+    opacity: 0.7
+}).addTo(mapC);
+
+let backgroundS = L.rectangle(bBoxS, {
+                      color: "#081d58",
+                      fillColor: "#41b6c4",
+                      opacity: 0.7
+                  }).addTo(mapC);
+
+
+// question mark
+const questionUrl = "img/question-mark.png";
+const questionBBox = [[51.958,7.606],[51.962,7.601]];
+
+
+let qm = L.imageOverlay(questionUrl, questionBBox,{ opacity: 1, zindex: 100});
+qm.addTo(mapC);
+// end creating elements
 
 mapC.invalidateSize();
 
