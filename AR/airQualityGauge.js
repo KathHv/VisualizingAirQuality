@@ -1,8 +1,8 @@
 var linearGauge;
 function translateRange(Input , inputHigh , inputLow , outputHigh , OutputLow) {
 
-	inputHigh = inputHigh ? inputHigh : this.inputHigh;
-	inputLow = inputLow ? inputLow : this.inputLow;
+	inputHigh = inputHigh ? inputHigh : (this.inputHigh ? this.inputHigh : 65);
+	inputLow = inputLow ? inputLow : (this.inputLow ? this.inputLow : 0);
 
 	outputHigh =  outputHigh ? outputHigh : 1;
 	OutputLow = OutputLow ? OutputLow : 0;
@@ -35,30 +35,15 @@ function translateRange(Input , inputHigh , inputLow , outputHigh , OutputLow) {
 
 		translateRange: translateRange,
 
-		draw: function(stops, min, max){
+		draw: function(min, max){
 
 			// setup drawing context
 			var ctx = this.canvas.getContext("2d");
 			//clear before redrawing
 			ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 
-			// define the gradient
-			var gradient = ctx.createLinearGradient(
-				0, 0, 0, this.canvasHeight
-			);
-
-			// draw stops from an array
-			// where every item is an array contains
-			// the position and the color of the gradient
-			for (var i = 0; i < stops.length; i++) {
-				gradient.addColorStop(
-					this.translateRange(stops[i][0]),
-					stops[i][1]
-				);
-			}
-
 			// defines the fill style on canvas
-			ctx.fillStyle = gradient;
+			ctx.fillStyle = '#3a3a3a';
 
 			// draw the a rect filled with created gradient
 			ctx.fillRect(this.canvasWidth/4, 0, this.canvasWidth/2, this.canvasHeight);
@@ -107,12 +92,12 @@ function translateRange(Input , inputHigh , inputLow , outputHigh , OutputLow) {
 
 			width = width ? width : 10;
 			ctx.strokeStyle = color ? color : '#000';
-			ctx.lineWidth = 3;
+			ctx.lineWidth = 2;
 
 			// draw line indicate a value
 			ctx.beginPath();
 			ctx.moveTo(
-				0,
+				this.canvasWidth/2 - width/2,
 				this.translateRange(
 					value,
 					this.inputHigh,
@@ -122,7 +107,7 @@ function translateRange(Input , inputHigh , inputLow , outputHigh , OutputLow) {
 				)
 			);
 			ctx.lineTo(
-				width,
+				this.canvasWidth/2 + width/2,
 				this.translateRange(
 					value,
 					this.inputHigh,
@@ -139,18 +124,14 @@ function translateRange(Input , inputHigh , inputLow , outputHigh , OutputLow) {
 	}
 }(window.HyyanAF = window.HyyanAF || {}));
 
-// Init
-var gauge = document.getElementById('gauge');
-var colourPct = d3.zip(
-	d3.range(0, 66, 6).map(d => Math.round(d)),
-	d3.schemeRdBu[11]
-);
-var stops = [];
-for(let i = colourPct.length-1; i>=0; i--) {
-	stops.push([colourPct[i][0],colourPct[(colourPct.length-1) - i][1]]);
-}
 
-linearGauge = new HyyanAF.LinearGauge(gauge,65,0)
-	.draw(stops, "0", "65")
-	.drawPointer(30, "#4CAF50", "30")
-	.drawPointerLanuv(13, "#0c0c26", 65);
+linearGauge = new HyyanAF.LinearGauge(gauge,0, 65)
+	.draw("0", "65")
+	.drawPointerLanuv(10, "#d9d9d9", 5)
+	.drawPointerLanuv(20, "#d9d9d9", 5)
+	.drawPointerLanuv(30, "#d9d9d9", 5)
+	.drawPointerLanuv(40, "#d9d9d9", 5)
+	.drawPointerLanuv(50, "#d9d9d9", 5)
+	.drawPointerLanuv(60, "#d9d9d9", 5)
+	.drawPointer(35, "#ff760d", "35")
+	.drawPointer(15, "#af5a0d", "15");

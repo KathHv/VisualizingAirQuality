@@ -278,14 +278,27 @@ function distance(lat1, lon1, lat2, lon2, unit) {
 function redrawGauge(pointerBike,pointerLanuv) {
     if (linearGauge) {
         linearGauge
-          .draw(stops, "0", "65")
-          .drawPointer(pointerBike, "#4CAF50", "" + Math.round(pointerBike * 100) / 100)
-          .drawPointerLanuv(pointerLanuv, "#0c0c26", 65);
+          .draw("0", "65")
+          .drawPointerLanuv(10, "#d9d9d9", 5)
+          .drawPointerLanuv(20, "#d9d9d9", 5)
+          .drawPointerLanuv(30, "#d9d9d9", 5)
+          .drawPointerLanuv(40, "#d9d9d9", 5)
+          .drawPointerLanuv(50, "#d9d9d9", 5)
+          .drawPointerLanuv(60, "#d9d9d9", 5)
+          .drawPointer((pointerLanuv>62) ? 62 : (pointerLanuv<0) ? 0 : pointerLanuv, "#af5a0d", "" + Math.round(pointerLanuv * 100) / 100)
+					.drawPointer((pointerBike>62) ? 62 : (pointerBike<0) ? 0 : pointerBike, "#ff760d", "" + Math.round(pointerBike * 100) / 100)				;
     } else {
-        linearGauge = new HyyanAF.LinearGauge(gauge,65,0)
-          .draw(stops, "0", "65")
-          .drawPointer((pointerBike>65) ? 65 : (pointerBike<0) ? 0 : pointerBike, "#4CAF50", "" + Math.round(pointerBike * 100) / 100)
-          .drawPointerLanuv((pointerLanuv>65) ? 65 : (pointerLanuv<0) ? 0 : pointerLanuv, "#0c0c26", 65);
+        linearGauge = new HyyanAF.LinearGauge(gauge,0,65)
+          .draw("0", "65")
+          .drawPointerLanuv(10, "#d9d9d9", 5)
+          .drawPointerLanuv(20, "#d9d9d9", 5)
+          .drawPointerLanuv(30, "#d9d9d9", 5)
+          .drawPointerLanuv(40, "#d9d9d9", 5)
+          .drawPointerLanuv(50, "#d9d9d9", 5)
+          .drawPointerLanuv(60, "#d9d9d9", 5)
+          .drawPointer((pointerLanuv>62) ? 62 : (pointerLanuv<0) ? 0 : pointerLanuv, "#af5a0d", "" + Math.round(pointerLanuv * 100) / 100)
+					.drawPointer((pointerBike>62) ? 62 : (pointerBike<0) ? 0 : pointerBike, "#ff760d", "" + Math.round(pointerBike * 100) / 100)
+				;
     }
 }
 
@@ -413,10 +426,7 @@ function visualizeParticles(pm10Value){
         let dust = document.createElement('a-entity');
         dust.setAttribute('position', '0 2.25 -15');
         dust.setAttribute('id', 'particles ' + pm10Value);
-        pm10ValueVisualized = pm10Value * 1000;
-        if (pm10ValueVisualized > 25000) {
-            pm10ValueVisualized = 25000;
-        }
+        pm10ValueVisualized = Math.floor(translateRange(pm10Value, 65, 0, 200000, 0));
         dust.setAttribute('particle-system', 'preset: dust; particleCount: ' + pm10ValueVisualized + ';  color: #61210B, #61380B, #3B170B');
         scene.appendChild(dust);
     }

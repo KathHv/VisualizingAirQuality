@@ -19,7 +19,6 @@
   <!-- D3 -->
   <script src="https://d3js.org/d3.v5.min.js"></script>
 
-
   <script>
   THREEx.ArToolkitContext.baseURL = 'https://raw.githack.com/jeromeetienne/ar.js/master/three.js/'
   </script>
@@ -60,12 +59,12 @@ onload="introduction(1);">
   screenshot
   device-orientation-permission-ui>
   <a-camera gps-camera="minDistance: 20;" rotation-reader id="camera" camera-listener id="camera">
-    <a-entity id="arrow" style="visibility: hidden" arrow="direction: 0 1 0; length: 0.7; headWidth: 0.2; color: #4CAF50;" position="0 -1.5 -2.7"></a-entity>
+    <a-entity id="arrow" style="visibility: hidden" arrow="direction: 0 1 0; length: 0.7; headWidth: 0.2; color: #ff760d;" position="0 -1.5 -2.7"></a-entity>
   </a-camera>
 </a-scene>
 
 <div class="centered">
-  <div id="distance" style="visibility: hidden"></div>
+  <div id="distance" style="visibility: hidden">ClosestDataPoint: -.-- km</div>
 </div>
 
 <div class="top-right" id="guide-buttons">
