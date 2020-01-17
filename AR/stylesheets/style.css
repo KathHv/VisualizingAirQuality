@@ -1,8 +1,4 @@
-button {
--webkit-appearance: none;
--moz-appearance: none;
-appearance: none;
-}
+
 
 .centered {
     align-items: center;
@@ -66,7 +62,7 @@ appearance: none;
   right: 10%;
   text-align: center;
   background-color: #555;
-  color: white;
+  color: #f3f3f3;
   align: center;
   overflow-y: scroll;
 }
@@ -85,7 +81,7 @@ appearance: none;
   right: 20%;
   text-align: center;
   background-color: #555;
-  color: white;
+  color: #f3f3f3;
   font-size: 85%;
   align: center;
   overflow-y: scroll;
@@ -104,12 +100,13 @@ appearance: none;
 .bottom {
   position: fixed;
   display: flex;
-  padding: 0.2em;
+
   left: 80%;
   right:5%;
   width:15%;
+  height: 20%;
   text-align: center;
-  bottom: 5vh;
+  /*bottom: 5vh;*/
   min-width: 50px;
   font-size: 4vh; /* Increased font-size */
   z-index:99999;
@@ -119,32 +116,42 @@ appearance: none;
 
 i{
   align-items: center;
-  background-color: #4CAF50;
+  background-color: #ff760d;
   padding: 0.2em;
+  color: #f3f3f3;
 }
 
 p{
-  width: 100%
+  width: 100%;
+  color: #f3f3f3;
+}
+
+button {
+-webkit-appearance: none;
+-moz-appearance: none;
+appearance: none;
+align-items: center;
+justify-content: center;
+color: #f3f3f3;
+  border: none;
 }
 
 #popupBtn, #introBtn , #infoBtn, #iconBarBtn{
     display: flex;
     font-size: 0.9em;
-    background-color: #4CAF50;
-    color: white;
+    background-color: #ff760d;
+    color: #f3f3f3;
     outline: none;
     text-align: center;
-    border-width: 1px;
-    border-color: #006600;
-    padding: 0.2em; /* Add some padding */
+      border: none;
 }
 
 #iconBarBtn, #guideBtn {
   text-align: center;
-  background-color: #4CAF50; /* Add an active/current color */
+  background-color: #ff760d; /* Add an active/current color */
   padding: 0.2em; /* Add some padding */
   transition: all 0.3s ease; /* Add transition for hover effects */
-  color: white; /* White text color */
+  color: #f3f3f3; /* White text color */
   font-size: 5.5vh; /* Increased font-size */
 
   border: none;
@@ -173,7 +180,7 @@ p{
   width: 25px;
   height: 25px;
   border-radius: 50%;
-  background: #4CAF50;
+  background: #ff760d;
   cursor: pointer;
 }
 
@@ -181,39 +188,25 @@ p{
   width: 25px;
   height: 25px;
   border-radius: 50%;
-  background: #4CAF50;
+  background: #ff760d;
   cursor: pointer;
 }
 
 /*---------------------links---------------------------*/
 
 /* unvisited link */
-a:link {
- color: #4CAF50;
-}
-
-/* visited link */
-a:visited {
- color: #006600;
-
-}
-
-/* mouse over link */
-a:hover {
- color: #006600;
-}
-
-/* selected link */
-a:active {
- color: #66ff66;
+a {
+ color: #ff760d;
 }
 
 #distance {
-    background-color: #555;
-    color: white;
+    background-color: #ff760d;
+    color: #f3f3f3;
     display: inline-block;
     padding: 5px;
     font-weight-absolute: bold;
+    min-width: 20%;
+    min-height: 10%;
 }
 
 .navbar-toggle {
@@ -232,6 +225,6 @@ a:active {
   text-align: center; /* Center-align text */
   padding: 16px; /* Add some padding */
   transition: all 0.3s ease; /* Add transition for hover effects */
-  color: white; /* White text color */
+  color: #f3f3f3; /* White text color */
   font-size: 36px; /* Increased font-size */
 }

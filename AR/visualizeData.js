@@ -15,6 +15,8 @@ var cameraOrientation=0;
 var direction;
 var guideAreas;
 var date = "1";
+var arrowOrigin;
+var arrowDestination;
 
 x = {
     currentPositionInternal: undefined,
@@ -172,11 +174,12 @@ function startNavigation(dataArray) {
                 let directionCoordinate = getDirectionCoordinate(dataArray,val);
                 direction = getAngle(val.coords.latitude, val.coords.longitude, directionCoordinate.lat, directionCoordinate.lon);
                 let closestDistance = getClosest(dataArray,val).distance;
-
+                arrowOrigin = val;
+                arrowDestination = directionCoordinate;
               distDiv.innerHTML = "Closest Data Point: " + (Math.round(closestDistance * 100) / 100) + " km";
                 distDiv.style.visibility = "visible";
             }, "direction");
-            distDiv.onclick = function(){showAndHideMap()};
+            distDiv.onclick = function(){urlToNavMap()};
             x.registerListener(function(val) {
                 let closest = getClosest(dataArray,val).closest;
                 if (!closestPointToCurrentPosition) {
@@ -467,14 +470,14 @@ function introduction(step){
     break;
 
     case 4:
-    introduction4.style.display = "block";
+    introduction4.style.display = "flex";
     document.getElementById("gaugeContainer").style.visibility = "visible";
     document.getElementById("distance").style.visibility = "visible";
     document.getElementById("arrow").setAttribute("visible",true);
     break;
 
     case 5:
-    introduction5.style.display = "block";
+    introduction5.style.display = "flex";
     break;
 
     case 6:
@@ -499,11 +502,7 @@ function showAndHideInformation(){
     for(var i = 0; i < introduction.length; i++) {
       introduction[i].style.display = "none";
     }
-    var settings = document.getElementById("settings");
-    var map = document.getElementById("map");
     information.style.display = "flex";
-    settings.style.display = "flex";
-    map.style.display = "none";
 
   }
   else{
@@ -521,34 +520,30 @@ function setDate(){
 
 //------------------- Map ----------------------------------------
 /*
-* hides or shows the map block on top of the AR
+* opens Google Maps with the route to the next routing point (which the navigation arrow points on)
 */
-function showAndHideMap(){
+function urlToNavMap(){
 
-  var information = document.getElementById("information");
-
-	if(information.style.display === "none"){
-    var introduction = document.getElementsByClassName("introduction");
-    for(var i = 0; i < introduction.length; i++) {
-      introduction[i].style.display = "none";
+  var information = document.getElementById("distance");
+  try {
+    var destinationCoord = getDirectionCoordinate();
+    var originCoord = getCurrentPosition();
+    if(destinationCoord == NULL || originCoord == NULL){
+      throw "destinationCoord or originCoord is null.";
     }
-    var settings = document.getElementById("settings");
-    var map = document.getElementById("map");
-    information.style.display = "flex";
-    settings.style.display = "none";
-    map.style.display = "flex";
-  }
-  else{
-    information.style.display = "none";
+    var url ="https://www.google.com/maps/dir/?api=1&origin="+arrowOrigin.coords.latitude+"%2C"+arrowOrigin.coords.longitude+"&destination="+arrowDestination.lat+"%2C"+arrowDestination.lon+"&travelmode=walking";
+  } catch (e) {
+    var url ="https://drive.google.com/open?id=1wKBvzSgLyZSQiVaxqd-n2ABefUzxqcMY&usp=sharing";
+  } finally {
+    console.log(originCoord);
+    console.log(destinationCoord);
+    console.log(url);
+    window.open(url);
   }
 }
 
-function setDate(){
-  date =  document.getElementById("range").value;
 
-  showAndHideInformation();
-  loadContent(date);
-}
+
 
 //------------------- Initial Function after Introduction ----------------------------------------
 
