@@ -162,7 +162,7 @@ mapB.fitBounds(boundsMuensterSmall);
 /// map C
 //////////////////////////////////////////////////////////////
 
-var mapC = L.map("mapC", {
+const mapC = L.map("mapC", {
 	// disable all zoom controls that interfere with scrolling
 	zoomControl: false,
 	scrollWheelZoom: false,
@@ -177,64 +177,64 @@ L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
 		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
 }).addTo(mapC);
 
+// create elements
 // add interpolation
-var imageURL = "data/idw_14-11.png";
-var imageBounds = [[51.93095,7.60295],[51.96405,7.62205]];
-var layer = L.imageOverlay(imageURL,imageBounds,{ opacity: 0.7});
-layer.addTo(mapC);
+const imageURL = "data/idw_14-11.png";
+const imageBounds = [[51.93095,7.60295],[51.96405,7.62205]];
+const interpolation = L.imageOverlay(imageURL,imageBounds,{ opacity: 0.7});
 
 // add stations
-stationOptions = {
+const stationOptions = {
     color: '#0570b0',
     fillColor: '#74a9cf',
     fillOpacity: 0.5,
     radius: 10
 };
-var geist = L.circleMarker(stationGeist, stationOptions).addTo(mapC);
-var weseler = L.circleMarker(stationWeseler,stationOptions).addTo(mapC);
+const geist = L.circleMarker(stationGeist, stationOptions);
+const weseler = L.circleMarker(stationWeseler,stationOptions);
 
 // add POI
 const poiPos = [51.957,7.609];
-let poi = L.circleMarker(poiPos,{
+const poi = L.circleMarker(poiPos,{
     fillColor: "#ffffff",//"#7a0177",
     color: "#ae017e",
     //zIndexOffset: 1
-}).addTo(mapC);
+});
 
 // add line
 const latSep = 51.945;
 const dotSep = [latSep,7.5]
 const linePos = [dotSep,[latSep,7.7]];
-let line = L.polyline(linePos, {
+const line = L.polyline(linePos, {
     color: "#49006a"
-}).addTo(mapC);
+});
 
 // add color
-
 const bBoxN = [dotSep, [52,7.7]];
 const bBoxS = [dotSep, [51.9,7.7]];
 
-let backgroundN = L.rectangle(bBoxN, {
+const backgroundN = L.rectangle(bBoxN, {
     color: "#004529",
     fillColor: "#41ab5d",
-    opacity: 0.7
-}).addTo(mapC);
+    opacity: 0.1
+});
 
-let backgroundS = L.rectangle(bBoxS, {
-                      color: "#081d58",
-                      fillColor: "#41b6c4",
-                      opacity: 0.7
-                  }).addTo(mapC);
+const backgroundS = L.rectangle(bBoxS, {
+    color: "#081d58",
+    fillColor: "#41b6c4",
+    opacity: 0.1
+});
 
 
 // question mark
 const questionUrl = "img/question-mark.png";
 const questionBBox = [[51.958,7.606],[51.962,7.601]];
+const qm = L.imageOverlay(questionUrl, questionBBox,{ opacity: 1, zindex: 100});
 
-
-let qm = L.imageOverlay(questionUrl, questionBBox,{ opacity: 1, zindex: 100});
-qm.addTo(mapC);
-// end creating elements
+// create layergroups
+const group1 = L.layerGroup([geist,weseler,poi]);
+const group2 = L.layerGroup([backgroundN,backgroundS,line]);
+// end creating elements for mapC
 
 mapC.invalidateSize();
 
@@ -523,11 +523,35 @@ function handleStepEnterC(response, data) {
 		return i === response.index;
 	});
 
-	// update image based on step
-	//scrollyC.img.attr("src", "img/" + scrollyImg[response.index]);
-	// update map based on step
-	 //updateMap(response.index);
-	 //figure.select("p").text(response.index);
+    //console.log(response.index);
+
+    // add or remove element of map depending on the textbox at the left
+    switch (response.index) {
+        case 0:
+            mapC.removeLayer(group2);
+            mapC.removeLayer(interpolation);
+            group1.addTo(mapC);
+            break;
+        case 1:
+            mapC.removeLayer(interpolation);
+            mapC.removeLayer(qm);
+            group2.addTo(mapC);
+            group1.addTo(mapC);
+            break;
+        case 2:
+            mapC.removeLayer(group2);
+            mapC.removeLayer(qm);
+            interpolation.addTo(mapC);
+            group1.addTo(mapC);
+            break;
+        case 3:
+            mapC.removeLayer(interpolation);
+            mapC.removeLayer(group2);
+            group1.addTo(mapC);
+            qm.addTo(mapC);
+            break;
+    }
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////
