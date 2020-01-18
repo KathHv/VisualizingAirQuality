@@ -19,35 +19,35 @@ var arrowOrigin;
 var arrowDestination;
 
 x = {
-    currentPositionInternal: undefined,
-    currentPositionListener: [],
-    set currentPosition(val) {
-        if (!this.currentPositionInternal || this.currentPositionInternal.coords !== val.coords) {
-            this.currentPositionInternal = val;
-            this.currentPositionListener.forEach(function (listener) {
-                listener.function(val);
-            });
-        }
-    },
-    get currentPosition() {
-        return this.currentPositionInternal;
-    },
-    registerListener: function(listener,name) {
-
-        this.currentPositionListener = this.currentPositionListener.filter(function( obj ) {
-            return obj.name !== name;
-        });
-
-        this.currentPositionListener.push({
-            name: name,
-            function: listener
-        });
-    },
-    callListeners: function(position) {
-        this.currentPositionListener.forEach(function (listener) {
-            listener.function(position);
-        });
+  currentPositionInternal: undefined,
+  currentPositionListener: [],
+  set currentPosition(val) {
+    if (!this.currentPositionInternal || this.currentPositionInternal.coords !== val.coords) {
+      this.currentPositionInternal = val;
+      this.currentPositionListener.forEach(function (listener) {
+        listener.function(val);
+      });
     }
+  },
+  get currentPosition() {
+    return this.currentPositionInternal;
+  },
+  registerListener: function(listener,name) {
+
+    this.currentPositionListener = this.currentPositionListener.filter(function( obj ) {
+      return obj.name !== name;
+    });
+
+    this.currentPositionListener.push({
+      name: name,
+      function: listener
+    });
+  },
+  callListeners: function(position) {
+    this.currentPositionListener.forEach(function (listener) {
+      listener.function(position);
+    });
+  }
 };
 
 
@@ -58,12 +58,12 @@ JL("mylogger").setOptions({"appenders": []});
 
 // this is similar to an endless loop which keeps on calling the function "getDirection"
 Promise.resolve().then(function resolver() {
-    return getPosition()
-        .then(function (position) {
-            x.currentPosition = position;
-        })
-        .then(resolver)
-        .catch(console.error);
+  return getPosition()
+    .then(function (position) {
+      x.currentPosition = position;
+    })
+    .then(resolver)
+    .catch(console.error);
 }).catch(console.error);
 
 /**
@@ -71,15 +71,15 @@ Promise.resolve().then(function resolver() {
  * @returns {Promise<any>}
  */
 function getPosition() {
-    return new Promise(function(resolve, reject) {
-        try {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                resolve(position);
-            });
-        } catch (e) {
-            reject(e);
-        }
-    });
+  return new Promise(function(resolve, reject) {
+    try {
+      navigator.geolocation.getCurrentPosition(function (position) {
+        resolve(position);
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
 }
 
 
@@ -93,12 +93,12 @@ function getPosition() {
  * @returns theta - the angle
  */
 function getAngle(lat1, lng1, lat2, lng2) {
-    var dy = lng2 - lng1;
-    var dx = lat2 - lat1;
-    var theta = Math.atan2(dy, dx); // range (-PI, PI]
-    theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
-    //if (theta < 0) theta = 360 + theta; // range [0, 360)
-    return theta;
+  var dy = lng2 - lng1;
+  var dx = lat2 - lat1;
+  var theta = Math.atan2(dy, dx); // range (-PI, PI]
+  theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
+  //if (theta < 0) theta = 360 + theta; // range [0, 360)
+  return theta;
 }
 
 
@@ -106,13 +106,13 @@ function getAngle(lat1, lng1, lat2, lng2) {
 
 
 function loadGuideAreas(dataArray) {
-          addGuideAreas(dataArray);
-          x.registerListener(function(val) {
-                  checkForGuideArea(dataArray,val);
-          }, "guide-areas");
-          if (x.currentPosition) {
-              x.callListeners(x.currentPosition);
-          }
+  addGuideAreas(dataArray);
+  x.registerListener(function(val) {
+    checkForGuideArea(dataArray,val);
+  }, "guide-areas");
+  if (x.currentPosition) {
+    x.callListeners(x.currentPosition);
+  }
 }
 
 /**
@@ -123,42 +123,42 @@ function loadGuideAreas(dataArray) {
  * @param position - the current position
  */
 function checkForGuideArea(dataArray, position) {
-    let possibleGuideAreas = getClosest(dataArray,position);
-    if (possibleGuideAreas.distance < 0.2) {
-        addGuide(possibleGuideAreas.closest.text);
-    } else {
-        removeGuide();
-    }
+  let possibleGuideAreas = getClosest(dataArray,position);
+  if (possibleGuideAreas.distance < 0.2) {
+    addGuide(possibleGuideAreas.closest.text);
+  } else {
+    removeGuide();
+  }
 }
 
 /**
-* visualizes data in the AR, writes into html
-*@param dataArray: array which contains the RELEVANT data of the air quality in format [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
-*/
+ * visualizes data in the AR, writes into html
+ *@param dataArray: array which contains the RELEVANT data of the air quality in format [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
+ */
 function addGuideAreas(dataArray){
-    JL("mylogger").info("--------visualizeData()--------");
-    let scene = document.querySelector('a-scene');
+  JL("mylogger").info("--------visualizeData()--------");
+  let scene = document.querySelector('a-scene');
 
-    dataArray.forEach((place) => {
-        let latitude = place.lat;
-        let longitude = place.lon;
+  dataArray.forEach((place) => {
+    let latitude = place.lat;
+    let longitude = place.lon;
 
-        // add place icon
-        let icon = document.createElement('a-ring');
-        icon.setAttribute('gps-entity-place', `latitude: ` + latitude + `; longitude: `+ longitude + `;`);
-        icon.setAttribute('name', place.name);
-        icon.setAttribute('color', '#f55a42');
-        icon.setAttribute('rotation', '-90 0 0');
-        icon.setAttribute('radius-inner', '1');
-        icon.setAttribute('radius-outer', '1.2');
-        icon.setAttribute('height', '-5');
+    // add place icon
+    let icon = document.createElement('a-ring');
+    icon.setAttribute('gps-entity-place', `latitude: ` + latitude + `; longitude: `+ longitude + `;`);
+    icon.setAttribute('name', place.name);
+    icon.setAttribute('color', '#f55a42');
+    icon.setAttribute('rotation', '-90 0 0');
+    icon.setAttribute('radius-inner', '1');
+    icon.setAttribute('radius-outer', '1.2');
+    icon.setAttribute('height', '-5');
 
-        // for debug purposes, just show in a bigger scale, otherwise I have to personally go on places...
-        icon.setAttribute('scale', '5 5 5');
+    // for debug purposes, just show in a bigger scale, otherwise I have to personally go on places...
+    icon.setAttribute('scale', '5 5 5');
 
-        icon.addEventListener('loaded', () => window.dispatchEvent(new CustomEvent('gps-entity-place-loaded')));
-        scene.appendChild(icon);
-    });
+    icon.addEventListener('loaded', () => window.dispatchEvent(new CustomEvent('gps-entity-place-loaded')));
+    scene.appendChild(icon);
+  });
 }
 
 
@@ -169,33 +169,33 @@ function addGuideAreas(dataArray){
  * Load the data and then use it for the navigation
  */
 function startNavigation(dataArray) {
-            let distDiv = document.getElementById("distance");
-            x.registerListener(function(val) {
-                let directionCoordinate = getDirectionCoordinate(dataArray,val);
-                direction = getAngle(val.coords.latitude, val.coords.longitude, directionCoordinate.lat, directionCoordinate.lon);
-                let closestDistance = getClosest(dataArray,val).distance;
-                arrowOrigin = val;
-                arrowDestination = directionCoordinate;
-              distDiv.innerHTML = "Closest Data Point: " + (Math.round(closestDistance * 100) / 100) + " km";
-                distDiv.style.visibility = "visible";
-            }, "direction");
-            distDiv.onclick = function(){urlToNavMap()};
-            x.registerListener(function(val) {
-                let closest = getClosest(dataArray,val).closest;
-                if (!closestPointToCurrentPosition) {
-                    closestPointToCurrentPosition = closest;
-                }
-                let closestLanuvPm10 = getClosest(getLanuvPm10(), val).closest.pm10;
-                if (closestPointToCurrentPosition !== closest || lanuvPm10 !== closestLanuvPm10) {
-                    closestPointToCurrentPosition = closest;
-                    lanuvPm10 = closestLanuvPm10;
-                    visualizeParticles(closest.pm10);
-                    redrawGauge(closest.pm10,closestLanuvPm10);
-                }
-            }, "particles");
-    if (x.currentPosition) {
-        x.callListeners(x.currentPosition);
+  let distDiv = document.getElementById("distance");
+  x.registerListener(function(val) {
+    let directionCoordinate = getDirectionCoordinate(dataArray,val);
+    direction = getAngle(val.coords.latitude, val.coords.longitude, directionCoordinate.lat, directionCoordinate.lon);
+    let closestDistance = getClosest(dataArray,val).distance;
+    arrowOrigin = val;
+    arrowDestination = directionCoordinate;
+    distDiv.innerHTML = "Closest Data Point: " + (Math.round(closestDistance * 100) / 100) + " km";
+    distDiv.style.visibility = "visible";
+  }, "direction");
+  distDiv.onclick = function(){urlToNavMap()};
+  x.registerListener(function(val) {
+    let closest = getClosest(dataArray,val).closest;
+    if (!closestPointToCurrentPosition) {
+      closestPointToCurrentPosition = closest;
     }
+    let closestLanuvPm10 = getClosest(getLanuvPm10(), val).closest.pm10;
+    if (closestPointToCurrentPosition !== closest || lanuvPm10 !== closestLanuvPm10) {
+      closestPointToCurrentPosition = closest;
+      lanuvPm10 = closestLanuvPm10;
+      visualizeParticles(closest.pm10);
+      redrawGauge(closest.pm10,closestLanuvPm10);
+    }
+  }, "particles");
+  if (x.currentPosition) {
+    x.callListeners(x.currentPosition);
+  }
 }
 
 
@@ -203,19 +203,19 @@ function startNavigation(dataArray) {
 
 
 function getClosest(dataArray,position) {
-    let closest = dataArray[0];
-    let minDistance = Infinity;
-    dataArray.forEach(function (current) {
-        let currentDistance = distance(current.lat, current.lon, position.coords.latitude, position.coords.longitude, "K");
-        if (currentDistance < minDistance) {
-            minDistance = currentDistance;
-            closest = current;
-        }
-    });
-    return {
-        closest: closest,
-        distance: minDistance
-    };
+  let closest = dataArray[0];
+  let minDistance = Infinity;
+  dataArray.forEach(function (current) {
+    let currentDistance = distance(current.lat, current.lon, position.coords.latitude, position.coords.longitude, "K");
+    if (currentDistance < minDistance) {
+      minDistance = currentDistance;
+      closest = current;
+    }
+  });
+  return {
+    closest: closest,
+    distance: minDistance
+  };
 }
 
 
@@ -229,15 +229,15 @@ function getClosest(dataArray,position) {
  * @param position
  */
 function getDirectionCoordinate(dataArray,position) {
-    let closest = getClosest(dataArray,position).closest;
-    let directionCoordinate = dataArray.find(coordinate => coordinate.name === closest.name + 2);
+  let closest = getClosest(dataArray,position).closest;
+  let directionCoordinate = dataArray.find(coordinate => coordinate.name === closest.name + 2);
+  if (!directionCoordinate) {
+    directionCoordinate = dataArray.find(coordinate => coordinate.name === closest.name + 1);
     if (!directionCoordinate) {
-        directionCoordinate = dataArray.find(coordinate => coordinate.name === closest.name + 1);
-        if (!directionCoordinate) {
-            directionCoordinate = closest;
-        }
+      directionCoordinate = closest;
     }
-    return directionCoordinate;
+  }
+  return directionCoordinate;
 }
 
 /**
@@ -251,55 +251,55 @@ function getDirectionCoordinate(dataArray,position) {
  * @returns {number} - returns distance in the specified unit
  */
 function distance(lat1, lon1, lat2, lon2, unit) {
-    if ((lat1 == lat2) && (lon1 == lon2)) {
-        return 0;
+  if ((lat1 == lat2) && (lon1 == lon2)) {
+    return 0;
+  }
+  else {
+    var radlat1 = Math.PI * lat1/180;
+    var radlat2 = Math.PI * lat2/180;
+    var theta = lon1-lon2;
+    var radtheta = Math.PI * theta/180;
+    var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+    if (dist > 1) {
+      dist = 1;
     }
-    else {
-        var radlat1 = Math.PI * lat1/180;
-        var radlat2 = Math.PI * lat2/180;
-        var theta = lon1-lon2;
-        var radtheta = Math.PI * theta/180;
-        var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-        if (dist > 1) {
-            dist = 1;
-        }
-        dist = Math.acos(dist);
-        dist = dist * 180/Math.PI;
-        dist = dist * 60 * 1.1515;
-        if (unit==="K") { dist = dist * 1.609344 }
-        if (unit==="N") { dist = dist * 0.8684 }
-        return dist;
-    }
+    dist = Math.acos(dist);
+    dist = dist * 180/Math.PI;
+    dist = dist * 60 * 1.1515;
+    if (unit==="K") { dist = dist * 1.609344 }
+    if (unit==="N") { dist = dist * 0.8684 }
+    return dist;
+  }
 }
 
 //------------------- Gauge ----------------------------------------
 
 
 function redrawGauge(pointerBike,pointerLanuv) {
-    if (linearGauge) {
-        linearGauge
-          .draw("0", "65")
-          .drawPointerLanuv(10, "#d9d9d9", 5)
-          .drawPointerLanuv(20, "#d9d9d9", 5)
-          .drawPointerLanuv(30, "#d9d9d9", 5)
-          .drawPointerLanuv(40, "#d9d9d9", 5)
-          .drawPointerLanuv(50, "#d9d9d9", 5)
-          .drawPointerLanuv(60, "#d9d9d9", 5)
-          .drawPointer((pointerLanuv>62) ? 62 : (pointerLanuv<0) ? 0 : pointerLanuv, "#af5a0d", "" + Math.round(pointerLanuv * 100) / 100)
-					.drawPointer((pointerBike>62) ? 62 : (pointerBike<0) ? 0 : pointerBike, "#ff760d", "" + Math.round(pointerBike * 100) / 100)				;
-    } else {
-        linearGauge = new HyyanAF.LinearGauge(gauge,0,65)
-          .draw("0", "65")
-          .drawPointerLanuv(10, "#d9d9d9", 5)
-          .drawPointerLanuv(20, "#d9d9d9", 5)
-          .drawPointerLanuv(30, "#d9d9d9", 5)
-          .drawPointerLanuv(40, "#d9d9d9", 5)
-          .drawPointerLanuv(50, "#d9d9d9", 5)
-          .drawPointerLanuv(60, "#d9d9d9", 5)
-          .drawPointer((pointerLanuv>62) ? 62 : (pointerLanuv<0) ? 0 : pointerLanuv, "#af5a0d", "" + Math.round(pointerLanuv * 100) / 100)
-					.drawPointer((pointerBike>62) ? 62 : (pointerBike<0) ? 0 : pointerBike, "#ff760d", "" + Math.round(pointerBike * 100) / 100)
-				;
-    }
+  if (linearGauge) {
+    linearGauge
+      .draw("0", "65")
+      .drawStep(10, "#d9d9d9", 5)
+      .drawStep(20, "#d9d9d9", 5)
+      .drawStep(30, "#d9d9d9", 5)
+      .drawStep(40, "#d9d9d9", 5)
+      .drawStep(50, "#d9d9d9", 5)
+      .drawStep(60, "#d9d9d9", 5)
+      .drawPointer((pointerLanuv>62) ? 62 : (pointerLanuv<0) ? 0 : pointerLanuv, "#af5a0d", "" + Math.round(pointerLanuv * 100) / 100)
+      .drawPointer((pointerBike>62) ? 62 : (pointerBike<0) ? 0 : pointerBike, "#ff760d", "" + Math.round(pointerBike * 100) / 100)				;
+  } else {
+    linearGauge = new HyyanAF.LinearGauge(gauge,0,65)
+      .draw("0", "65")
+      .drawStep(10, "#d9d9d9", 5)
+      .drawStep(20, "#d9d9d9", 5)
+      .drawStep(30, "#d9d9d9", 5)
+      .drawStep(40, "#d9d9d9", 5)
+      .drawStep(50, "#d9d9d9", 5)
+      .drawStep(60, "#d9d9d9", 5)
+      .drawPointer((pointerLanuv>62) ? 62 : (pointerLanuv<0) ? 0 : pointerLanuv, "#af5a0d", "" + Math.round(pointerLanuv * 100) / 100)
+      .drawPointer((pointerBike>62) ? 62 : (pointerBike<0) ? 0 : pointerBike, "#ff760d", "" + Math.round(pointerBike * 100) / 100)
+    ;
+  }
 }
 
 
@@ -344,18 +344,7 @@ function removeGuide() {
  * @returns {Function}
  */
 function openClosePopup() {
-    return function() {
-      var guidePane = document.getElementById("guideAreaInfo");
-      if(guidePane.style.visibility === "hidden"){
-        guidePane.style.visibility = "visible";
-      }
-      else{
-        guidePane.style.visibility = "hidden";
-      }
-    };
-}
-
-function openClosePopup2() {
+  return function() {
     var guidePane = document.getElementById("guideAreaInfo");
     if(guidePane.style.visibility === "hidden"){
       guidePane.style.visibility = "visible";
@@ -363,82 +352,93 @@ function openClosePopup2() {
     else{
       guidePane.style.visibility = "hidden";
     }
+  };
+}
+
+function openClosePopup2() {
+  var guidePane = document.getElementById("guideAreaInfo");
+  if(guidePane.style.visibility === "hidden"){
+    guidePane.style.visibility = "visible";
+  }
+  else{
+    guidePane.style.visibility = "hidden";
+  }
 }
 
 
 
 function getLanuvPm10(){
-    let lanuv = [];
-    if(date === "2"){
-        lanuv1912.forEach(function (e){
-            if(e.time.getHours() === closestPointToCurrentPosition.time.getHours()) {
-                lanuv.push({
-                    lat: 51.953289,
-                    lon: 7.619380,
-                    pm10: e.pm10_Weseler
-                });
-                lanuv.push({
-                    lat: 51.936482,
-                    lon: 7.611618,
-                    pm10: e.pm10_Geist
-                });
-            }
+  let lanuv = [];
+  if(date === "2"){
+    lanuv1912.forEach(function (e){
+      if(e.time.getHours() === closestPointToCurrentPosition.time.getHours()) {
+        lanuv.push({
+          lat: 51.953289,
+          lon: 7.619380,
+          pm10: e.pm10_Weseler
         });
-    }
-    else
-    {
-        lanuv1411.forEach(function (e){
-            if(e.time.getHours() === closestPointToCurrentPosition.time.getHours()) {
-                lanuv.push({
-                    lat: 51.953289,
-                    lon: 7.619380,
-                    pm10: e.pm10_Weseler
-                });
-                lanuv.push({
-                    lat: 51.936482,
-                    lon: 7.611618,
-                    pm10: e.pm10_Geist
-                });
-            }
+        lanuv.push({
+          lat: 51.936482,
+          lon: 7.611618,
+          pm10: e.pm10_Geist
         });
-    }
-    return lanuv;
+      }
+    });
+  }
+  else
+  {
+    lanuv1411.forEach(function (e){
+      if(e.time.getHours() === closestPointToCurrentPosition.time.getHours()) {
+        lanuv.push({
+          lat: 51.953289,
+          lon: 7.619380,
+          pm10: e.pm10_Weseler
+        });
+        lanuv.push({
+          lat: 51.936482,
+          lon: 7.611618,
+          pm10: e.pm10_Geist
+        });
+      }
+    });
+  }
+  return lanuv;
 }
 
 
 //------------------- Particles ----------------------------------------
 
 /**
-* This function visualizes the particles in the AR.
-*@param pm10Value
-*/
+ * This function visualizes the particles in the AR.
+ *@param pm10Value
+ */
 function visualizeParticles(pm10Value){
-    JL("mylogger").info("--------visualizeParticles()--------");
+  JL("mylogger").info("--------visualizeParticles()--------");
 
-    if (document.getElementById("particles " + pm10Value) === null) {
-        // remove all other particle-systems
-        let alreadyExisting = document.querySelectorAll('[id^="particles"]');
-        alreadyExisting.forEach(function(current) {
-            current.parentNode.removeChild(current);
-        });
-        // add particle icon
-        let scene = document.querySelector('a-scene');
-        let dust = document.createElement('a-entity');
-        dust.setAttribute('position', '0 2.25 -15');
-        dust.setAttribute('id', 'particles ' + pm10Value);
-        pm10ValueVisualized = Math.floor(translateRange(pm10Value, 65, 0, 200000, 0));
-        dust.setAttribute('particle-system', 'preset: dust; particleCount: ' + pm10ValueVisualized + ';  color: #61210B, #61380B, #3B170B');
-        scene.appendChild(dust);
-    }
+  if (document.getElementById("particles " + pm10Value) === null) {
+    // remove all other particle-systems
+    let alreadyExisting = document.querySelectorAll('[id^="particles"]');
+    alreadyExisting.forEach(function(current) {
+      current.parentNode.removeChild(current);
+    });
+    // add particle icon
+    let scene = document.querySelector('a-scene');
+    let dust = document.createElement('a-entity');
+    dust.setAttribute('position', '0 2.25 -15');
+    dust.setAttribute('id', 'particles ' + pm10Value);
+    pm10ValueVisualized = Math.floor(translateRange(pm10Value, 65, 0, 200000, 0));
+    dust.setAttribute('particle-system', 'preset: dust; particleCount: ' + pm10ValueVisualized + ';  color: #61210B, #61380B, #3B170B');
+    scene.appendChild(dust);
+  }
 }
 
 
 //------------------- Introduction ----------------------------------------
 
 /**
-*Function that controlles the content of the introduction.
-* @param step Number between 1 and 6, displays page of introduction
-*/
+ *Function that controlles the content of the introduction.
+ * @param step Number between 1 and 6, displays page of introduction
+ */
 function introduction(step){
   var information = document.getElementById("information");
   information.style.display = "none";
@@ -462,40 +462,40 @@ function introduction(step){
 
   switch (step){
     case 1:
-    introduction1.style.display = "flex";
-    document.getElementById("gaugeContainer").style.visibility = "hidden";
-    document.getElementById("distance").style.visibility = "hidden";
-    document.getElementById("arrow").setAttribute("visible",false);
-    visualizeParticles(5);
-    break;
+      introduction1.style.display = "flex";
+      document.getElementById("gaugeContainer").style.visibility = "hidden";
+      document.getElementById("distance").style.visibility = "hidden";
+      document.getElementById("arrow").setAttribute("visible",false);
+      visualizeParticles(5);
+      break;
 
     case 2:
-    introduction2.style.display = "flex";
-    visualizeParticles(40);
-    break;
+      introduction2.style.display = "flex";
+      visualizeParticles(40);
+      break;
 
     case 3:
-    introduction3.style.display = "flex";
-    visualizeParticles(15);
-    break;
+      introduction3.style.display = "flex";
+      visualizeParticles(15);
+      break;
 
     case 4:
-    introduction4.style.display = "flex";
-    document.getElementById("gaugeContainer").style.visibility = "visible";
-    document.getElementById("distance").style.visibility = "visible";
-    document.getElementById("arrow").setAttribute("visible",true);
-    break;
+      introduction4.style.display = "flex";
+      document.getElementById("gaugeContainer").style.visibility = "visible";
+      document.getElementById("distance").style.visibility = "visible";
+      document.getElementById("arrow").setAttribute("visible",true);
+      break;
 
     case 5:
-    introduction5.style.display = "flex";
-    break;
+      introduction5.style.display = "flex";
+      break;
 
     case 6:
-    for(var i = 0; i < introduction.length; i++) {
-      introduction[i].style.display = "none";
-    }
-    loadContent();
-    break;
+      for(var i = 0; i < introduction.length; i++) {
+        introduction[i].style.display = "none";
+      }
+      loadContent();
+      break;
   }
 }
 
@@ -507,7 +507,7 @@ function showAndHideInformation(){
 
   var information = document.getElementById("information");
 
-	if(information.style.display === "none"){
+  if(information.style.display === "none"){
     var introduction = document.getElementsByClassName("introduction");
     for(var i = 0; i < introduction.length; i++) {
       introduction[i].style.display = "none";
@@ -562,9 +562,9 @@ function urlToNavMap(){
  */
 function loadContent(date) {
 
-    readAllData()
-      .then(function () {
-          loadGuideAreas((date === "1") ? guide1411 : guide1912);
-          startNavigation((date === "1") ? bike1411 : bike1912);
-      });
+  readAllData()
+    .then(function () {
+      loadGuideAreas((date === "1") ? guide1411 : guide1912);
+      startNavigation((date === "1") ? bike1411 : bike1912);
+    });
 }

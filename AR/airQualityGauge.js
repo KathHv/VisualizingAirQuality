@@ -27,7 +27,7 @@ function translateRange(Input , inputHigh , inputLow , outputHigh , OutputLow) {
 		this.canvasHeight = Number(canvas.getAttribute("height"));
 		this.x = this.canvasWidth/2;
 		this.w = this.x;
-	}
+	};
 
 	HyyanAF.LinearGauge.prototype = {
 
@@ -48,7 +48,7 @@ function translateRange(Input , inputHigh , inputLow , outputHigh , OutputLow) {
 			// draw the a rect filled with created gradient
 			ctx.fillRect(this.canvasWidth/4, 0, this.canvasWidth/2, this.canvasHeight);
 
-			this.drawMinMax(min, max)
+			this.drawMinMax(min, max);
 
 			return this;
 		},
@@ -74,18 +74,18 @@ function translateRange(Input , inputHigh , inputLow , outputHigh , OutputLow) {
 			var ctx = this.canvas.getContext("2d");
 			ctx.beginPath();
 			ctx.fillStyle = color ? color : '#000';
-			ctx.arc(this.x, y, this.w, 0, 2 * Math.PI, false);
+			ctx.arc(this.x, this.canvasHeight - y, this.w, 0, 2 * Math.PI, false);
 			ctx.fill();
 
 			ctx.font = '8pt Calibri';
 			ctx.fillStyle = 'white';
 			ctx.textAlign = 'center';
-			ctx.fillText(content, this.x, y+3);
+			ctx.fillText(content, this.x, this.canvasHeight - y + 3);
 
 			return this;
 
 		},
-		drawPointerLanuv:  function(value,color,width){
+		drawStep:  function(value, color, width){
 
 			// setup drawing context
 			var ctx = this.canvas.getContext("2d");
@@ -98,6 +98,7 @@ function translateRange(Input , inputHigh , inputLow , outputHigh , OutputLow) {
 			ctx.beginPath();
 			ctx.moveTo(
 				this.canvasWidth/2 - width/2,
+				this.canvasHeight -
 				this.translateRange(
 					value,
 					this.inputHigh,
@@ -108,6 +109,7 @@ function translateRange(Input , inputHigh , inputLow , outputHigh , OutputLow) {
 			);
 			ctx.lineTo(
 				this.canvasWidth/2 + width/2,
+				this.canvasHeight -
 				this.translateRange(
 					value,
 					this.inputHigh,
@@ -127,11 +129,11 @@ function translateRange(Input , inputHigh , inputLow , outputHigh , OutputLow) {
 
 linearGauge = new HyyanAF.LinearGauge(gauge,0, 65)
 	.draw("0", "65")
-	.drawPointerLanuv(10, "#d9d9d9", 5)
-	.drawPointerLanuv(20, "#d9d9d9", 5)
-	.drawPointerLanuv(30, "#d9d9d9", 5)
-	.drawPointerLanuv(40, "#d9d9d9", 5)
-	.drawPointerLanuv(50, "#d9d9d9", 5)
-	.drawPointerLanuv(60, "#d9d9d9", 5)
+	.drawStep(10, "#d9d9d9", 5)
+	.drawStep(20, "#d9d9d9", 5)
+	.drawStep(30, "#d9d9d9", 5)
+	.drawStep(40, "#d9d9d9", 5)
+	.drawStep(50, "#d9d9d9", 5)
+	.drawStep(60, "#d9d9d9", 5)
 	.drawPointer(35, "#ff760d", "35")
 	.drawPointer(15, "#af5a0d", "15");
