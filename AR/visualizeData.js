@@ -144,14 +144,16 @@ function addGuideAreas(dataArray){
     let longitude = place.lon;
 
     // add place icon
-    let icon = document.createElement('a-ring');
-    icon.setAttribute('gps-entity-place', `latitude: ` + latitude + `; longitude: `+ longitude + `;`);
+    let icon = document.createElement('a-torus');
+		icon.setAttribute('position', '0 -5 0');
+		icon.setAttribute('gps-entity-place', `latitude: ` + latitude + `; longitude: `+ longitude + `;`);
     icon.setAttribute('name', place.name);
-    icon.setAttribute('color', '#f55a42');
+    icon.setAttribute('color', '#ff760d');
     icon.setAttribute('rotation', '-90 0 0');
-    icon.setAttribute('radius-inner', '1');
-    icon.setAttribute('radius-outer', '1.2');
-    icon.setAttribute('height', '-5');
+    icon.setAttribute('radius', '1');
+    icon.setAttribute('radius-tubular', '0.05');
+		icon.setAttribute('material', 'opacity: 0.5');
+    // add a marker for better visibility
 
     // for debug purposes, just show in a bigger scale, otherwise I have to personally go on places...
     icon.setAttribute('scale', '5 5 5');
