@@ -48,66 +48,77 @@
 <body style='margin: 0; overflow: hidden; font-family: Helvetica, Verdana, Times, serif; font-size: 1.3em;' id="visArea"
 onload="introduction(1);">
 
-  <a-scene
-  vr-mode-ui="enabled: false"
-  embedded
-  arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;'
-  cursor="rayOrigin: mouse; fuse: true; fuseTimeout: 0;"
-  raycaster="objects: [gps-entity-place];"
-  inspector
-  keyboard-shortcuts
-  screenshot
-  device-orientation-permission-ui>
-  <a-camera gps-camera="minDistance: 20;" rotation-reader id="camera" camera-listener id="camera" wasd-controls-enabled="false">
-    <a-entity id="arrow" style="visibility: hidden" arrow="direction: 0 1 0; length: 0.7; headWidth: 0.2; color: #ff760d;" position="0 -1.5 -2.7"></a-entity>
-  </a-camera>
+<!-- AR.js scene with entities and camera -->
+<a-scene
+vr-mode-ui="enabled: false"
+embedded
+arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;'
+cursor="rayOrigin: mouse; fuse: true; fuseTimeout: 0;"
+raycaster="objects: [gps-entity-place];"
+inspector
+keyboard-shortcuts
+screenshot
+device-orientation-permission-ui>
+<a-camera gps-camera="minDistance: 20;" rotation-reader id="camera" camera-listener id="camera">
+  <a-entity id="arrow" style="visibility: hidden" arrow="direction: 0 1 0; length: 0.7; headWidth: 0.2; color: #ff760d;" position="0 -1.5 -2.7"></a-entity>
+</a-camera>
 </a-scene>
 
+
+<!-- Button for clostest data point and routing -->
 <div class="centered">
   <div id="distance" style="visibility: hidden">ClosestDataPoint: -.-- km</div>
 </div>
 
+
+<!-- Button which appears when being in a guide area -->
 <div class="top-right" id="guide-buttons">
 </div>
 
-  <div class="right" style="visibility: hidden" id="gaugeContainer">
-    <div style="text-align:center; font-size: 12px; background-color: #555; color: white; padding: 0.1em;">PM10 (ppm)</div>
-    <canvas id="gauge" width="30" height="300" style="margin-right: 0px;"></canvas>
-  </div>
-
-<div class="top-left">
-
-    <button onclick=showAndHideInformation() id="iconBarBtn"><i class="fa fa-question-circle"></i></button>
-     <a href="../" class="active" id="iconBarBtn"><i class="fa fa-globe"></i></a>
 
 
+<!-- Gauge container -->
+<div class="right" style="visibility: hidden" id="gaugeContainer">
+  <div style="text-align:center; font-size: 12px; background-color: #555; color: white; padding: 0.1em;">PM10 (ppm)</div>
+  <canvas id="gauge" width="30" height="300" style="margin-right: 0px;"></canvas>
 </div>
 
+
+<!-- Icon bar -->
+<div class="top-left">
+  <button onclick=showAndHideInformation() id="iconBarBtn"><i class="fa fa-question-circle"></i></button>
+  <a href="../" class="active" id="iconBarBtn"><i class="fa fa-globe"></i></a>
+</div>
+
+
+<!-- Information/Settings area -->
 <div class="information" id="information" style="display: none;">
   <h3>Air quality in Münster (PM10)</h3>
-    <p> Choose a dataset:</p>
-    <div class="slidecontainer">
-      <input type="range" min="1" max="2" value="1" class="slider" id="range">
-      <p style="text-align:left;"> 14/11/2019  -  19/12/2019 </p>
-            <button onclick="setDate()"  id="infoBtn"> Set date! </button>
-            <br>
-            <br>
-            <br>
-      <button onclick="introduction(1)" id="infoBtn" > Show Intro </button>
+  <p> Choose a dataset:</p>
+  <div class="slidecontainer">
+    <input type="range" min="1" max="2" value="1" class="slider" id="range">
+    <p style="text-align:left;"> 14/11/2019  -  19/12/2019 </p>
+    <button onclick="setDate()"  id="infoBtn"> Set date! </button>
+    <br>
+    <br>
+    <br>
+    <button onclick="introduction(1)" id="infoBtn" > Show Intro </button>
 
-</div>
-</div>
-
-  <div class="information" id="guideAreaInfo" style="visibility: hidden;">
-    <div id="guideContent"></div>
-
-    <button onclick="openClosePopup2()" class= "bottom" id="guideBtn" style="min-width: 70px;"> Got it! </button>
   </div>
+</div>
 
+
+<!-- Information/Guide Information area -->
+<div class="information" id="guideAreaInfo" style="visibility: hidden;">
+  <div id="guideContent"></div>
+  <button onclick="openClosePopup2()" class= "bottom" id="guideBtn" style="min-width: 70px;"> Got it! </button>
+</div>
+
+<!-- Introduction -->
 <div class="introduction">
   <div  id = "introduction-1">
     <p> This is healthy air with less PM10. <br> (5 microgram PM10)</p>
-      <button onclick="introduction(2)" class= "bottom" id="introBtn"> Next </button>
+    <button onclick="introduction(2)" class= "bottom" id="introBtn"> Next </button>
   </div>
   <div  id = "introduction-2">
     <p> This is unhealthy air with a lot of PM10.<br>  (40 microgram PM10) </p>
@@ -123,16 +134,16 @@ onload="introduction(1);">
       chosen time. <br>
       The arrow shows the direction of the route. Following it, you can find guide areas. </p>
       <button onclick="introduction(5)" class= "bottom" id="introBtn"> Next </button>
-  </div>
-  <div id = "introduction-5">
-    <p> To choose between different dates or to see this introduction again click on the question mark in the top-left corner.
-      More information about air quality is available on <a href = "../"> this site.</a></p>
+    </div>
+    <div id = "introduction-5">
+      <p> To choose between different dates or to see this introduction again click on the question mark in the top-left corner.
+        More information about air quality is available on <a href = "../"> this site.</a></p>
 
-    <button onclick="introduction(6)" class= "bottom" id="introBtn"> Close </button>
-  </div>
-</div>
+        <button onclick="introduction(6)" class= "bottom" id="introBtn"> Close </button>
+      </div>
+    </div>
 
-</body>
-</html>
+  </body>
+  </html>
 
-<script src="airQualityGauge.js"></script>
+  <script src="airQualityGauge.js"></script>

@@ -4,6 +4,9 @@ if (typeof AFRAME === "undefined") {
     throw "Component attempted to register before AFRAME was available.";
 }
 
+/**
+*
+*/
 AFRAME.registerComponent('camera-listener', {
     tick: function () {
         if (typeof direction !== "undefined") {
@@ -18,6 +21,9 @@ AFRAME.registerComponent('camera-listener', {
     }
 });
 
+/**
+*
+*/
 AFRAME.registerComponent("arrow", {
     schema: {
         direction: {

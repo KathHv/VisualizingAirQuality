@@ -1,3 +1,15 @@
+
+/**
+*
+*@var bike1411;
+*@var bike1912;
+*@var sensebox1411;
+*@var sensebox1912;
+*@var lanuv1411;
+*@var lanuv1912;
+*@var guide1411;
+*@var guide1912;
+*/
 var bike1411;
 var bike1912;
 var sensebox1411;
@@ -7,6 +19,10 @@ var lanuv1912;
 var guide1411;
 var guide1912;
 
+/**
+*
+*@param
+*/
 function readAllData() {
 			// DATA
 		 return Promise.all([

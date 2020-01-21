@@ -7,6 +7,13 @@
  *@param currentPosition: current position of the device [lat,lng]
  *@param closestPointToCurrentPosition: point with clostest point on route according to the current position
  *@param visArea: area in document where something can be visualized
+ *@param cameraOrientation
+ *@param direction
+ *@param guideAreas
+ *@param date
+ *@param arrowOrigin
+ *@param arrowDestination
+ *@param x
  */
 var closestPointToCurrentPosition;
 var lanuvPm10;
@@ -51,7 +58,7 @@ x = {
 };
 
 
-// "mylogger" logs to just the console
+// "mylogger" logs to the console
 //@see http://js.jsnlog.com/
 //var consoleAppender = JL.createConsoleAppender('consoleAppender');
 JL("mylogger").setOptions({"appenders": []});
@@ -104,7 +111,9 @@ function getAngle(lat1, lng1, lat2, lng2) {
 
 //------------------- Guide Areas ----------------------------------------
 
-
+/**
+**@param dataArray
+*/
 function loadGuideAreas(dataArray) {
   addGuideAreas(dataArray);
   x.registerListener(function(val) {
@@ -169,6 +178,7 @@ function addGuideAreas(dataArray){
 
 /**
  * Load the data and then use it for the navigation
+ *@param
  */
 function startNavigation(dataArray) {
   let distDiv = document.getElementById("distance");
@@ -203,7 +213,10 @@ function startNavigation(dataArray) {
 
 
 
-
+/**
+*
+*@param
+*/
 function getClosest(dataArray,position) {
   let closest = dataArray[0];
   let minDistance = Infinity;
@@ -276,7 +289,10 @@ function distance(lat1, lon1, lat2, lon2, unit) {
 
 //------------------- Gauge ----------------------------------------
 
-
+/**
+*
+*@param
+*/
 function redrawGauge(pointerBike,pointerLanuv) {
   if (linearGauge) {
     linearGauge
@@ -346,7 +362,22 @@ function removeGuide() {
  * @returns {Function}
  */
 function openClosePopup() {
-  return function() {
+    return function() {
+      var guidePane = document.getElementById("guideAreaInfo");
+      if(guidePane.style.visibility === "hidden"){
+        guidePane.style.visibility = "visible";
+      }
+      else{
+        guidePane.style.visibility = "hidden";
+      }
+    };
+}
+
+/**
+*
+*@param
+*/
+function openClosePopup2() {
     var guidePane = document.getElementById("guideAreaInfo");
     if(guidePane.style.visibility === "hidden"){
       guidePane.style.visibility = "visible";
@@ -367,8 +398,11 @@ function openClosePopup2() {
   }
 }
 
-
-
+/**
+*
+*@param
+*@return
+*/
 function getLanuvPm10(){
   let lanuv = [];
   if(date === "2"){
@@ -523,6 +557,9 @@ function showAndHideInformation(){
   }
 }
 
+/**
+*
+*/
 function setDate(){
   date =  document.getElementById("range").value;
 
@@ -561,6 +598,7 @@ function urlToNavMap(){
 
 /**
  *
+ *@param
  */
 function loadContent(date) {
 

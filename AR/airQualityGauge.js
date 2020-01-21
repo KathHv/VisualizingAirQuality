@@ -1,4 +1,17 @@
+/**
+*
+*@var
+*/
 var linearGauge;
+
+/**
+*
+*@param
+*@param
+*@param
+*@param
+*@param
+*/
 function translateRange(Input , inputHigh , inputLow , outputHigh , OutputLow) {
 
 	inputHigh = inputHigh ? inputHigh : (this.inputHigh ? this.inputHigh : 65);
@@ -11,6 +24,10 @@ function translateRange(Input , inputHigh , inputLow , outputHigh , OutputLow) {
 		(outputHigh - OutputLow) + OutputLow;
 }
 
+/**
+*
+*@param
+*/
 (function(HyyanAF) {
 
 	'use strict';
@@ -29,6 +46,9 @@ function translateRange(Input , inputHigh , inputLow , outputHigh , OutputLow) {
 		this.w = this.x;
 	};
 
+	/**
+	*
+	*/
 	HyyanAF.LinearGauge.prototype = {
 
 		constructor: HyyanAF.LinearGauge,
@@ -126,7 +146,9 @@ function translateRange(Input , inputHigh , inputLow , outputHigh , OutputLow) {
 	}
 }(window.HyyanAF = window.HyyanAF || {}));
 
-
+/**
+*@var
+*/
 linearGauge = new HyyanAF.LinearGauge(gauge,0, 65)
 	.draw("0", "65")
 	.drawStep(10, "#d9d9d9", 5)
