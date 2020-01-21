@@ -179,10 +179,11 @@ L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
 
 // create elements
 // add interpolation
-const imageURL = "data/idw_14-11.png";
-const imageBounds = [[51.93095,7.60295],[51.96405,7.62205]];
+const imageURL = "data/idw_14-11_large.png";
+const imageBounds = [[51.93095,7.58095],[51.96405,7.65905]];
 const interpolation = L.imageOverlay(imageURL,imageBounds,{ opacity: 0.7});
 
+const minExtent = [[51.93095,7.60295],[51.96405,7.62205]];
 // add stations
 const stationOptions = {
     color: '#0570b0',
@@ -523,7 +524,8 @@ function handleStepEnterC(response, data) {
 		return i === response.index;
 	});
 
-    //console.log(response.index);
+
+	mapC.fitBounds(minExtent);
 
     // add or remove element of map depending on the textbox at the left
     switch (response.index) {
