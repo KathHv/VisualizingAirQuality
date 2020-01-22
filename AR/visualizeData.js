@@ -378,14 +378,13 @@ function openClosePopup() {
 *@param
 */
 function openClosePopup2() {
-    var guidePane = document.getElementById("guideAreaInfo");
-    if(guidePane.style.visibility === "hidden"){
-      guidePane.style.visibility = "visible";
-    }
-    else{
-      guidePane.style.visibility = "hidden";
-    }
-  };
+  var guidePane = document.getElementById("guideAreaInfo");
+  if(guidePane.style.visibility === "hidden"){
+    guidePane.style.visibility = "visible";
+  }
+  else{
+    guidePane.style.visibility = "hidden";
+  }
 }
 
 function openClosePopup2() {
