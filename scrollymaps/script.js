@@ -1,6 +1,3 @@
-const initCoord = [51.95, 7.63];
-const initZoom = 14;
-
 const stationGeist = [51.936482, 7.611609]; // lat lon
 const stationWeseler = [51.953275, 7.619379];
 
@@ -170,7 +167,7 @@ const mapC = L.map("mapC", {
 	touchZoom: false,
 	boxZoom: false,
 	dragging: false
-}).setView(initCoord, initZoom);
+});
 
 L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
 	attribution:
@@ -181,9 +178,21 @@ L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
 // add interpolation
 const imageURL = "data/idw_14-11_large.png";
 const imageBounds = [[51.93095,7.58095],[51.96405,7.65905]];
+
 const interpolation = L.imageOverlay(imageURL,imageBounds,{ opacity: 0.7});
 
+const legendC = legendB.cloneNode(true);
+const divLegendC = document.getElementById("legendC");
+divLegendC.append(legendC);
+divLegendC.style.display = "none";
+//
+//// add init coord
 const minExtent = [[51.93095,7.60295],[51.96405,7.62205]];
+//const initLat = minExtent[0][0] + ((minExtent[1][0]-minExtent[0][0])/2);
+//const initLon = minExtent[0][1] + ((minExtent[1][1]-minExtent[0][1])/2);
+//const initCoord = [initLat,initLon];
+//const initZoom = 14;
+//
 // add stations
 const stationOptions = {
     color: '#0570b0',
@@ -237,6 +246,8 @@ const group1 = L.layerGroup([geist,weseler,poi]);
 const group2 = L.layerGroup([backgroundN,backgroundS,line]);
 // end creating elements for mapC
 
+
+mapC.fitBounds(minExtent);
 mapC.invalidateSize();
 
 //////////
@@ -532,11 +543,13 @@ function handleStepEnterC(response, data) {
         case 0:
             mapC.removeLayer(group2);
             mapC.removeLayer(interpolation);
+            divLegendC.style.display = "none";
             group1.addTo(mapC);
             break;
         case 1:
             mapC.removeLayer(interpolation);
             mapC.removeLayer(qm);
+            divLegendC.style.display = "none";
             group2.addTo(mapC);
             group1.addTo(mapC);
             break;
@@ -544,10 +557,12 @@ function handleStepEnterC(response, data) {
             mapC.removeLayer(group2);
             mapC.removeLayer(qm);
             interpolation.addTo(mapC);
+            divLegendC.style.display = "block";
             group1.addTo(mapC);
             break;
         case 3:
             mapC.removeLayer(interpolation);
+            divLegendC.style.display = "none";
             mapC.removeLayer(group2);
             group1.addTo(mapC);
             qm.addTo(mapC);
