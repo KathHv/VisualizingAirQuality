@@ -46,6 +46,7 @@ function parseGuide(d) {
 		name: d.name,
 		lat: +d.lat,
 		lon: +d.lon,
-		text: d.text
+		text: d.text,
+		color: d.color
 	};
 }

@@ -60,7 +60,7 @@ keyboard-shortcuts
 screenshot
 device-orientation-permission-ui>
 <a-camera gps-camera="minDistance: 20;" rotation-reader id="camera" camera-listener id="camera">
-  <a-entity id="arrow" style="visibility: hidden" arrow="direction: 0 1 0; length: 0.7; headWidth: 0.2; color: #ff760d;" position="0 -1.5 -2.7"></a-entity>
+  <a-entity id="arrow" style="visibility: hidden" arrow="direction: 0 1 0; length: 0.7; headWidth: 0.2; color: #ffa15a;" position="0 -1.5 -2.7"></a-entity>
 </a-camera>
 </a-scene>
 
@@ -109,9 +109,9 @@ device-orientation-permission-ui>
 
 
 <!-- Information/Guide Information area -->
-<div class="information" id="guideAreaInfo" style="visibility: hidden;">
+<div class="information" id="guideAreaInfo" style="visibility: hidden; text-align: center;">
   <div id="guideContent"></div>
-  <button onclick="openClosePopup2()" class= "bottom" id="guideBtn" style="min-width: 70px;"> Got it! </button>
+  <button onclick="openClosePopup2()" id="guideBtn"> Got it! </button>
 </div>
 
 <!-- Introduction -->

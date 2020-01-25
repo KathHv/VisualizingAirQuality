@@ -133,7 +133,7 @@ function loadGuideAreas(dataArray) {
  */
 function checkForGuideArea(dataArray, position) {
   let possibleGuideAreas = getClosest(dataArray,position);
-  if (possibleGuideAreas.distance < 0.2) {
+  if (possibleGuideAreas.distance < 0.1) {
     addGuide(possibleGuideAreas.closest.text);
   } else {
     removeGuide();
@@ -157,7 +157,7 @@ function addGuideAreas(dataArray){
 		icon.setAttribute('position', '0 -5 0');
 		icon.setAttribute('gps-entity-place', `latitude: ` + latitude + `; longitude: `+ longitude + `;`);
     icon.setAttribute('name', place.name);
-    icon.setAttribute('color', '#ff760d');
+    icon.setAttribute('color', place.color);
     icon.setAttribute('rotation', '-90 0 0');
     icon.setAttribute('radius', '1');
     icon.setAttribute('radius-tubular', '0.05');
@@ -304,7 +304,7 @@ function redrawGauge(pointerBike,pointerLanuv) {
       .drawStep(50, "#d9d9d9", 5)
       .drawStep(60, "#d9d9d9", 5)
       .drawPointer((pointerLanuv>62) ? 62 : (pointerLanuv<0) ? 0 : pointerLanuv, "#af5a0d", "" + Math.round(pointerLanuv * 100) / 100)
-      .drawPointer((pointerBike>62) ? 62 : (pointerBike<0) ? 0 : pointerBike, "#ff760d", "" + Math.round(pointerBike * 100) / 100)				;
+      .drawPointer((pointerBike>62) ? 62 : (pointerBike<0) ? 0 : pointerBike, "#ffa15a", "" + Math.round(pointerBike * 100) / 100)				;
   } else {
     linearGauge = new HyyanAF.LinearGauge(gauge,0,65)
       .draw("0", "65")
@@ -315,7 +315,7 @@ function redrawGauge(pointerBike,pointerLanuv) {
       .drawStep(50, "#d9d9d9", 5)
       .drawStep(60, "#d9d9d9", 5)
       .drawPointer((pointerLanuv>62) ? 62 : (pointerLanuv<0) ? 0 : pointerLanuv, "#af5a0d", "" + Math.round(pointerLanuv * 100) / 100)
-      .drawPointer((pointerBike>62) ? 62 : (pointerBike<0) ? 0 : pointerBike, "#ff760d", "" + Math.round(pointerBike * 100) / 100)
+      .drawPointer((pointerBike>62) ? 62 : (pointerBike<0) ? 0 : pointerBike, "#ffa15a", "" + Math.round(pointerBike * 100) / 100)
     ;
   }
 }

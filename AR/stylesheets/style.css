@@ -164,6 +164,12 @@ color: #f3f3f3;
   outline: none;
 }
 
+#guideBtn {
+  position: fixed;
+  z-index: 99999;
+  bottom:10%;
+}
+
 
 /*---------------------slider---------------------------*/
 
