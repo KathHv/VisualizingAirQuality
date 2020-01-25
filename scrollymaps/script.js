@@ -5,6 +5,17 @@ const boundsMuensterSmall = [[51.965114, 7.601657], [51.928291, 7.628437]];
 const boundsMuenster = [[51.982262, 7.590976], [51.927088, 7.679865]];
 
 const scrollyImg = ["lanuv.jpg", "sensebox.jpg", "bike.jpg", "All.jpg"];
+const mapInteractions = {
+    // disable all zoom controls that interfere with scrolling
+    keyboard: false,
+    dragging: false,
+    zoomControl: false,
+    boxZoom: false,
+    doubleClickZoom: false,
+    scrollWheelZoom: false,
+    tap: false,
+    touchZoom: false
+};
 
 // time formatters
 var formatTime = d3.timeFormat("%d/%m/%Y, %H:%M");
@@ -116,15 +127,7 @@ handleResize();
 window.addEventListener("resize", handleResize);
 
 // initialise Leaflet map for scrolly B
-var mapB = L.map("mapB", {
-	// disable all zoom controls
-	zoomControl: false,
-	scrollWheelZoom: false,
-	doubleClickZoom: false,
-	touchZoom: false,
-	boxZoom: false,
-	dragging: false
-}).setView([51.97, 7.63], 13);
+var mapB = L.map("mapB", mapInteractions).setView([51.97, 7.63], 13);
 L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
 	attribution:
 		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
@@ -159,15 +162,7 @@ mapB.fitBounds(boundsMuensterSmall);
 /// map C
 //////////////////////////////////////////////////////////////
 
-const mapC = L.map("mapC", {
-	// disable all zoom controls that interfere with scrolling
-	zoomControl: false,
-	scrollWheelZoom: false,
-	doubleClickZoom: false,
-	touchZoom: false,
-	boxZoom: false,
-	dragging: false
-});
+const mapC = L.map("mapC", mapInteractions);
 
 L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
 	attribution:
