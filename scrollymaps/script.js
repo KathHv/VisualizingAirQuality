@@ -212,26 +212,21 @@ const poi = L.circleMarker(poiPos,{
 });
 
 // add line
-const latSep = 51.945;
-const dotSep = [latSep,7.5]
-const linePos = [dotSep,[latSep,7.7]];
+const linePos = [[51.9636,7.5246],[51.928,7.6963]];
 const line = L.polyline(linePos, {
     color: "#49006a"
 });
 
 // add color
-const bBoxN = [dotSep, [52,7.7]];
-const bBoxS = [dotSep, [51.9,7.7]];
+const bBoxN = [linePos[0],linePos[1],[52,7.7],[52,7.5]];
+const bBoxS = [linePos[0],linePos[1],[51.9,7.7],[51.9,7.5]];
 
-const backgroundN = L.rectangle(bBoxN, {
-    color: "#004529",
-    fillColor: "#41ab5d",
+const backgroundN = L.polygon(bBoxN, {
+    fillColor: "#000000",
     opacity: 0.1
 });
-
-const backgroundS = L.rectangle(bBoxS, {
-    color: "#081d58",
-    fillColor: "#41b6c4",
+const backgroundS = L.polygon(bBoxS,{
+    fillColor:"#f7f7f7",
     opacity: 0.1
 });
 
