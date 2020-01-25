@@ -1,6 +1,3 @@
-const initCoord = [51.95, 7.63];
-const initZoom = 14;
-
 const stationGeist = [51.936482, 7.611609]; // lat lon
 const stationWeseler = [51.953275, 7.619379];
 
@@ -8,6 +5,17 @@ const boundsMuensterSmall = [[51.965114, 7.601657], [51.928291, 7.628437]];
 const boundsMuenster = [[51.982262, 7.590976], [51.927088, 7.679865]];
 
 const scrollyImg = ["lanuv.jpg", "sensebox.jpg", "bike.jpg", "All.jpg"];
+const mapInteractions = {
+    // disable all zoom controls that interfere with scrolling
+    keyboard: false,
+    dragging: false,
+    zoomControl: false,
+    boxZoom: false,
+    doubleClickZoom: false,
+    scrollWheelZoom: false,
+    tap: false,
+    touchZoom: false
+};
 
 // time formatters
 var formatTime = d3.timeFormat("%d/%m/%Y, %H:%M");
@@ -119,15 +127,7 @@ handleResize();
 window.addEventListener("resize", handleResize);
 
 // initialise Leaflet map for scrolly B
-var mapB = L.map("mapB", {
-	// disable all zoom controls
-	zoomControl: false,
-	scrollWheelZoom: false,
-	doubleClickZoom: false,
-	touchZoom: false,
-	boxZoom: false,
-	dragging: false
-}).setView([51.97, 7.63], 13);
+var mapB = L.map("mapB", mapInteractions).setView([51.97, 7.63], 13);
 L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
 	attribution:
 		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
@@ -162,15 +162,7 @@ mapB.fitBounds(boundsMuensterSmall);
 /// map C
 //////////////////////////////////////////////////////////////
 
-const mapC = L.map("mapC", {
-	// disable all zoom controls that interfere with scrolling
-	zoomControl: false,
-	scrollWheelZoom: false,
-	doubleClickZoom: false,
-	touchZoom: false,
-	boxZoom: false,
-	dragging: false
-}).setView(initCoord, initZoom);
+const mapC = L.map("mapC", mapInteractions);
 
 L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
 	attribution:
@@ -181,9 +173,21 @@ L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
 // add interpolation
 const imageURL = "data/idw_14-11_large.png";
 const imageBounds = [[51.93095,7.58095],[51.96405,7.65905]];
+
 const interpolation = L.imageOverlay(imageURL,imageBounds,{ opacity: 0.7});
 
+const legendC = legendB.cloneNode(true);
+const divLegendC = document.getElementById("legendC");
+divLegendC.append(legendC);
+divLegendC.style.display = "none";
+//
+//// add init coord
 const minExtent = [[51.93095,7.60295],[51.96405,7.62205]];
+//const initLat = minExtent[0][0] + ((minExtent[1][0]-minExtent[0][0])/2);
+//const initLon = minExtent[0][1] + ((minExtent[1][1]-minExtent[0][1])/2);
+//const initCoord = [initLat,initLon];
+//const initZoom = 14;
+//
 // add stations
 const stationOptions = {
     color: '#0570b0',
@@ -203,26 +207,21 @@ const poi = L.circleMarker(poiPos,{
 });
 
 // add line
-const latSep = 51.945;
-const dotSep = [latSep,7.5]
-const linePos = [dotSep,[latSep,7.7]];
+const linePos = [[51.9636,7.5246],[51.928,7.6963]];
 const line = L.polyline(linePos, {
     color: "#49006a"
 });
 
 // add color
-const bBoxN = [dotSep, [52,7.7]];
-const bBoxS = [dotSep, [51.9,7.7]];
+const bBoxN = [linePos[0],linePos[1],[52,7.7],[52,7.5]];
+const bBoxS = [linePos[0],linePos[1],[51.9,7.7],[51.9,7.5]];
 
-const backgroundN = L.rectangle(bBoxN, {
-    color: "#004529",
-    fillColor: "#41ab5d",
+const backgroundN = L.polygon(bBoxN, {
+    fillColor: "#000000",
     opacity: 0.1
 });
-
-const backgroundS = L.rectangle(bBoxS, {
-    color: "#081d58",
-    fillColor: "#41b6c4",
+const backgroundS = L.polygon(bBoxS,{
+    fillColor:"#f7f7f7",
     opacity: 0.1
 });
 
@@ -237,6 +236,8 @@ const group1 = L.layerGroup([geist,weseler,poi]);
 const group2 = L.layerGroup([backgroundN,backgroundS,line]);
 // end creating elements for mapC
 
+
+mapC.fitBounds(minExtent);
 mapC.invalidateSize();
 
 //////////
@@ -532,11 +533,13 @@ function handleStepEnterC(response, data) {
         case 0:
             mapC.removeLayer(group2);
             mapC.removeLayer(interpolation);
+            divLegendC.style.display = "none";
             group1.addTo(mapC);
             break;
         case 1:
             mapC.removeLayer(interpolation);
             mapC.removeLayer(qm);
+            divLegendC.style.display = "none";
             group2.addTo(mapC);
             group1.addTo(mapC);
             break;
@@ -544,10 +547,12 @@ function handleStepEnterC(response, data) {
             mapC.removeLayer(group2);
             mapC.removeLayer(qm);
             interpolation.addTo(mapC);
+            divLegendC.style.display = "block";
             group1.addTo(mapC);
             break;
         case 3:
             mapC.removeLayer(interpolation);
+            divLegendC.style.display = "none";
             mapC.removeLayer(group2);
             group1.addTo(mapC);
             qm.addTo(mapC);
