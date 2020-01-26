@@ -12,3 +12,7 @@
 ## Links to Sites
 * AR: https://kathhv.github.io/VisualizingAirQuality/AR
 * Webpage: https://kathhv.github.io/VisualizingAirQuality
+
+## References:
+* image stickman: https://www.needpix.com/photo/19195/matchstick-man-man-stickman-stick-figure-character-question-helpless-gesture-hands
+* image guestion mark: https://pixabay.com/vectors/the-question-mark-sign-question-ask-350170/
