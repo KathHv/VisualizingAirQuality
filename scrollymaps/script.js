@@ -52,7 +52,7 @@ var scrollyC = {
 };
 
 // colour scale for pm10
-const pmBounds = [0, 65]; // roughly the range of pm10 values
+const pmBounds = [0, 40]; // roughly the range of pm10 values
 var colourPM10 = d3
 	.scaleSequentialSqrt()
 	.domain([pmBounds[1], pmBounds[0]]) // flip because we want red to be highest
@@ -108,7 +108,7 @@ legend
 // labels
 legend
 	.selectAll("text")
-	.data([[280, "0ppm -"], [0, ">65ppm -"]])
+	.data([[280, pmBounds[0] + "ppm -"], [0, ">" + pmBounds[1] + "ppm -"]])
 	.enter()
 	.append("text")
 	.classed("legendLabel", true)
