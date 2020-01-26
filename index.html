@@ -9,7 +9,7 @@
 		<link rel="stylesheet" type="text/css" href="scrollymaps/styles.css" />
 
 		<link
-			href="https://fonts.googleapis.com/css?family=Gelasio:400,700&display=swap"
+			href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,800|Raleway:900&display=swap"
 			rel="stylesheet"
 		/>
 
@@ -41,30 +41,36 @@
 	</head>
 
 	<body>
+		<canvas class="background"></canvas>
+
 		<main>
 			<section id="intro">
+				<hr />
 				<h1>Air Quality: How much can we trust official data?</h1>
 				<h2>Investigating PM10 data for Münster</h2>
-
+				<hr />
 				<p>
 					Air quality and its effects has been a target for today’s media. The
-					air we breathe does carry some harmful particles called <a href="https://en.wikipedia.org/wiki/Particulates#Health_effects">PM</a> or
-					<u>P</u>articulate <u>M</u>atter. They are broadly categorised into 
-					PM10 and PM 2.5 corresponding to particulate matter smaller than 10 
-					micrometers and 2.5 micrometers respectively. 
+					air we breathe does carry some harmful particles called
+					<a href="https://en.wikipedia.org/wiki/Particulates#Health_effects"
+						>PM</a
+					>
+					or <u>P</u>articulate <u>M</u>atter. They are broadly categorised into
+					PM10 and PM 2.5 corresponding to particulate matter smaller than 10
+					micrometers and 2.5 micrometers respectively.
 				</p>
-				<br>
+				<br />
 				<p>
-					An average human inhales around 12-16 times per minute.
-					This corresponds to approximately 13 kg of air daily. Out of the
+					An average human inhales around 12-16 times per minute. This
+					corresponds to approximately 13 kg of air daily. Out of the
 					recommended standard for PM inhalation by World Health Organization
 					(WHO), we reach about 75% of that limit daily and this number will
-					continue to grow with more urbanization and industrialization. 
+					continue to grow with more urbanization and industrialization.
 				</p>
-				<br>
+				<br />
 				<p>
-					Unfortunately, these particles have
-					major effects on our health. A 2013 report by
+					Unfortunately, these particles have major effects on our health. A
+					2013 report by
 					<a href="https://www.who.int/airpollution/ambient/health-impacts/en/"
 						>WHO</a
 					>
@@ -109,9 +115,9 @@
 					<article>
 						<div class="step" data-step="1">
 							<p>
-								Instruments like this have been deployed all over
-								Germany to measure the quality of air. But these instruments are 
-								neither cheap nor small. This hinders easy and widespread deployment. 
+								Instruments like this have been deployed all over Germany to
+								measure the quality of air. But these instruments are neither
+								cheap nor small. This hinders easy and widespread deployment.
 							</p>
 							<br />
 							<p>
@@ -137,11 +143,12 @@
 								<a href="https://sensebox.github.io/en/">SenseBox</a>, where
 								they provide Do-It-Yourself air quality measurement kits. It is
 								capable of measuring PM10 and PM2.5 with a wide range of sensors
-								configurations. But the qualty of hardware introduces accuracy issues.
+								configurations. But the qualty of hardware introduces accuracy
+								issues.
 							</p>
 							<p>
 								The data can be shared using their
-								<a href="https://opensensemap.org/">openSenseMap</a>. 
+								<a href="https://opensensemap.org/">openSenseMap</a>.
 							</p>
 							<br />
 							<p>
@@ -158,17 +165,18 @@
 							</p>
 							<p>
 								This bike can be ridden around the city and can measure air
-								quality while moving. As the bike is capable of carrying a larger load, the
-								sensors quality is between Sensebox and LANUV. But the bike has 
-								a power limitation since it relies on Lithium batteries for sensors.
+								quality while moving. As the bike is capable of carrying a
+								larger load, the sensors quality is between Sensebox and LANUV.
+								But the bike has a power limitation since it relies on Lithium
+								batteries for sensors.
 							</p>
 						</div>
 						<div class="step" data-step="4">
 							<p>
 								All in all, three levels of measurement instruments can be
-								identified. Sensebox as the most affordable, The bike as
-								a mobile sensor with a better instrument and LANUV as the 
-								industrial sensor used for official purposes. 
+								identified. Sensebox as the most affordable, The bike as a
+								mobile sensor with a better instrument and LANUV as the
+								industrial sensor used for official purposes.
 							</p>
 						</div>
 					</article>
@@ -194,35 +202,35 @@
 								<p class="progress"></p>
 							</div>
 							<p>
-								Official stations only publish data averaged over one hour. 
-								But it just so happens that the air quality
-								around you can be disrupted by ,for example, the vehicles
-								driving around you. This is an instantaneous change and will not 
-								be reflected in an hourly update.
+								Official stations only publish data averaged over one hour. But
+								it just so happens that the air quality around you can be
+								disrupted by ,for example, the vehicles driving around you. This
+								is an instantaneous change and will not be reflected in an
+								hourly update.
 							</p>
 							<p>
 								The map shows two stations in Muenster with the values of PM10
-								through out the day. As you scroll, the timer above changes and so do
-								the measurements. Different colors show different values. The scale on 
-								the bottom right shows the range of measurements.
+								through out the day. As you scroll, the timer above changes and
+								so do the measurements. Different colors show different values.
+								The scale on the bottom right shows the range of measurements.
 							</p>
 							<p>
-								We know PM 2.5 are considered more dangerous than PM 10 but 
-								the official stations in Muenster do not measure PM 2.5 at all.  
-
+								We know PM 2.5 are considered more dangerous than PM 10 but the
+								official stations in Muenster do not measure PM 2.5 at all.
 							</p>
 						</div>
 						<div class="step" data-step="2">
 							<p>
 								Therefore, we used the bike to cover the area around one of the
-								stations (Muenster-Geist) to understand if the air quality differs 
-								drastically in one hour. 
+								stations (Muenster-Geist) to understand if the air quality
+								differs drastically in one hour.
 							</p>
 							<p>
-								We found a considerable rise and fall in PM 10. Some anomalies were 
-								introduced by cars passing by corresponding to the high values on map. 
-								Officially, we have a single value of PM10 for the entire bike ride to
-								compare to. You can see how much the air quality varies.
+								We found a considerable rise and fall in PM 10. Some anomalies
+								were introduced by cars passing by corresponding to the high
+								values on map. Officially, we have a single value of PM10 for
+								the entire bike ride to compare to. You can see how much the air
+								quality varies.
 							</p>
 						</div>
 						<div class="step" data-step="3">
@@ -231,10 +239,10 @@
 								<p class="progress"></p>
 							</div>
 							<p>
-								For a more consistant comparision, we also deployed a sensebox next to 
-								the LANUV station. The sensebox measures 
-								PM 10 every 1/4<sup>th</sup> second. This made it a perfect
-								crossover between LANUV and the bike. As seen here, the PM10 values 
+								For a more consistant comparision, we also deployed a sensebox
+								next to the LANUV station. The sensebox measures PM 10 every
+								1/4<sup>th</sup> second. This made it a perfect crossover
+								between LANUV and the bike. As seen here, the PM10 values
 								measured by sensebox also vary a lot in one hour.
 							</p>
 						</div>
@@ -244,11 +252,11 @@
 								<p class="progress"></p>
 							</div>
 							<p>
-								We can say that the data published by LANUV can be misleading as it does
-								not reflect changes in that hour. The 
-								bike reports many times during an hour but it only measures once at a location
-								and moves on. A sensebox can be a preliminary source if enough of them are deployed 
-								but sensor quality matters.
+								We can say that the data published by LANUV can be misleading as
+								it does not reflect changes in that hour. The bike reports many
+								times during an hour but it only measures once at a location and
+								moves on. A sensebox can be a preliminary source if enough of
+								them are deployed but sensor quality matters.
 							</p>
 						</div>
 					</article>
@@ -270,34 +278,34 @@
 					<article>
 						<div class="step" data-step="1">
 							<p>
-								Imagine you are at the red spot and you want to know the
-								air quality where you stand.   
+								Imagine you are at the red spot and you want to know the air
+								quality where you stand.
 							</p>
 						</div>
 						<div class="step" data-step="2">
-                            <p>
-								A simplistic approach would be to check the measurement
-								at the nearest station, say the one at Weseler Strasse which is a  
-								busy street. The measurement would be way higher than it is at your 
-								location as you would be standing 
-								on a quiet street.
-                            </p>
+							<p>
+								A simplistic approach would be to check the measurement at the
+								nearest station, say the one at Weseler Strasse which is a busy
+								street. The measurement would be way higher than it is at your
+								location as you would be standing on a quiet street.
+							</p>
 						</div>
 						<div class="step" data-step="3">
-                            <p>
-                                A scientific approach to this would involve calculating interpolations
-                                based on the measurements from the bike. This method gives you an estimate
-                                of the air quality. 
-                            </p>
+							<p>
+								A scientific approach to this would involve calculating
+								interpolations based on the measurements from the bike. This
+								method gives you an estimate of the air quality.
+							</p>
 						</div>
 						<div class="step" data-step="4">
-                            <p>
-                            	However, its still an estimate. The bike route does not pass close by the
-                            	location where you stand. The accuracy of interpolations reduces as you move
-                            	away from the actual measurement. Moreover, no information on the surroundings 
-                            	(buildings, resulting air circulation, type of road, traffic, industry, etc.) 
-                            	was taken into account. 
-                            </p>
+							<p>
+								However, its still an estimate. The bike route does not pass
+								close by the location where you stand. The accuracy of
+								interpolations reduces as you move away from the actual
+								measurement. Moreover, no information on the surroundings
+								(buildings, resulting air circulation, type of road, traffic,
+								industry, etc.) was taken into account.
+							</p>
 						</div>
 					</article>
 
@@ -310,38 +318,42 @@
 			</div>
 
 			<section id="outro">
-				<br>
-				<br>
+				<br />
+				<br />
 				<p>
-					Air quality measurement is not an easy task considering the uncertainties it
-					introduces in the measurement. The accuracy of measurements will increase 
-					with the number of instruments. The three types of instruments mentioned above can be a 
-					reliable source of information as they cover up the uncertainties which are most important.
+					Air quality measurement is not an easy task considering the
+					uncertainties it introduces in the measurement. The accuracy of
+					measurements will increase with the number of instruments. The three
+					types of instruments mentioned above can be a reliable source of
+					information as they cover up the uncertainties which are most
+					important.
 				</p>
-				<br>
-				<p>	
-					But there are so many factors which still affect the air quality. Weather is one of such factors.
-					A strong wind or rain affects the air quality drastically. Sunshine causes some pollutants to
-					undergo chemical reactions, producing smog. Higher temperatures speed up chemical reactions in 
-					the air as well.
-				</p>
-				<br>
+				<br />
 				<p>
-					This website is designed to be an information platform about the various challanges in air
-					quality measurement. It is a top-down perspective about measurement uncertainties over an 
-					entire city. We also created an AR app for an immersive experience. It shows air quality information
-					at your location. Click the button below. 
+					But there are so many factors which still affect the air quality.
+					Weather is one of such factors. A strong wind or rain affects the air
+					quality drastically. Sunshine causes some pollutants to undergo
+					chemical reactions, producing smog. Higher temperatures speed up
+					chemical reactions in the air as well.
 				</p>
-				<br>
+				<br />
+				<p>
+					This website is designed to be an information platform about the
+					various challanges in air quality measurement. It is a top-down
+					perspective about measurement uncertainties over an entire city. We
+					also created an AR app for an immersive experience. It shows air
+					quality information at your location. Click the button below.
+				</p>
+				<br />
 				<a href="AR" id="arbutton">See Air Quality in AR</a>
 				<p>or scan the QR code</p>
 				<figure>
-					<img src="img/QR.png">
+					<img src="img/QR.png" />
 				</figure>
-
 			</section>
 		</main>
 
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/particlesjs/2.2.2/particles.min.js"></script>
 		<script type="text/javascript" src="scrollymaps/script.js"></script>
 	</body>
 </html>

@@ -1,14 +1,38 @@
 html,
 body {
-	font-family: "Gelasio", serif;
+	font-family: "Open Sans";
 	margin: 0;
-	background-color: #fcfcfc; /*almost white*/
+	padding: 0;
 	color: #242424; /*almost black*/
+}
+
+.background {
+	position: fixed;
+	display: block;
+	background-color: #f7f6f3; /*almost white*/
+	top: 0;
+	left: 0;
+	z-index: -1;
+}
+
+#intro p,
+#outro p {
+	background-color: #f7f6f3cc;
+}
+
+p {
+	line-height: 1.5rem;
+}
+
+h1,
+h2 {
+	font-family: "Raleway", sans-serif;
+	font-weight: 900;
 }
 
 h1 {
 	max-width: 750px;
-	margin: 5rem auto 1rem auto;
+	margin: 1rem auto;
 	font-size: 3rem;
 }
 
@@ -16,6 +40,14 @@ h2 {
 	margin: 1rem auto 2rem auto;
 	font-size: 2rem;
 	max-width: 750px;
+}
+
+hr {
+	border: none;
+	height: 5px;
+	background-color: #ffcb00;
+	width: 650px;
+	margin: 45px auto;
 }
 
 .sectionContainer h2 {
@@ -36,25 +68,50 @@ p,
 #sectionList a {
 	display: table-cell;
 	text-decoration: none;
-	text-align: left;
-	color: #000;
+	text-align: center;
+	color: #f7f6f3;
 	padding: 15px;
+	border-radius: 6px;
+}
+
+#sectionList .colourSectionA {
+	background-color: #99594d;
+}
+
+#sectionList .colourSectionB {
+	background-color: #636b4a;
+}
+
+#sectionList .colourSectionC {
+	background-color: #759e9e;
+}
+
+#headingA {
+	color: #99594d;
+}
+
+#headingB {
+	color: #636b4a;
+}
+
+#headingC {
+	color: #759e9e;
 }
 
 .sectionContainer {
 	padding: 1px;
 }
 
-.colourSectionA {
-	background-color: #cbd2e1;
+.sectionContainer.colourSectionA {
+	border-left: #99594d solid 60px;
 }
 
-.colourSectionB {
-	background-color: #e8e5db;
+.sectionContainer.colourSectionB {
+	border-left: #636b4a solid 60px;
 }
 
-.colourSectionC {
-	background-color: #cdd;
+.sectionContainer.colourSectionC {
+	border-left: #759e9e solid 60px;
 }
 
 h1,
@@ -124,7 +181,7 @@ figure img {
 }
 
 .step.is-active {
-	background-color: #eeea; /*transparent light grey*/
+	background-color: #fffefc;
 }
 
 .step p {

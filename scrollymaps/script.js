@@ -6,15 +6,15 @@ const boundsMuenster = [[51.982262, 7.590976], [51.927088, 7.679865]];
 
 const scrollyImg = ["lanuv.jpg", "sensebox.jpg", "bike.jpg", "All.jpg"];
 const mapInteractions = {
-    // disable all zoom controls that interfere with scrolling
-    keyboard: false,
-    dragging: false,
-    zoomControl: false,
-    boxZoom: false,
-    doubleClickZoom: false,
-    scrollWheelZoom: false,
-    tap: false,
-    touchZoom: false
+	// disable all zoom controls that interfere with scrolling
+	keyboard: false,
+	dragging: false,
+	zoomControl: false,
+	boxZoom: false,
+	doubleClickZoom: false,
+	scrollWheelZoom: false,
+	tap: false,
+	touchZoom: false
 };
 
 // time formatters
@@ -172,9 +172,9 @@ L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
 // create elements
 // add interpolation
 const imageURL = "data/idw_14-11_large.png";
-const imageBounds = [[51.93095,7.58095],[51.96405,7.65905]];
+const imageBounds = [[51.93095, 7.58095], [51.96405, 7.65905]];
 
-const interpolation = L.imageOverlay(imageURL,imageBounds,{ opacity: 0.7});
+const interpolation = L.imageOverlay(imageURL, imageBounds, { opacity: 0.7 });
 
 const legendC = legendB.cloneNode(true);
 const divLegendC = document.getElementById("legendC");
@@ -182,7 +182,7 @@ divLegendC.append(legendC);
 divLegendC.style.display = "none";
 //
 //// add init coord
-const minExtent = [[51.93095,7.60295],[51.96405,7.62205]];
+const minExtent = [[51.93095, 7.60295], [51.96405, 7.62205]];
 //const initLat = minExtent[0][0] + ((minExtent[1][0]-minExtent[0][0])/2);
 //const initLon = minExtent[0][1] + ((minExtent[1][1]-minExtent[0][1])/2);
 //const initCoord = [initLat,initLon];
@@ -190,52 +190,53 @@ const minExtent = [[51.93095,7.60295],[51.96405,7.62205]];
 //
 // add stations
 const stationOptions = {
-    color: '#0570b0',
-    fillColor: '#74a9cf',
-    fillOpacity: 0.5,
-    radius: 10
+	color: "#0570b0",
+	fillColor: "#74a9cf",
+	fillOpacity: 0.5,
+	radius: 10
 };
 const geist = L.circleMarker(stationGeist, stationOptions);
-const weseler = L.circleMarker(stationWeseler,stationOptions);
+const weseler = L.circleMarker(stationWeseler, stationOptions);
 
 // add POI
-const poiPos = [51.957,7.609];
-const poi = L.circleMarker(poiPos,{
-    fillColor: "#ffffff",//"#7a0177",
-    color: "#ae017e",
-    //zIndexOffset: 1
+const poiPos = [51.957, 7.609];
+const poi = L.circleMarker(poiPos, {
+	fillColor: "#ffffff", //"#7a0177",
+	color: "#ae017e"
+	//zIndexOffset: 1
 });
 
 // add line
-const linePos = [[51.9636,7.5246],[51.928,7.6963]];
+const linePos = [[51.9636, 7.5246], [51.928, 7.6963]];
 const line = L.polyline(linePos, {
-    color: "#49006a"
+	color: "#49006a"
 });
 
 // add color
-const bBoxN = [linePos[0],linePos[1],[52,7.7],[52,7.5]];
-const bBoxS = [linePos[0],linePos[1],[51.9,7.7],[51.9,7.5]];
+const bBoxN = [linePos[0], linePos[1], [52, 7.7], [52, 7.5]];
+const bBoxS = [linePos[0], linePos[1], [51.9, 7.7], [51.9, 7.5]];
 
 const backgroundN = L.polygon(bBoxN, {
-    fillColor: "#000000",
-    opacity: 0.1
+	fillColor: "#000000",
+	opacity: 0.1
 });
-const backgroundS = L.polygon(bBoxS,{
-    fillColor:"#f7f7f7",
-    opacity: 0.1
+const backgroundS = L.polygon(bBoxS, {
+	fillColor: "#f7f7f7",
+	opacity: 0.1
 });
-
 
 // question mark
 const questionUrl = "img/question-mark.png";
-const questionBBox = [[51.958,7.606],[51.962,7.601]];
-const qm = L.imageOverlay(questionUrl, questionBBox,{ opacity: 1, zindex: 100});
+const questionBBox = [[51.958, 7.606], [51.962, 7.601]];
+const qm = L.imageOverlay(questionUrl, questionBBox, {
+	opacity: 1,
+	zindex: 100
+});
 
 // create layergroups
-const group1 = L.layerGroup([geist,weseler,poi]);
-const group2 = L.layerGroup([backgroundN,backgroundS,line]);
+const group1 = L.layerGroup([geist, weseler, poi]);
+const group2 = L.layerGroup([backgroundN, backgroundS, line]);
 // end creating elements for mapC
-
 
 mapC.fitBounds(minExtent);
 mapC.invalidateSize();
@@ -525,40 +526,38 @@ function handleStepEnterC(response, data) {
 		return i === response.index;
 	});
 
-
 	mapC.fitBounds(minExtent);
 
-    // add or remove element of map depending on the textbox at the left
-    switch (response.index) {
-        case 0:
-            mapC.removeLayer(group2);
-            mapC.removeLayer(interpolation);
-            divLegendC.style.display = "none";
-            group1.addTo(mapC);
-            break;
-        case 1:
-            mapC.removeLayer(interpolation);
-            mapC.removeLayer(qm);
-            divLegendC.style.display = "none";
-            group2.addTo(mapC);
-            group1.addTo(mapC);
-            break;
-        case 2:
-            mapC.removeLayer(group2);
-            mapC.removeLayer(qm);
-            interpolation.addTo(mapC);
-            divLegendC.style.display = "block";
-            group1.addTo(mapC);
-            break;
-        case 3:
-            mapC.removeLayer(interpolation);
-            divLegendC.style.display = "none";
-            mapC.removeLayer(group2);
-            group1.addTo(mapC);
-            qm.addTo(mapC);
-            break;
-    }
-
+	// add or remove element of map depending on the textbox at the left
+	switch (response.index) {
+		case 0:
+			mapC.removeLayer(group2);
+			mapC.removeLayer(interpolation);
+			divLegendC.style.display = "none";
+			group1.addTo(mapC);
+			break;
+		case 1:
+			mapC.removeLayer(interpolation);
+			mapC.removeLayer(qm);
+			divLegendC.style.display = "none";
+			group2.addTo(mapC);
+			group1.addTo(mapC);
+			break;
+		case 2:
+			mapC.removeLayer(group2);
+			mapC.removeLayer(qm);
+			interpolation.addTo(mapC);
+			divLegendC.style.display = "block";
+			group1.addTo(mapC);
+			break;
+		case 3:
+			mapC.removeLayer(interpolation);
+			divLegendC.style.display = "none";
+			mapC.removeLayer(group2);
+			group1.addTo(mapC);
+			qm.addTo(mapC);
+			break;
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -587,3 +586,13 @@ function updateMap(index) {
 			break;
 	}
 }
+
+// Initialise particles
+window.onload = function() {
+	Particles.init({
+		selector: ".background",
+		color: "#555",
+		speed: 0.2,
+		maxParticles: 300
+	});
+};
