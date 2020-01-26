@@ -4,7 +4,7 @@ const stationWeseler = [51.953275, 7.619379];
 const boundsMuensterSmall = [[51.965114, 7.601657], [51.928291, 7.628437]];
 const boundsMuenster = [[51.982262, 7.590976], [51.927088, 7.679865]];
 
-const scrollyImg = ["lanuv.jpg", "sensebox.jpg", "bike.jpg", "All.jpg"];
+const scrollyImg = ["lanuv.jpg", "sensebox.jpg", "bike.jpg", "all.png"];
 const mapInteractions = {
 	// disable all zoom controls that interfere with scrolling
 	keyboard: false,
@@ -276,9 +276,14 @@ Promise.all([
 function handleResize() {
 	// 1. update height of step elements
 	var stepH = Math.floor(window.innerHeight * 0.75);
-	scrollyA.step.style("height", stepH + "px");
-	scrollyB.step.style("height", stepH + "px");
-	scrollyC.step.style("height", stepH + "px");
+	// scrollyA.step.style("height", stepH + "px");
+	// scrollyB.step.style("height", stepH + "px");
+	// scrollyC.step.style("height", stepH + "px");
+
+	d3.selectAll(".step.height1").style("height", stepH + "px");
+	d3.selectAll(".step.height2").style("height", 2 * stepH + "px");
+	d3.selectAll(".step.height3").style("height", 3 * stepH + "px");
+
 	var figureHeight = window.innerHeight * 0.95;
 	var figureMarginTop = (window.innerHeight - figureHeight) / 2;
 	allFigures
