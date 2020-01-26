@@ -100,17 +100,17 @@
 .bottom {
   position: fixed;
   display: flex;
-
   left: 80%;
   right:5%;
   width:15%;
   height: 20%;
   text-align: center;
-  /*bottom: 5vh;*/
   min-width: 50px;
-  font-size: 4vh; /* Increased font-size */
   z-index:99999;
   font-size: 80%;
+  appearance: none;
+  align-items: center;
+  outline: none;
 }
 
 
@@ -127,44 +127,41 @@ p{
 }
 
 button {
--webkit-appearance: none;
--moz-appearance: none;
-appearance: none;
-align-items: center;
-justify-content: center;
-color: #f3f3f3;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  align-items: center;
+  justify-content: center;
+  color: #f3f3f3; /* White text color */
   border: none;
 }
 
-#iconBarBtn{
-  padding: 0.2em;
-  background-color: #ff760d;
-}
-
 #popupBtn, #introBtn , #infoBtn, #iconBarBtn{
-    display: flex;
-    font-size: 0.9em;
-    background-color: #ff760d;
-    color: #f3f3f3;
-    outline: none;
-    text-align: center;
-      border: none;
+  display: flex;
+  font-size: 1em; /*Increased font-size*/
+  background-color: #ff760d;/* Add an active/current color */
+  outline: none;
+  text-align: center;
 }
 
-#iconBarBtn, #guideBtn {
+#iconBarBtn{
+  text-align: center;
+  padding: 0.2em; /* Add some padding */
+  transition: all 0.3s ease; /* Add transition for hover effects */
+  font-size: 4.4vh; /*Increased font-size*/
+}
+
+
+#guideBtn {
   text-align: center;
   background-color: #ff760d; /* Add an active/current color */
   padding: 0.2em; /* Add some padding */
   transition: all 0.3s ease; /* Add transition for hover effects */
   color: #f3f3f3; /* White text color */
   font-size: 5.5vh; /* Increased font-size */
-
   border: none;
   display: flex;
   outline: none;
-}
-
-#guideBtn {
   position: fixed;
   z-index: 99999;
   bottom:10%;
@@ -205,7 +202,6 @@ color: #f3f3f3;
 
 /*---------------------links---------------------------*/
 
-/* unvisited link */
 a {
  color: #ff760d;
 }
@@ -223,19 +219,4 @@ a {
 .navbar-toggle {
     display: inline-block;
     float: none;
-}
-
-/*-------------------icon bar------------------------------*/
-.icon-bar {
-  width: 90px; /* Set a specific width */
-  background-color: #555; /* Dark-grey background */
-}
-
-.icon-bar a {
-  display: block; /* Make the links appear below each other instead of side-by-side */
-  text-align: center; /* Center-align text */
-  padding: 16px; /* Add some padding */
-  transition: all 0.3s ease; /* Add transition for hover effects */
-  color: #f3f3f3; /* White text color */
-  font-size: 36px; /* Increased font-size */
 }
