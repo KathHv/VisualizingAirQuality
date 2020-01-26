@@ -463,7 +463,7 @@ function handleStepProgressB(response, data) {
 			break;
 	}
 
-	el.select(".progress").html(
+	d3.select("#timeB p").html(
 		// d3.format(".1%")(response.progress) + "<br/>" +
 		formatTime(timenow)
 	);
