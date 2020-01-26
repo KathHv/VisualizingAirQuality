@@ -190,8 +190,8 @@ const minExtent = [[51.93095, 7.60295], [51.96405, 7.62205]];
 //
 // add stations
 const stationOptions = {
-	color: "#0570b0",
-	fillColor: "#74a9cf",
+	color: "#759f9e",
+	fillColor: "#8ebfbe",
 	fillOpacity: 0.5,
 	radius: 10
 };
@@ -199,17 +199,20 @@ const geist = L.circleMarker(stationGeist, stationOptions);
 const weseler = L.circleMarker(stationWeseler, stationOptions);
 
 // add POI
-const poiPos = [51.957, 7.609];
+const poiPos = [[51.957, 7.609],[51.959,7.611]];
+const poiURL = "img/stickman.png";
+const poi = L.imageOverlay(poiURL, poiPos);
+/*
 const poi = L.circleMarker(poiPos, {
-	fillColor: "#ffffff", //"#7a0177",
-	color: "#ae017e"
-	//zIndexOffset: 1
+	fillColor: "#3d3d3d",
+	color: "#636363"
 });
+*/
 
 // add line
 const linePos = [[51.9636, 7.5246], [51.928, 7.6963]];
 const line = L.polyline(linePos, {
-	color: "#49006a"
+	color: "#759f9e"
 });
 
 // add color
@@ -217,7 +220,7 @@ const bBoxN = [linePos[0], linePos[1], [52, 7.7], [52, 7.5]];
 const bBoxS = [linePos[0], linePos[1], [51.9, 7.7], [51.9, 7.5]];
 
 const backgroundN = L.polygon(bBoxN, {
-	fillColor: "#000000",
+	fillColor: "#759f9e",
 	opacity: 0.1
 });
 const backgroundS = L.polygon(bBoxS, {
