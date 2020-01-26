@@ -447,18 +447,22 @@ function handleStepProgressB(response, data) {
 
 	switch (response.index) {
 		case 0:
+		    timeB.style.display = "block";
 			timenow = timerLong(response.progress);
 			updateStationDots(timenow, data);
 			break;
 		case 1:
 			// only showing the static bike route here
+			timeB.style.display = "none";
 			break;
 		case 2:
+		    timeB.style.display = "block";
 			timenow = timerShort(response.progress);
 			updateStationDots(timenow, data);
 			updateSenseboxDots(timenow, data);
 			break;
 		case 3:
+		    timeB.style.display = "block";
 			timenow = timerShort(response.progress);
 			updateStationDots(timenow, data);
 			updateSenseboxDots(timenow, data);
