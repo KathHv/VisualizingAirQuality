@@ -303,8 +303,8 @@ function redrawGauge(pointerBike,pointerLanuv) {
       .drawStep(40, "#d9d9d9", 5)
       .drawStep(50, "#d9d9d9", 5)
       .drawStep(60, "#d9d9d9", 5)
-      .drawPointer((pointerLanuv>62) ? 62 : (pointerLanuv<0) ? 0 : pointerLanuv, "#af5a0d", "" + Math.round(pointerLanuv * 100) / 100)
-      .drawPointer((pointerBike>62) ? 62 : (pointerBike<0) ? 0 : pointerBike, "#ffa15a", "" + Math.round(pointerBike * 100) / 100)				;
+      .drawPointer((pointerLanuv>62) ? 62 : (pointerLanuv<0) ? 0 : pointerLanuv, "#b38e00", "" + Math.round(pointerLanuv * 100) / 100)
+      .drawPointer((pointerBike>62) ? 62 : (pointerBike<0) ? 0 : pointerBike, "#ffdb4d", "" + Math.round(pointerBike * 100) / 100)				;
   } else {
     linearGauge = new HyyanAF.LinearGauge(gauge,0,65)
       .draw("0", "65")
@@ -314,8 +314,8 @@ function redrawGauge(pointerBike,pointerLanuv) {
       .drawStep(40, "#d9d9d9", 5)
       .drawStep(50, "#d9d9d9", 5)
       .drawStep(60, "#d9d9d9", 5)
-      .drawPointer((pointerLanuv>62) ? 62 : (pointerLanuv<0) ? 0 : pointerLanuv, "#af5a0d", "" + Math.round(pointerLanuv * 100) / 100)
-      .drawPointer((pointerBike>62) ? 62 : (pointerBike<0) ? 0 : pointerBike, "#ffa15a", "" + Math.round(pointerBike * 100) / 100)
+      .drawPointer((pointerLanuv>62) ? 62 : (pointerLanuv<0) ? 0 : pointerLanuv, "#b38e00", "" + Math.round(pointerLanuv * 100) / 100)
+      .drawPointer((pointerBike>62) ? 62 : (pointerBike<0) ? 0 : pointerBike, "#ffdb4d", "" + Math.round(pointerBike * 100) / 100)
     ;
   }
 }

@@ -98,7 +98,7 @@ function translateRange(Input , inputHigh , inputLow , outputHigh , OutputLow) {
 			ctx.fill();
 
 			ctx.font = '8pt Calibri';
-			ctx.fillStyle = 'white';
+			ctx.fillStyle = 'black';
 			ctx.textAlign = 'center';
 			ctx.fillText(content, this.x, this.canvasHeight - y + 3);
 
@@ -157,5 +157,5 @@ linearGauge = new HyyanAF.LinearGauge(gauge,0, 65)
 	.drawStep(40, "#d9d9d9", 5)
 	.drawStep(50, "#d9d9d9", 5)
 	.drawStep(60, "#d9d9d9", 5)
-	.drawPointer(35, "#ffa15a", "35")
-	.drawPointer(15, "#af5a0d", "15");
+	.drawPointer(35, "#ffdb4d", "35")
+	.drawPointer(15, "#b38e00", "15");

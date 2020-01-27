@@ -1,5 +1,3 @@
-
-
 .centered {
     align-items: center;
     justify-content: center;
@@ -116,7 +114,7 @@
 
 i{
   align-items: center;
-  background-color: #ff760d;
+  background-color: #ffcb00;
   padding: 0.2em;
   color: #f3f3f3;
 }
@@ -132,14 +130,14 @@ button {
   appearance: none;
   align-items: center;
   justify-content: center;
-  color: #f3f3f3; /* White text color */
+  color: #555; /* White text color */
   border: none;
 }
 
 #popupBtn, #introBtn , #infoBtn, #iconBarBtn{
   display: flex;
   font-size: 1em; /*Increased font-size*/
-  background-color: #ff760d;/* Add an active/current color */
+  background-color: #ffcb00;/* Add an active/current color */
   outline: none;
   text-align: center;
 }
@@ -154,10 +152,10 @@ button {
 
 #guideBtn {
   text-align: center;
-  background-color: #ff760d; /* Add an active/current color */
+  background-color: #ffcb00; /* Add an active/current color */
   padding: 0.2em; /* Add some padding */
   transition: all 0.3s ease; /* Add transition for hover effects */
-  color: #f3f3f3; /* White text color */
+  color: #555; /* White text color */
   font-size: 5.5vh; /* Increased font-size */
   border: none;
   display: flex;
@@ -188,7 +186,7 @@ button {
   width: 25px;
   height: 25px;
   border-radius: 50%;
-  background: #ff760d;
+  background: #ffcb00;
   cursor: pointer;
 }
 
@@ -196,19 +194,19 @@ button {
   width: 25px;
   height: 25px;
   border-radius: 50%;
-  background: #ff760d;
+  background: #ffcb00;
   cursor: pointer;
 }
 
 /*---------------------links---------------------------*/
 
 a {
- color: #ff760d;
+ color: #ffcb00;
 }
 
 #distance {
-    background-color: #ff760d;
-    color: #f3f3f3;
+    background-color: #ffcb00;
+    color: #555;
     display: inline-block;
     padding: 5px;
     font-weight-absolute: bold;
