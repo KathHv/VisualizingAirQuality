@@ -6,7 +6,7 @@ body {
 	color: #242424; /*almost black*/
 }
 
-.background {
+#background {
 	position: fixed;
 	display: block;
 	background-color: #f7f6f3; /*almost white*/

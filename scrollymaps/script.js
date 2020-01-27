@@ -199,7 +199,7 @@ const geist = L.circleMarker(stationGeist, stationOptions);
 const weseler = L.circleMarker(stationWeseler, stationOptions);
 
 // add POI
-const poiPos = [[51.957, 7.609],[51.959,7.611]];
+const poiPos = [[51.957, 7.609], [51.959, 7.611]];
 const poiURL = "img/stickman.png";
 const poi = L.imageOverlay(poiURL, poiPos);
 /*
@@ -447,7 +447,7 @@ function handleStepProgressB(response, data) {
 
 	switch (response.index) {
 		case 0:
-		    timeB.style.display = "block";
+			timeB.style.display = "block";
 			timenow = timerLong(response.progress);
 			updateStationDots(timenow, data);
 			break;
@@ -456,13 +456,13 @@ function handleStepProgressB(response, data) {
 			timeB.style.display = "none";
 			break;
 		case 2:
-		    timeB.style.display = "block";
+			timeB.style.display = "block";
 			timenow = timerShort(response.progress);
 			updateStationDots(timenow, data);
 			updateSenseboxDots(timenow, data);
 			break;
 		case 3:
-		    timeB.style.display = "block";
+			timeB.style.display = "block";
 			timenow = timerShort(response.progress);
 			updateStationDots(timenow, data);
 			updateSenseboxDots(timenow, data);
@@ -598,13 +598,3 @@ function updateMap(index) {
 			break;
 	}
 }
-
-// Initialise particles
-window.onload = function() {
-	Particles.init({
-		selector: ".background",
-		color: "#555",
-		speed: 0.2,
-		maxParticles: 300
-	});
-};

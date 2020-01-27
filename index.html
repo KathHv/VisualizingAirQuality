@@ -41,7 +41,7 @@
 	</head>
 
 	<body>
-		<canvas class="background"></canvas>
+		<div id="background"></div>
 
 		<main>
 			<section id="intro">
@@ -50,39 +50,50 @@
 				<h2>Investigating PM10 data for Münster</h2>
 				<hr />
 				<p>
-					The air we breathe carries some harmful particles called  
+					The air we breathe carries some harmful particles called
 					<a href="https://en.wikipedia.org/wiki/Particulates#Health_effects"
-					>PM</a> or Particulate Matter.They are broadly categorized into PM10 and 
-					PM 2.5 corresponding to particulate matter smaller than 10 micrometers 
+						>PM</a
+					>
+					or Particulate Matter.They are broadly categorized into PM10 and PM
+					2.5 corresponding to particulate matter smaller than 10 micrometers
 					and 2.5 micrometers respectively.
 				</p>
 				<br />
 				<p>
-					Unfortunately, these particles have major effects on our health. A 2013 report by 
+					Unfortunately, these particles have major effects on our health. A
+					2013 report by
 					<a href="https://www.who.int/airpollution/ambient/health-impacts/en/"
 						>WHO</a
 					>
-					states that poor ambient air quality can cause cancer, inflammation of lungs which can cause
-					premature deaths.
+					states that poor ambient air quality can cause cancer, inflammation of
+					lungs which can cause premature deaths.
 				</p>
 				<br />
 				<p>
-					We are notified about the air quality around us through measurement instruments deployed in various parts of our cities. There are two official air quality measurement stations in Münster. But the measurements reported have some uncertainties or errors associated with them. These can be broadly divided into three categories:
+					We are notified about the air quality around us through measurement
+					instruments deployed in various parts of our cities. There are two
+					official air quality measurement stations in Münster. But the
+					measurements reported have some uncertainties or errors associated
+					with them. These can be broadly divided into three categories:
 				</p>
 				<br />
 				<div id="sectionList">
 					<a class="colourSectionA" href="#headingA">
 						<b>Measurement (hardware-based) uncertainty</b> <br />
-						The capability and accuracy of the instrument vary with its hardware quality. 
-						A cheaper instrument may be less accurate.
+						The capability and accuracy of the instrument vary with its hardware
+						quality. A cheaper instrument may be less accurate.
 					</a>
 					<a class="colourSectionB" href="#headingB">
 						<b>Temporal (time-based) uncertainty</b> <br />
-						An arithmetic average of all values of measurements over one hour or a day does not really reflect the true measurement at a point in time. An hourly average can be misleading
+						An arithmetic average of all values of measurements over one hour or
+						a day does not really reflect the true measurement at a point in
+						time. An hourly average can be misleading
 					</a>
 					<a class="colourSectionC" href="#headingC">
 						<b>Spatial (distance-based) uncertainty</b> <br />
-						A fixed instrument at a location might not be able to accurately measure air quality at the other end of the city. One value for an entire city can be misleading as well.
+						A fixed instrument at a location might not be able to accurately
+						measure air quality at the other end of the city. One value for an
+						entire city can be misleading as well.
 					</a>
 					<br />
 				</div>
@@ -97,11 +108,15 @@
 						<div class="step height1" data-step="1">
 							<div class="stepInner">
 								<p>
-									Instruments like this have been deployed all over Germany to measure the quality of air. But these instruments are neither cheap nor small. This hinders easy and widespread deployment.
+									Instruments like this have been deployed all over Germany to
+									measure the quality of air. But these instruments are neither
+									cheap nor small. This hinders easy and widespread deployment.
 								</p>
 								<br />
 								<p>
-									For the state of North Rhine-Westphalia, you can see an overview of the hourly updated measured values of various parameters on the 
+									For the state of North Rhine-Westphalia, you can see an
+									overview of the hourly updated measured values of various
+									parameters on the
 									<a
 										href="https://www.lanuv.nrw.de/umwelt/luft/immissionen/aktuelle-luftqualitaet/partikel-pm25-feinstaub"
 										>LANUV</a
@@ -118,8 +133,13 @@
 						<div class="step height1" data-step="2">
 							<div class="stepInner">
 								<p>
-									The Institute of Geoinformatics at the University of Münster has its citizen science project called 
-									<a href="https://sensebox.github.io/en/">senseBox</a>. They provide Do-It-Yourself air quality measurement kits. It is capable of measuring PM10 and PM2.5 with a wide range of sensors configurations. But the quality of hardware introduces accuracy issues.
+									The Institute of Geoinformatics at the University of Münster
+									has its citizen science project called
+									<a href="https://sensebox.github.io/en/">senseBox</a>. They
+									provide Do-It-Yourself air quality measurement kits. It is
+									capable of measuring PM10 and PM2.5 with a wide range of
+									sensors configurations. But the quality of hardware introduces
+									accuracy issues.
 								</p>
 								<p>
 									The data can be shared using their
@@ -135,17 +155,27 @@
 						<div class="step height1" data-step="3">
 							<div class="stepInner">
 								<p>
-									An example would be the Landscape ecology group at the University of Münster and their mobile air quality measurement instrument. They have retrofitted a bicycle with an air quality measurement instrument.
+									An example would be the Landscape ecology group at the
+									University of Münster and their mobile air quality measurement
+									instrument. They have retrofitted a bicycle with an air
+									quality measurement instrument.
 								</p>
 								<p>
-									This bike can be ridden around the city and can measure air quality while moving. As the bike is capable of carrying a larger load, the quality of the sensors is between senseBox and LANUV. But the bike has a power limitation since it relies on batteries for sensors.
+									This bike can be ridden around the city and can measure air
+									quality while moving. As the bike is capable of carrying a
+									larger load, the quality of the sensors is between senseBox
+									and LANUV. But the bike has a power limitation since it relies
+									on batteries for sensors.
 								</p>
 							</div>
 						</div>
 						<div class="step height1" data-step="4">
 							<div class="stepInner">
 								<p>
-									All in all, three levels of measurement instruments can be identified. senseBox as the most affordable, the bike as a mobile sensor with a better instrument and LANUV as the industrial sensor used for official purposes
+									All in all, three levels of measurement instruments can be
+									identified. senseBox as the most affordable, the bike as a
+									mobile sensor with a better instrument and LANUV as the
+									industrial sensor used for official purposes
 								</p>
 							</div>
 						</div>
@@ -169,37 +199,61 @@
 						<div class="step height2" data-step="1">
 							<div class="stepInner">
 								<p>
-									The official stations in Münster only publish data averaged over one hour. But it just so happens that the air quality around you can be disrupted by, for example, the vehicles driving around you. This is an instantaneous change and will not be reflected in an hourly update.
+									The official stations in Münster only publish data averaged
+									over one hour. But it just so happens that the air quality
+									around you can be disrupted by, for example, the vehicles
+									driving around you. This is an instantaneous change and will
+									not be reflected in an hourly update.
 								</p>
 								<p>
-									The map shows two stations in Münster with the values of PM10 throughout the day. As you scroll, the timer on the map changes and so do the measurements. Different colors show different values. The scale on the bottom right shows the range of measurements.
+									The map shows two stations in Münster with the values of PM10
+									throughout the day. As you scroll, the timer on the map
+									changes and so do the measurements. Different colors show
+									different values. The scale on the bottom right shows the
+									range of measurements.
 								</p>
 								<p>
-									We know PM2.5 is considered more dangerous than PM10 but the official stations in Münster do not measure PM2.5 at all.
+									We know PM2.5 is considered more dangerous than PM10 but the
+									official stations in Münster do not measure PM2.5 at all.
 								</p>
 							</div>
 						</div>
 						<div class="step height1" data-step="2">
 							<div class="stepInner">
 								<p>
-									Therefore, we used the bike to cover the area around one of the stations (Münster-Geist) to understand if the air quality differs drastically in one hour.
+									Therefore, we used the bike to cover the area around one of
+									the stations (Münster-Geist) to understand if the air quality
+									differs drastically in one hour.
 								</p>
 								<p>
-									We found a considerable variation in PM10 values. Some anomalies were introduced by cars passing by corresponding to the high values on the map. Officially, we have a single value of PM10 for the entire bike ride to compare to. You can see how much the air quality varies.
+									We found a considerable variation in PM10 values. Some
+									anomalies were introduced by cars passing by corresponding to
+									the high values on the map. Officially, we have a single value
+									of PM10 for the entire bike ride to compare to. You can see
+									how much the air quality varies.
 								</p>
 							</div>
 						</div>
 						<div class="step height3" data-step="3">
 							<div class="stepInner">
 								<p>
-									For a more consistent comparison, we also deployed a senseBox next to the LANUV station. The senseBox measures PM10 every 1/4<sup>th</sup> second. This made it a perfect crossover between LANUV and the bike. As seen here, the PM10 values measured by senseBox also vary a lot in one hour.
+									For a more consistent comparison, we also deployed a senseBox
+									next to the LANUV station. The senseBox measures PM10 every
+									1/4<sup>th</sup> second. This made it a perfect crossover
+									between LANUV and the bike. As seen here, the PM10 values
+									measured by senseBox also vary a lot in one hour.
 								</p>
 							</div>
 						</div>
 						<div class="step height3" data-step="4">
 							<div class="stepInner">
 								<p>
-									We can say that the data published by LANUV can be misleading as it does not reflect changes in that hour. The bike data shows changes within the hour but it only measures once at a location and moves on. A senseBox can be a preliminary source if enough of them are deployed but again,sensor quality matters.
+									We can say that the data published by LANUV can be misleading
+									as it does not reflect changes in that hour. The bike data
+									shows changes within the hour but it only measures once at a
+									location and moves on. A senseBox can be a preliminary source
+									if enough of them are deployed but again,sensor quality
+									matters.
 								</p>
 							</div>
 						</div>
@@ -225,28 +279,39 @@
 						<div class="step height1" data-step="1">
 							<div class="stepInner">
 								<p>
-									Imagine you are at the red spot and you want to know the air quality where you stand.
+									Imagine you are at the red spot and you want to know the air
+									quality where you stand.
 								</p>
 							</div>
 						</div>
 						<div class="step height1" data-step="2">
 							<div class="stepInner">
 								<p>
-									A simplistic approach would be to check the measurement at the nearest station, say the one at Weseler Strasse which is a busy street. The measurement would be way higher than it is at your location as you would be standing on a quiet street.
+									A simplistic approach would be to check the measurement at the
+									nearest station, say the one at Weseler Strasse which is a
+									busy street. The measurement would be way higher than it is at
+									your location as you would be standing on a quiet street.
 								</p>
 							</div>
 						</div>
 						<div class="step height1" data-step="3">
 							<div class="stepInner">
 								<p>
-									A scientific approach to this would involve calculating interpolations based on the measurements from the bike. This method gives you an estimate of the air quality.
+									A scientific approach to this would involve calculating
+									interpolations based on the measurements from the bike. This
+									method gives you an estimate of the air quality.
 								</p>
 							</div>
 						</div>
 						<div class="step height1" data-step="4">
 							<div class="stepInner">
 								<p>
-									However, it is still an estimate. The bike route does not pass close by the location where you stand. The accuracy of interpolations reduces as you move away from the actual measurement. Moreover, no information on the surroundings (buildings, resulting in air circulation, type of road, traffic, industry, etc.) was taken into account.
+									However, it is still an estimate. The bike route does not pass
+									close by the location where you stand. The accuracy of
+									interpolations reduces as you move away from the actual
+									measurement. Moreover, no information on the surroundings
+									(buildings, resulting in air circulation, type of road,
+									traffic, industry, etc.) was taken into account.
 								</p>
 							</div>
 						</div>
@@ -264,15 +329,27 @@
 				<br />
 				<br />
 				<p>
-					Air quality measurement is not an easy task considering the uncertainties it introduces in the measurement. The accuracy of measurements will increase with the number of instruments. The three types of instruments mentioned above can be a reliable source of information as they cover up the most important uncertainties.
+					Air quality measurement is not an easy task considering the
+					uncertainties it introduces in the measurement. The accuracy of
+					measurements will increase with the number of instruments. The three
+					types of instruments mentioned above can be a reliable source of
+					information as they cover up the most important uncertainties.
 				</p>
 				<br />
 				<p>
-					But there are so many factors which still affect air quality. Weather is one of such factors. A strong wind or rain affects air quality drastically. Sunshine causes some pollutants to undergo chemical reactions, producing smog. Higher temperatures speed up chemical reactions in the air as well.
+					But there are so many factors which still affect air quality. Weather
+					is one of such factors. A strong wind or rain affects air quality
+					drastically. Sunshine causes some pollutants to undergo chemical
+					reactions, producing smog. Higher temperatures speed up chemical
+					reactions in the air as well.
 				</p>
 				<br />
 				<p>
-					This website is designed to be an information platform about the various challenges in air quality measurement. It is a top-down perspective about measurement uncertainties over an entire city. We also created an AR app for an immersive experience. It shows air quality information at your location. Click the button below.
+					This website is designed to be an information platform about the
+					various challenges in air quality measurement. It is a top-down
+					perspective about measurement uncertainties over an entire city. We
+					also created an AR app for an immersive experience. It shows air
+					quality information at your location. Click the button below.
 				</p>
 				<br />
 				<a href="AR" id="arbutton">See Air Quality in AR</a>
@@ -283,7 +360,15 @@
 			</section>
 		</main>
 
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/particlesjs/2.2.2/particles.min.js"></script>
 		<script type="text/javascript" src="scrollymaps/script.js"></script>
+
+		<!-- <div id="particles-js"></div> -->
+		<script src="scrollymaps/particles.min.js"></script>
+		<!-- prettier-ignore -->
+		<script type="text/javascript">
+			particlesJS.load('background', 'scrollymaps/particlesjs-config.json', function() {
+			  console.log('callback - particles.js config loaded');
+			});
+		</script>
 	</body>
 </html>
