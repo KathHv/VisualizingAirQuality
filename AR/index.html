@@ -23,6 +23,8 @@
   THREEx.ArToolkitContext.baseURL = 'https://raw.githack.com/jeromeetienne/ar.js/master/three.js/'
   </script>
 
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+
 
   <!-- Add icon library -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -45,7 +47,7 @@
 </head>
 
 
-<body style='margin: 0; overflow: hidden; font-family: Helvetica, Verdana, Times, serif; font-size: 1.3em;' id="visArea"
+<body style='margin: 0; overflow: hidden; font-size: 1.3em;' id="visArea"
 onload="introduction(1);">
 
 <!-- AR.js scene with entities and camera -->
@@ -129,8 +131,8 @@ device-orientation-permission-ui>
     <button onclick="introduction(4)" class= "bottom" id="introBtn"> Next </button>
   </div>
   <div  id = "introduction-4">
-    <p> The PM10 value of the next LANUV station is displayed as a lighter point in the slider on the right.
-      The darker point represents the PM10 value for the closest point on the route to your location at the
+    <p> The PM10 value of the next LANUV station is displayed as a darker point in the slider on the right.
+      The lighter point represents the PM10 value for the closest point on the route to your location at the
       chosen time. <br>
       The arrow shows the direction of the route. Following it, you can find guide areas. Clicking on the distance to the next data point Google Maps will start guiding you. </p>
       <button onclick="introduction(5)" class= "bottom" id="introBtn"> Next </button>

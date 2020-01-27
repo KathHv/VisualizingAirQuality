@@ -161,7 +161,7 @@ function addGuideAreas(dataArray){
     icon.setAttribute('rotation', '-90 0 0');
     icon.setAttribute('radius', '1');
     icon.setAttribute('radius-tubular', '0.05');
-		icon.setAttribute('material', 'opacity: 0.5');
+		icon.setAttribute('material', 'opacity: 0.6');
     // add a marker for better visibility
 
     // for debug purposes, just show in a bigger scale, otherwise I have to personally go on places...
@@ -529,7 +529,7 @@ function introduction(step){
       for(var i = 0; i < introduction.length; i++) {
         introduction[i].style.display = "none";
       }
-      loadContent();
+      loadContent("1");
       break;
   }
 }
