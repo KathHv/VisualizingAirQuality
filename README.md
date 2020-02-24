@@ -9,9 +9,23 @@
 * Part II: Create an AR application with which people can walk around the station and see the air quality visualized as a "mist" to provide a more playful way of interacting with the data
   * Unity, City Engine, maybe SketchUp
 
-## Links to Sites
-* AR: https://kathhv.github.io/VisualizingAirQuality/AR
-* Webpage: https://kathhv.github.io/VisualizingAirQuality
+## The Website
+* link: https://kathhv.github.io/VisualizingAirQuality
+
+### Tutorial
+TODO
+
+### Bugs and Limitations
+TODO
+
+## The AR Web Application
+* link: https://kathhv.github.io/VisualizingAirQuality/AR
+
+### Tutorial
+TODO
+
+### Bugs and Limitations
+TODO
 
 ## References:
 * image stickman: https://www.needpix.com/photo/19195/matchstick-man-man-stickman-stick-figure-character-question-helpless-gesture-hands
