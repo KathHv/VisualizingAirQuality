@@ -4,30 +4,30 @@
 
 /**
  * initialzing variables
- *@param currentPosition: current position of the device [lat,lng]
- *@param closestPointToCurrentPosition: point with clostest point on route according to the current position
- *@param visArea: area in document where something can be visualized
- *@param cameraOrientation
- *@param direction
- *@param guideAreas
- *@param date
+ *@param currentPosition - current position of the device [lat,lng]
+ *@param closestPointToCurrentPosition - point with clostest point on route according to the current position
+ *@param visArea - area in document where something can be visualized
+ *@param cameraOrientation - orientation of the camera
+ *@param direction - direction of the next point on the route
+ *@param date - number of the bike trip (either "1" for 14th of november or "2" for 11th of december)
  *@param arrowOrigin
  *@param arrowDestination
- *@param x
+ *@param x - stores the current position of the device
  */
 var closestPointToCurrentPosition;
 var lanuvPm10;
 var visArea = document.getElementById("visArea");
 var cameraOrientation=0;
 var direction;
-var guideAreas;
 var date = "1";
 var arrowOrigin;
 var arrowDestination;
 
+// this variable stores the current position of the device
 x = {
   currentPositionInternal: undefined,
   currentPositionListener: [],
+  // update the internal value for the position and trigger the listeners if the postion has changed
   set currentPosition(val) {
     if (!this.currentPositionInternal || this.currentPositionInternal.coords !== val.coords) {
       this.currentPositionInternal = val;
@@ -36,9 +36,11 @@ x = {
       });
     }
   },
+  // return the position
   get currentPosition() {
     return this.currentPositionInternal;
   },
+  // add a new listener which is triggered when th position changes. All listers must have unique names
   registerListener: function(listener,name) {
 
     this.currentPositionListener = this.currentPositionListener.filter(function( obj ) {
@@ -50,6 +52,7 @@ x = {
       function: listener
     });
   },
+  // call all listeners with the current value of the position
   callListeners: function(position) {
     this.currentPositionListener.forEach(function (listener) {
       listener.function(position);
@@ -112,6 +115,8 @@ function getAngle(lat1, lng1, lat2, lng2) {
 //------------------- Guide Areas ----------------------------------------
 
 /**
+ * This function triggers the visualization of the guide areas in AR and also implements the listener that will make sure
+ * that the option for explanatory text is activated once you are close enough to a guide area.
 **@param dataArray
 */
 function loadGuideAreas(dataArray) {
@@ -127,7 +132,6 @@ function loadGuideAreas(dataArray) {
 /**
  * This function checks if there are guide areas nearby.
  * If a guide area is within a set radius (0.000001 degree) then the corresponding popup will be enabled.
- * CURRENTLY THIS METHOD SEEMS TO BE SELECTING ALL GUIDE AREAS. MAYBE THERE'S A PROBLEM WITH "selectData".
  * @param dataArray - contains the guide areas
  * @param position - the current position
  */
@@ -141,8 +145,8 @@ function checkForGuideArea(dataArray, position) {
 }
 
 /**
- * visualizes data in the AR, writes into html
- *@param dataArray: array which contains the RELEVANT data of the air quality in format [[timestamp, record, lat, lon, AirTC_Avg, RH_Avg, pm25, pm10], ...]
+ * Visualizes the guide areas in AR, by adding them as Aframe-components to the html page
+ *@param dataArray - contains the guide areas
  */
 function addGuideAreas(dataArray){
   JL("mylogger").info("--------visualizeData()--------");
@@ -152,7 +156,7 @@ function addGuideAreas(dataArray){
     let latitude = place.lat;
     let longitude = place.lon;
 
-    // add place icon
+    // add geometry for guide area
     let icon = document.createElement('a-torus');
 		icon.setAttribute('position', '0 -5 0');
 		icon.setAttribute('gps-entity-place', `latitude: ` + latitude + `; longitude: `+ longitude + `;`);
@@ -162,7 +166,6 @@ function addGuideAreas(dataArray){
     icon.setAttribute('radius', '1');
     icon.setAttribute('radius-tubular', '0.05');
 		icon.setAttribute('material', 'opacity: 0.6');
-    // add a marker for better visibility
 
     // for debug purposes, just show in a bigger scale, otherwise I have to personally go on places...
     icon.setAttribute('scale', '5 5 5');
@@ -177,11 +180,13 @@ function addGuideAreas(dataArray){
 //------------------- Navigation Arrow ----------------------------------------
 
 /**
- * Load the data and then use it for the navigation
- *@param
+ * Load the data and then use it for the navigation with the arrow and the distance to the closest measurement
+ * @param dataArray - contains data on the air quality measured with the bike
  */
 function startNavigation(dataArray) {
   let distDiv = document.getElementById("distance");
+  // this listener updates html component that displays the distance to the closest measurement and also updates
+  // the global variable "direction" which stores the direction in which the arrow is pointing
   x.registerListener(function(val) {
     let directionCoordinate = getDirectionCoordinate(dataArray,val);
     direction = getAngle(val.coords.latitude, val.coords.longitude, directionCoordinate.lat, directionCoordinate.lon);
@@ -191,7 +196,9 @@ function startNavigation(dataArray) {
     distDiv.innerHTML = "Closest Data Point: " + (Math.round(closestDistance * 100) / 100) + " km";
     distDiv.style.visibility = "visible";
   }, "direction");
+  // this links google maps to the html component that displays the distance
   distDiv.onclick = function(){urlToNavMap()};
+  // this listener updates the particles and the air quality gauge
   x.registerListener(function(val) {
     let closest = getClosest(dataArray,val).closest;
     if (!closestPointToCurrentPosition) {
@@ -214,8 +221,9 @@ function startNavigation(dataArray) {
 
 
 /**
-*
-*@param
+* Calculates the closest element of the given dataArray to a given position.
+* @param dataArray - contains data which is geolocated
+* @param position - lats and longs of a position
 */
 function getClosest(dataArray,position) {
   let closest = dataArray[0];
@@ -240,7 +248,7 @@ function getClosest(dataArray,position) {
 /**
  * this retrieves the current position and calculates the direction from it. The direction is then saved in the global
  * variable called direction.
- * @param dataArray - the route points
+ * @param dataArray - contains data which is geolocated
  * @param position
  */
 function getDirectionCoordinate(dataArray,position) {
@@ -290,31 +298,40 @@ function distance(lat1, lon1, lat2, lon2, unit) {
 //------------------- Gauge ----------------------------------------
 
 /**
-*
-*@param
+* Everytime the gauge has to be updated this function is called to redraw it entirely based on the given values.
+* @param pointerBike - pm10 value of the bike
+* @param pointerLanuv - pm10 value of the lanuv station
 */
 function redrawGauge(pointerBike,pointerLanuv) {
   if (linearGauge) {
     linearGauge
+      // draw max and min
       .draw("0", "65")
+      // draw steps between min and max (like steps on a ruler)
       .drawStep(10, "#d9d9d9", 5)
       .drawStep(20, "#d9d9d9", 5)
       .drawStep(30, "#d9d9d9", 5)
       .drawStep(40, "#d9d9d9", 5)
       .drawStep(50, "#d9d9d9", 5)
       .drawStep(60, "#d9d9d9", 5)
+      // draw value for lanuv station
       .drawPointer((pointerLanuv>62) ? 62 : (pointerLanuv<0) ? 0 : pointerLanuv, "#b38e00", "" + Math.round(pointerLanuv * 100) / 100)
+      // draw value for bike measurement
       .drawPointer((pointerBike>62) ? 62 : (pointerBike<0) ? 0 : pointerBike, "#ffdb4d", "" + Math.round(pointerBike * 100) / 100)				;
   } else {
     linearGauge = new HyyanAF.LinearGauge(gauge,0,65)
+      // draw max and min
       .draw("0", "65")
+      // draw steps between min and max (like steps on a ruler)
       .drawStep(10, "#d9d9d9", 5)
       .drawStep(20, "#d9d9d9", 5)
       .drawStep(30, "#d9d9d9", 5)
       .drawStep(40, "#d9d9d9", 5)
       .drawStep(50, "#d9d9d9", 5)
       .drawStep(60, "#d9d9d9", 5)
+      // draw value for lanuv station
       .drawPointer((pointerLanuv>62) ? 62 : (pointerLanuv<0) ? 0 : pointerLanuv, "#b38e00", "" + Math.round(pointerLanuv * 100) / 100)
+      // draw value for bike measurement
       .drawPointer((pointerBike>62) ? 62 : (pointerBike<0) ? 0 : pointerBike, "#ffdb4d", "" + Math.round(pointerBike * 100) / 100)
     ;
   }
@@ -326,8 +343,8 @@ function redrawGauge(pointerBike,pointerLanuv) {
 
 
 /**
- * This function adds the guide to the scene. If theres already an active guide its content will be replaced.
- * A guide consists of a button and a popup (a-entity with a plane and text) for the content.
+ * This function adds the explanatory text of a guide to the scene. If theres already an active guide its text will be replaced.
+ * An explanatory text consists of a button and a popup (a-entity with a plane and text) for the content.
  * The button is for opening and closing the popup.
  * @param content - content for the guide
  */
@@ -337,7 +354,7 @@ function addGuide(content) {
     let btnContainer = document.getElementById("guide-buttons");
     let popupBtn = document.createElement("button");
     popupBtn.setAttribute("id", "popupBtn");
-    popupBtn.onclick = openClosePopup();
+    popupBtn.onclick = returnOpenClosePopup();
     popupBtn.innerText = "info";
     btnContainer.appendChild(popupBtn);
   }
@@ -361,7 +378,7 @@ function removeGuide() {
  * This function returns a function for opening and closing popups.
  * @returns {Function}
  */
-function openClosePopup() {
+function returnOpenClosePopup() {
     return function() {
       var guidePane = document.getElementById("guideAreaInfo");
       if(guidePane.style.visibility === "hidden"){
@@ -374,20 +391,9 @@ function openClosePopup() {
 }
 
 /**
-*
-*@param
+* Function for opening and closing popups.
 */
-function openClosePopup2() {
-  var guidePane = document.getElementById("guideAreaInfo");
-  if(guidePane.style.visibility === "hidden"){
-    guidePane.style.visibility = "visible";
-  }
-  else{
-    guidePane.style.visibility = "hidden";
-  }
-}
-
-function openClosePopup2() {
+function openClosePopup() {
   var guidePane = document.getElementById("guideAreaInfo");
   if(guidePane.style.visibility === "hidden"){
     guidePane.style.visibility = "visible";
@@ -398,12 +404,12 @@ function openClosePopup2() {
 }
 
 /**
-*
-*@param
-*@return
+* Returns the data measured by the two lanuv stations during the time of the bike trip.
+* @return lanuv - an array containing the values
 */
 function getLanuvPm10(){
   let lanuv = [];
+  // 11th of december
   if(date === "2"){
     lanuv1912.forEach(function (e){
       if(e.time.getHours() === closestPointToCurrentPosition.time.getHours()) {
@@ -420,6 +426,7 @@ function getLanuvPm10(){
       }
     });
   }
+  // 14th of november
   else
   {
     lanuv1411.forEach(function (e){
@@ -535,7 +542,7 @@ function introduction(step){
 }
 
 //------------------- Menue ----------------------------------------
-/*
+/**
 * hides or shows the information block on top of the AR
 */
 function showAndHideInformation(){
@@ -557,7 +564,7 @@ function showAndHideInformation(){
 }
 
 /**
-*
+* Set the date according to the range slider in the menu, hide the menu and reload the Content to match the new date.
 */
 function setDate(){
   date =  document.getElementById("range").value;
@@ -567,7 +574,7 @@ function setDate(){
 }
 
 //------------------- Map ----------------------------------------
-/*
+/**
 * opens Google Maps with the route to the next routing point (which the navigation arrow points on)
 */
 function urlToNavMap(){
@@ -596,8 +603,8 @@ function urlToNavMap(){
 //------------------- Initial Function after Introduction ----------------------------------------
 
 /**
- *
- *@param
+ * This function retrieves the relevant data for the given date and then loads the guide areas and starts the navigation.
+ *@param date - the date of the bike trip
  */
 function loadContent(date) {
 
