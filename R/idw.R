@@ -9,10 +9,7 @@
 ##########################################
 library(ggplot2)
 library(gstat)
-library(sp)
-library(maptools)
 library(rgdal)
-library(dplyr)
 library(RColorBrewer)
 library(mapview)
 
@@ -27,13 +24,12 @@ mapviewOptions(basemaps = c("OpenStreetMap", "Esri.WorldImagery"),
 
 
 # in- and output filename
-in_name = paste("./bike_", data_date, ".csv", sep="")
-out_name = paste("idw_", data_date, ".tif", sep="")
+in_name = paste("./../data/bike_", data_date, ".csv", sep="")
+out_name = paste("./../data/idw_", data_date, ".tif", sep="")
 
 # read the data
 bike <- read.csv(in_name, header=TRUE)
 bike = na.omit(bike)
-glimpse(bike)
 
 # define x & y as longitude and latitude
 bike$x <- bike$lon
@@ -88,17 +84,8 @@ ggplot() +
 proj4string(idw) <- CRS("+init=epsg:4326")
 mapView(idw, zcol="var1.pred", at = c(0,5,10,15,20,40,80))
 
-# save the interpolation as GeoTIFF
-outfilename <- tempfile(pattern="file", tmpdir = tempdir())
-writeGDAL(idw, outfilename, drivername = "GTiff")
-file.rename (outfilename, out_name)
-
+# save idw as geoTIFF
 idw$var1.var <- NULL
 outfilename <- tempfile(pattern="file", tmpdir = tempdir())
 writeGDAL(idw, outfilename, drivername = "GTiff")
 file.rename (outfilename, out_name)
-
-library(raster)
-r <- raster("./idw_14-11.tif", package="raster")
-writeRaster(r, filename="idw_14-11.asc", format = "ascii", datatype='INT4S', overwrite=TRUE)
-writeOGR(idw, "test_geojson", layer="idw", driver="GeoJSON")
