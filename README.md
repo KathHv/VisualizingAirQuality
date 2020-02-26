@@ -29,7 +29,7 @@ TODO
 * link: https://kathhv.github.io/VisualizingAirQuality/AR
 
 ### Tutorial
-The AR application is an entirely browser-based app that does not require any installation procedures from the end user.  The app can be accessed through any browser and can be accessed from the link above QR code at the end of the scrollytelling website. The app gives preliminary description of the air quality measurements and a comparative representation of high and low PM10 values on initialization. 
+The AR application is an entirely browser-based app. The app can be accessed from the link above or through the QR code at the end of the scrollytelling website. On initialization, The app gives preliminary description of the air quality measurements and a comparative representation of high and low PM10 values. 
 
 The guide to using the app is as follows -
 
