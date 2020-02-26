@@ -1,11 +1,11 @@
-const stationGeist = [51.936482, 7.611609]; // lat lon
-const stationWeseler = [51.953275, 7.619379];
+var stationGeist = [51.936482, 7.611609]; // lat lon
+var stationWeseler = [51.953275, 7.619379];
 
-const boundsMuensterSmall = [[51.965114, 7.601657], [51.928291, 7.628437]];
-const boundsMuenster = [[51.982262, 7.590976], [51.927088, 7.679865]];
+var boundsMuensterSmall = [[51.965114, 7.601657], [51.928291, 7.628437]];
+var boundsMuenster = [[51.982262, 7.590976], [51.927088, 7.679865]];
 
-const scrollyImg = ["lanuv.jpg", "sensebox.jpg", "bike.jpg", "all.png"];
-const mapInteractions = {
+var scrollyImg = ["lanuv.jpg", "sensebox.jpg", "bike.jpg", "all.png"];
+var mapInteractions = {
 	// disable all zoom controls that interfere with scrolling
 	keyboard: false,
 	dragging: false,
@@ -52,7 +52,7 @@ var scrollyC = {
 };
 
 // colour scale for pm10
-const pmBounds = [0, 40]; // roughly the range of pm10 values
+var pmBounds = [0, 40]; // roughly the range of pm10 values
 var colourPM10 = d3
 	.scaleSequentialSqrt()
 	.domain([pmBounds[1], pmBounds[0]]) // flip because we want red to be highest
@@ -135,21 +135,21 @@ L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
 
 // SVG overlay for mapB
 L.svg().addTo(mapB);
-const overlayB = d3.select(mapB.getPanes().overlayPane);
-const svgB = overlayB.select("svg");
-const gBikePath = svgB
+var overlayB = d3.select(mapB.getPanes().overlayPane);
+var svgB = overlayB.select("svg");
+var gBikePath = svgB
 	.append("g")
 	.attr("id", "gBikePath")
 	.classed("hidden", true);
-const gBikeDots = svgB
+var gBikeDots = svgB
 	.append("g")
 	.attr("id", "gBikeDots")
 	.classed("hidden", true);
-const gStationDots = svgB
+var gStationDots = svgB
 	.append("g")
 	.attr("id", "gStationDots")
 	.classed("hidden", true);
-const gSenseBox = svgB
+var gSenseBox = svgB
 	.append("g")
 	.attr("id", "gSenseBox")
 	.classed("hidden", true);
@@ -162,7 +162,7 @@ mapB.fitBounds(boundsMuensterSmall);
 /// map C
 //////////////////////////////////////////////////////////////
 
-const mapC = L.map("mapC", mapInteractions);
+var mapC = L.map("mapC", mapInteractions);
 
 L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
 	attribution:
@@ -171,74 +171,74 @@ L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
 
 // create elements
 // add interpolation
-const imageURL = "data/idw_14-11_large.png";
-const imageBounds = [[51.93095, 7.58095], [51.96405, 7.65905]];
+var imageURL = "data/idw_14-11_large.png";
+var imageBounds = [[51.93095, 7.58095], [51.96405, 7.65905]];
 
-const interpolation = L.imageOverlay(imageURL, imageBounds, { opacity: 0.7 });
+var interpolation = L.imageOverlay(imageURL, imageBounds, { opacity: 0.7 });
 
-const legendC = legendB.cloneNode(true);
-const divLegendC = document.getElementById("legendC");
+var legendC = legendB.cloneNode(true);
+var divLegendC = document.getElementById("legendC");
 divLegendC.append(legendC);
 divLegendC.style.display = "none";
 //
 //// add init coord
-const minExtent = [[51.93095, 7.60295], [51.96405, 7.62205]];
-//const initLat = minExtent[0][0] + ((minExtent[1][0]-minExtent[0][0])/2);
-//const initLon = minExtent[0][1] + ((minExtent[1][1]-minExtent[0][1])/2);
-//const initCoord = [initLat,initLon];
-//const initZoom = 14;
+var minExtent = [[51.93095, 7.60295], [51.96405, 7.62205]];
+//var initLat = minExtent[0][0] + ((minExtent[1][0]-minExtent[0][0])/2);
+//var initLon = minExtent[0][1] + ((minExtent[1][1]-minExtent[0][1])/2);
+//var initCoord = [initLat,initLon];
+//var initZoom = 14;
 //
 // add stations
-const stationOptions = {
+var stationOptions = {
 	color: "#759f9e",
 	fillColor: "#8ebfbe",
 	fillOpacity: 0.5,
 	radius: 10
 };
-const geist = L.circleMarker(stationGeist, stationOptions);
-const weseler = L.circleMarker(stationWeseler, stationOptions);
+var geist = L.circleMarker(stationGeist, stationOptions);
+var weseler = L.circleMarker(stationWeseler, stationOptions);
 
 // add POI
-const poiPos = [[51.957, 7.609], [51.959, 7.611]];
-const poiURL = "img/stickman.png";
-const poi = L.imageOverlay(poiURL, poiPos);
+var poiPos = [[51.957, 7.609], [51.959, 7.611]];
+var poiURL = "img/stickman.png";
+var poi = L.imageOverlay(poiURL, poiPos);
 /*
-const poi = L.circleMarker(poiPos, {
+var poi = L.circleMarker(poiPos, {
 	fillColor: "#3d3d3d",
 	color: "#636363"
 });
 */
 
 // add line
-const linePos = [[51.9636, 7.5246], [51.928, 7.6963]];
-const line = L.polyline(linePos, {
+var linePos = [[51.9636, 7.5246], [51.928, 7.6963]];
+var line = L.polyline(linePos, {
 	color: "#759f9e"
 });
 
 // add color
-const bBoxN = [linePos[0], linePos[1], [52, 7.7], [52, 7.5]];
-const bBoxS = [linePos[0], linePos[1], [51.9, 7.7], [51.9, 7.5]];
+var bBoxN = [linePos[0], linePos[1], [52, 7.7], [52, 7.5]];
+var bBoxS = [linePos[0], linePos[1], [51.9, 7.7], [51.9, 7.5]];
 
-const backgroundN = L.polygon(bBoxN, {
+var backgroundN = L.polygon(bBoxN, {
 	fillColor: "#759f9e",
 	opacity: 0.1
 });
-const backgroundS = L.polygon(bBoxS, {
+var backgroundS = L.polygon(bBoxS, {
 	fillColor: "#f7f7f7",
 	opacity: 0.1
 });
 
 // question mark
-const questionUrl = "img/question-mark.png";
-const questionBBox = [[51.958, 7.606], [51.962, 7.601]];
-const qm = L.imageOverlay(questionUrl, questionBBox, {
+var questionUrl = "img/question-mark.png";
+var questionBBox = [[51.958, 7.606], [51.962, 7.601]];
+var qm = L.imageOverlay(questionUrl, questionBBox, {
 	opacity: 1,
 	zindex: 100
 });
 
 // create layergroups
-const group1 = L.layerGroup([geist, weseler, poi]);
-const group2 = L.layerGroup([backgroundN, backgroundS, line]);
+var group1 = L.layerGroup([geist, weseler, poi]);
+var group2 = L.layerGroup([backgroundN, backgroundS, line]);
 // end creating elements for mapC
 
 mapC.fitBounds(minExtent);
