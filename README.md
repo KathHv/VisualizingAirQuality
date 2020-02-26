@@ -13,7 +13,14 @@
 * link: https://kathhv.github.io/VisualizingAirQuality
 
 ### Tutorial
-TODO
+The scrollytelling website is a comprehensive look into the uncertainties and misrepresentations of air quality measurement. After the preliminary description, the website contains three coloured blocks each with a brief description of an uncertainty chapter. 
+
+The website offers the following functionalities -
+
+* Click on any one of the coloured blocks to skip or move to that specific uncertainty chapter.
+* Scrolling down through any chapter will change the visualization on the right and the corresponding text panel on the left. 
+* Scrolling back/up reloads the previous visualizations.
+
 
 ### Bugs and Limitations
 TODO
@@ -22,7 +29,20 @@ TODO
 * link: https://kathhv.github.io/VisualizingAirQuality/AR
 
 ### Tutorial
-TODO
+The AR application is an entirely browser-based app that does not require any installation procedures from the end user.  The app can be accessed through any browser and can be accessed from the link above QR code at the end of the scrollytelling website. The app gives preliminary description of the air quality measurements and a comparative representation of high and low PM10 values on initialization. 
+
+The guide to using the app is as follows -
+
+*	Allow camera and sensor permissions as well as location accessibility.
+*	Click the “Next” button at the bottom of the screen 
+*	The application displays particles on the screen corresponding to the PM10 value at the user’s location. As the user moves, the location is continuously updated, so are the PM10 values. 
+*	The arrow at the bottom of the screen points to the next data point.
+*	The panel below the arrow displays the user’s distance from the closest data point. Click on the panel to access Google maps for navigation.
+* The gauge on the right displays the PM10 value at the user’s location and the PM10 measurement from the official station at Geist. 
+* The top left corner contains the link to the scrollytelling website and the button for choosing a different dataset.
+
+#### It should be noted that the app displays historical data from the mobile sensor and LANUV. The date can be seen on the change dataset button on the top left. 
+
 
 ### Bugs and Limitations
 TODO
