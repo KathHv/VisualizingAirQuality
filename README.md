@@ -40,6 +40,7 @@ The guide to using the app is as follows -
 *	The panel below the arrow displays the user’s distance from the closest data point. Click on the panel to access Google maps for navigation.
 * The gauge on the right displays the PM10 value at the user’s location and the PM10 measurement from the official station at Geist.
 * The top left corner contains the link to the scrollytelling website and the button for choosing a different dataset.
+* On the location where we measured there are several guide areas. These are marked at their respective location with differently coloured toruses. Once you get close enough to the location of such a guide area a button will appear at the top right corner. Upon clicking this button an explanatory text about some feature at your location will pop up.
 
 #### It should be noted that the app displays historical data from the mobile sensor and LANUV. The date can be seen on the change dataset button on the top left.
 
@@ -48,6 +49,11 @@ The guide to using the app is as follows -
 * For Safari users the "Next" Button in the introduction is not visibile but clicking where the button should be works.
 
 ![Position of "Next" button](Bild1.png)
+
+* Oftentimes the guide areas are not visible, but the option for explanatory text will still be available, once you get close enough to one.
+* There are only proper guide areas for the bike trip which we took on the 14th of november. For the other trip we only added demo guide areas which are located around the GEO1 building, and contain demo texts.
+* If the arrow is pointing in the wrong direction try recalibrating the orientation of your device (e.g. using the google maps app).
+
 
 ## Overview of this repository
 * **AR**: HTML, CSS and JS files required for the AR app
