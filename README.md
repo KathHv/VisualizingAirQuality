@@ -9,24 +9,24 @@
 * Part II: Create an AR application with which people can walk around the station and see the air quality visualized as a "mist" to provide a more playful way of interacting with the data
   * Unity, City Engine, maybe SketchUp
 
-## The Website
-* link: https://kathhv.github.io/VisualizingAirQuality
+## The Scrollytelling Website
+* Link: https://kathhv.github.io/VisualizingAirQuality
 
 ### Tutorial
 The scrollytelling website is a comprehensive look into the uncertainties and misrepresentations of air quality measurement. After the preliminary description, the website contains three coloured blocks each with a brief description of an uncertainty chapter.
 
 The website offers the following functionalities -
 
+* Navigate through an interactive explanation of uncertainties associated with air quality measurements by scrolling through the page. The visualization on the right will update, corresponding to the text panel on the left, as you scroll through the page.
 * Click on any one of the coloured blocks to skip or move to that specific uncertainty chapter.
-* Scrolling down through any chapter will change the visualization on the right and the corresponding text panel on the left.
 * Scrolling back/up reloads the previous visualizations.
 
 
 ### Bugs and Limitations
-TODO
+* The website is not optimised for mobile devices.
 
 ## The AR Web Application
-* link: https://kathhv.github.io/VisualizingAirQuality/AR
+* Link: https://kathhv.github.io/VisualizingAirQuality/AR
 
 ### Tutorial
 The AR application is an entirely browser-based app. The app can be accessed from the link above or through the QR code at the end of the scrollytelling website. On initialization, The app gives preliminary description of the air quality measurements and a comparative representation of high and low PM10 values.
@@ -49,7 +49,17 @@ The guide to using the app is as follows -
 
 ![Position of "Next" button](Bild1.png)
 
+## Overview of this repository
+* **AR**: HTML, CSS and JS files required for the AR app
+* **R**: R code used for data analysis
+* **data**: Data files of the LANUV, bike, and SenseBox data
+* **img**: Images used across the two web apps
+* **lib**: Contains a library required for the scrollytelling page, which could not be loaded from a CDN
+* **scrollymaps**: Contains CSS and JS files required for the Scrollytelling web page
+* **shared**: Contains JS code shared between the two apps
+* index.html: HTML for the scrollytelling page
+
 ## References:
 * image stickman: https://www.needpix.com/photo/19195/matchstick-man-man-stickman-stick-figure-character-question-helpless-gesture-hands
 * image guestion mark: https://pixabay.com/vectors/the-question-mark-sign-question-ask-350170/
-*
+
