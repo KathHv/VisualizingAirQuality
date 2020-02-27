@@ -1,5 +1,7 @@
 # Visualizing Air Quality
 
+The project and code is also availble on Github: https://github.com/KathHv/VisualizingAirQuality
+
 ## Project Idea
 * Visualise the uncertainty associated with data collected from the two official stations
 * Plot routes around the two stations for the bike, ride those routes once or more times
